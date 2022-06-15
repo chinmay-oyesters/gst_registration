@@ -1,0 +1,18 @@
+:root{
+    --primary: #6993ff ;
+    --secondary: #ffc107;
+    --danger:  #dc3545;
+}
+/* global */
+.card_primary{
+    background: var(--primary);
+}
+.card_secondary{
+    background: var(--secondary);
+}
+.card_danger{
+    background: var(--danger);
+}
+.cp{
+    cursor: pointer;
+}

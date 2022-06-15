@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer - GST Admin</title>
+    <!-- Main CSS-->
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <!-- Font-icon css-->
+    <link rel="stylesheet" type="text/css"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body class="app sidebar-mini">
+    <!-- NOTE: START: -->
+    <!-- loader -->
+    <div class="overlay"></div>
+    <div class="spanner">
+        <div class="loader"></div>
+        <!-- <p>Uploading music file, please be patient.</p> -->
+    </div>
+    <!-- END: -->
+    <!-- Navbar-->
+    <header class="app-header"><a class="app-header__logo" href="home.html">GST Admin</a>
+        <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
+            aria-label="Hide Sidebar"></a>
+        <!-- Navbar Right Menu-->
+        <ul class="app-nav">
+            <!--Notification Menu-->
+            <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown"
+                    aria-label="Show notifications"><i class="fa fa-bell-o fa-lg"></i></a>
+                <ul class="app-notification dropdown-menu dropdown-menu-right">
+                    <li class="app-notification__title">You have 4 new notifications.</li>
+                    <div class="app-notification__content">
+                        <li><a class="app-notification__item" href="javascript:;"><span
+                                    class="app-notification__icon"><span class="fa-stack fa-lg"><i
+                                            class="fa fa-circle fa-stack-2x text-primary"></i><i
+                                            class="fa fa-envelope fa-stack-1x fa-inverse"></i></span></span>
+                                <div>
+                                    <p class="app-notification__message">Lisa sent you a mail</p>
+                                    <p class="app-notification__meta">2 min ago</p>
+                                </div>
+                            </a></li>
+                        <li><a class="app-notification__item" href="javascript:;"><span
+                                    class="app-notification__icon"><span class="fa-stack fa-lg"><i
+                                            class="fa fa-circle fa-stack-2x text-danger"></i><i
+                                            class="fa fa-hdd-o fa-stack-1x fa-inverse"></i></span></span>
+                                <div>
+                                    <p class="app-notification__message">Mail server not working</p>
+                                    <p class="app-notification__meta">5 min ago</p>
+                                </div>
+                            </a></li>
+                        <li><a class="app-notification__item" href="javascript:;"><span
+                                    class="app-notification__icon"><span class="fa-stack fa-lg"><i
+                                            class="fa fa-circle fa-stack-2x text-success"></i><i
+                                            class="fa fa-money fa-stack-1x fa-inverse"></i></span></span>
+                                <div>
+                                    <p class="app-notification__message">Transaction complete</p>
+                                    <p class="app-notification__meta">2 days ago</p>
+                                </div>
+                            </a></li>
+                        <div class="app-notification__content">
+                            <li><a class="app-notification__item" href="javascript:;"><span
+                                        class="app-notification__icon"><span class="fa-stack fa-lg"><i
+                                                class="fa fa-circle fa-stack-2x text-primary"></i><i
+                                                class="fa fa-envelope fa-stack-1x fa-inverse"></i></span></span>
+                                    <div>
+                                        <p class="app-notification__message">Lisa sent you a mail</p>
+                                        <p class="app-notification__meta">2 min ago</p>
+                                    </div>
+                                </a></li>
+                            <li><a class="app-notification__item" href="javascript:;"><span
+                                        class="app-notification__icon"><span class="fa-stack fa-lg"><i
+                                                class="fa fa-circle fa-stack-2x text-danger"></i><i
+                                                class="fa fa-hdd-o fa-stack-1x fa-inverse"></i></span></span>
+                                    <div>
+                                        <p class="app-notification__message">Mail server not working</p>
+                                        <p class="app-notification__meta">5 min ago</p>
+                                    </div>
+                                </a></li>
+                            <li><a class="app-notification__item" href="javascript:;"><span
+                                        class="app-notification__icon"><span class="fa-stack fa-lg"><i
+                                                class="fa fa-circle fa-stack-2x text-success"></i><i
+                                                class="fa fa-money fa-stack-1x fa-inverse"></i></span></span>
+                                    <div>
+                                        <p class="app-notification__message">Transaction complete</p>
+                                        <p class="app-notification__meta">2 days ago</p>
+                                    </div>
+                                </a></li>
+                        </div>
+                    </div>
+                    <li class="app-notification__footer"><a href="#">See all notifications.</a></li>
+                </ul>
+            </li>
+            <!-- User Menu-->
+            <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown"
+                    aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
+                <ul class="dropdown-menu settings-menu dropdown-menu-right">
+                    <li><a class="dropdown-item" href="page-user.html"><i class="fa fa-user fa-lg"></i> Profile</a></li>
+                    <li><a class="dropdown-item" href="page-login.html"><i class="fa fa-sign-out fa-lg"></i> Logout</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </header>
+    <!-- Sidebar menu-->
+    <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+    <aside class="app-sidebar">
+        <div class="app-sidebar__user"><img class="app-sidebar__user-avatar"
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAM1BMVEXk5ueutLfn6eqrsbTp6+zg4uOwtrnJzc/j5earsbW0uby4vcDQ09XGyszU19jd3+G/xMamCvwDAAAFLklEQVR4nO2d2bLbIAxAbYE3sDH//7WFbPfexG4MiCAcnWmnrzkjIRaD2jQMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMw5wQkHJczewxZh2lhNK/CBOQo1n0JIT74/H/qMV0Z7GU3aCcVPuEE1XDCtVLAhgtpme7H0s1N1U7QjO0L8F7llzGeh1hEG/8Lo7TUmmuSrOfns9xnGXpXxsONPpA/B6OqqstjC6Ax/0ujkNdYQQbKNi2k64qiiEZ+ohi35X+2YcZw/WujmslYewiAliVYrxgJYrdwUmwXsU+RdApUi83oNIE27YvrfB/ZPg8+BJETXnqh9CVzBbTQHgojgiCvtqU9thFJg/CKz3VIMKMEkIXxIWqIpIg2SkjYj+xC816mrJae2aiWGykxRNsW0UwiJghJDljYI5CD8GRiCtIsJxizYUPQ2pzItZy5pcisTRdk/a9m4amtNNfBuQkdVhSaYqfpNTSFGfb9GRIakrE2Pm+GFLaCQPqiu0OpWP+HMPQQcgQMiQprWXNmsVwIjQjYi/ZrhAqNTCgr2gu0Jnz85RSSjso0HkMFZ0YZjKkc26a/jlmh9JiDyDxi9oeorTYAzZkwwoMz19pzj9bnH/GP/+qbchjSGflneWYhtTuKdMOmNKZcJ5TjInQKcYXnESd/jQxy0ENpULTNGOGgxpap/oyw9pbUAqhfx2Dbkhovvfgz4iUzoM9+GlK6/Mh4q29hyC1mwro30hpVVLPF9wYQr71RazOeM5/cw81iBRD+A03aM9/C/obbrKjbYSpCmIVG3qT/Q8oeUo3Rz0IL7vI1tEbCB9pSiu8I/aV8x3Kg/BGWrWp4ZVs0nZfmAoEG4h/61yHYIJiFSl6Q0Vk6tTW1N8kYp8hdOkfHYYMXd2Qft+8CYwqYDSKvqIh+MCF8Wgca2u/cwdgeW3TtuVn6+1oBs3yLo5C2JpK6CvQzGpfUkz9UG/87gCsi5o2LIXolxN0FbwAsjOLEr+YJmXn7iR6N0BCt5p5cMxm7eAsfS+/CACQf4CTpKjzgkvr2cVarVTf96372yut7XLJ1sa7lv6VcfgYrWaxqr3Wlo1S6pvStr22sxOtTNPLzdY3nj20bPP+ejFdJYkLsjGLdtPBEbe/mr2bQKiXWJDroA+vtzc0p9aahuwqHMDYrQEXHEw9jwQl3drMpts9JBU1SdktPe5FBRdJQ6bwXBpa57ib2A8kukQDzMjh++Uo7Fo6Wd02Pkf4fknqoo4HtvAIjsqUcjx6DIPgWCaOML9rKI/oqD9/lgNrn+eF+p7j8tnzHBiR7+kdUGw/+V1Kzkc75mMy6U+FMaxjPibiM1U1uGM+puInHpmALZCgP4pt7i840MV8+0R1zPsRB6UTcqpizncYwZ89syDydfyWCwXB1l8/zRNGWbTG/GHKUm9AkxHMc/EGSk3z2+ArEhPEV5TUBLEvUGFcjEUH80J/jveTGOAJEljJbILWGQT3zRYiwuKsUXN1EEJAzBhRJFll7mBUG7KD8EqPkKekBREaL8hMDZLQSG6AQjtHPYmvTQnX0TtpC1SYCe2YdkkyLP3jj5BSbKiuR585eQhTgoje6yIb0Yb0C+mV6EYvebqw5SDy2WmubogZiF2AVxPC2FpDf8H2Q9QWo6IkjUxTWVEI3WY/wrCeSuqJ+eRWzXR/JXwgVjUMozbCOfoEZiSiKVGepqv5CJ8RyR4D7xBeamqa7z3BJ/z17JxuBPdv93d/a2Ki878MMAzDMAzDMAzDMAzDMF/KP09VUmxBAiI3AAAAAElFTkSuQmCC"
+                alt="User Image">
+            <div>
+                <p class="app-sidebar__user-name">John Doe</p>
+                <p class="app-sidebar__user-designation">Admin</p>
+            </div>
+        </div>
+        <ul class="app-menu">
+            <li><a class="app-menu__item " href="dashboard.html"><i class="app-menu__icon fa fa-dashboard"></i><span
+                        class="app-menu__label">Dashboard</span></a>
+            </li>
+            <li class="treeview"><a class="app-menu__item active" href="#" data-toggle="treeview"><i
+                        class="app-menu__icon fa fa-user"></i><span class="app-menu__label">Users</span><i
+                        class="treeview-indicator fa fa-angle-right"></i></a>
+                <ul class="treeview-menu">
+                    <li><a class="treeview-item " href="staff.html"><i class="icon fa fa-circle-o"></i> Staff</a></li>
+                    <li><a class="treeview-item active" href="customer.html"><i class="icon fa fa-circle-o"></i>
+                            Customer</a>
+                    </li>
+                </ul>
+            </li>
+            <li><a class="app-menu__item" href="payments.html"><i class="app-menu__icon fa fa-money"></i><span
+                        class="app-menu__label">Payments</span></a></li>
+            <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
+                        class="app-menu__icon fa fa-edit"></i><span class="app-menu__label">Forms</span><i
+                        class="treeview-indicator fa fa-angle-right"></i></a>
+                <ul class="treeview-menu">
+                    <li><a class="treeview-item" href="gst-form.html"><i class="icon fa fa-circle-o"></i>
+                            GST</a></li>
+                    <li><a class="treeview-item" href="iec-form.html"><i class="icon fa fa-circle-o"></i>IEC
+                        </a></li>
+                    <li><a class="treeview-item" href="pt-form.html"><i class="icon fa fa-circle-o"></i>
+                            PT</a></li>
+                </ul>
+            </li>
+            <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
+                        class="app-menu__icon fa fa-cog"></i><span class="app-menu__label">Settings</span><i
+                        class="treeview-indicator fa fa-angle-right"></i></a>
+                <ul class="treeview-menu">
+                    <li><a class="treeview-item " href="integrations.html"><i
+                                class="icon fa fa-circle-o"></i>Integrations</a></li>
+                    <li><a class="treeview-item" href="customize.html"><i class="icon fa fa-circle-o"></i>Customize
+                            Forms</a></li>
+                </ul>
+            </li>
+        </ul>
+    </aside>
+    <main class="app-content">
+        <div class="app-title">
+            <div>
+                <h1><i class="fa fa-users" aria-hidden="true"></i>&nbsp;Customer</h1>
+            </div>
+        </div>
+        <div class="tile">
+            <div class="tile-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered" id="sampleTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone Number</th>
+                                <th style="width: 135px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- edit game rate modal -->
+    <div class="modal fade" id="edit_game_rate_modal" role="dialog">
+        <div class="modal-dialog  modal-dialog-centered ">
+
+            <!-- Modal content-->
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit User<br />
+                        <p style="text-align:left; font-size:13px;font-weight:500;">
+                        <p>
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="uploadPreAssessmentId">
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Name</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" placeholder="-" id="edit_user_name">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Email</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="email" placeholder="-" id="edit_user_email">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Phone Number</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" maxlength="10"
+                                    oninput="this.value=this.value.replace(/[^0-9]/g,'');" placeholder="-"
+                                    id="edit_user_phone">
+                            </div>
+                        </div>
+                        <div class="modal-footer " style="justify-content: center;margin-top:20px;">
+                            <button class="btn btn-success" type="button" id="edit_save_btn">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Essential javascripts for application to work-->
+    <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/globalFunction.js"></script>
+    <!-- Data table plugin-->
+    <script type="text/javascript" src="../js/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="../js/plugins/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/plugins/bootstrap-notify.min.js"></script>
+    <script type="text/javascript" src="../js/plugins/sweetalert.min.js"></script>
+    <script type="text/javascript">$('#sampleTable').DataTable();</script>
+    <script type="text/javascript">
+        // authenticate();
+        // let userList = [];
+        // window.onload = function () {
+        //     getUserList()
+        // }
+        // function getUserList() {
+        //     startLoader()
+        //     axiosInstance.get('fetch_admin_user').then((response) => {
+        //         endLoader()
+        //         console.log(response)
+        //         if (response.status === 200) {
+        //             let dataSet = response.data?.msg
+        //             userList = dataSet
+        //             $(document).ready(function () {
+        //                 $('#sampleTable').DataTable().destroy();
+        //                 $('#sampleTable').DataTable({
+        //                     data: dataSet,
+        //                     columns: [
+        //                         {
+        //                             data: 'admin_fullname',
+        //                         },
+        //                         {
+        //                             data: 'admin_email_id',
+        //                         },
+        //                         {
+        //                             data: 'admin_phonenumber',
+        //                         },
+        //                         {
+        //                             data: 'admin_user_id',
+        //                             render: function (data) {
+        //                                 return `<div class="d-flex justify-content-around" >
+        //                                     <button class="btn-sm btn-info" onclick="setEditForm(${data})" data-toggle="modal" data-target="#edit_game_rate_modal" ><i
+        //                                   class="fa fa-pencil cp" aria-hidden="true"></i>&nbsp;Edit</button><button
+        //                                  class="btn-sm btn-danger" onclick="deleteGameRate(${data})" ><i class="fa fa-trash cp"
+        //                                    aria-hidden="true"></i>&nbsp;Delete</button>
+        //                                     </div>`;
+        //                             },
+        //                         },
+        //                     ],
+        //                 });
+        //             });
+        //         } else {
+        //             if (response?.data?.is_logged_out) {
+        //                 localStorage.setItem("isLoggedIn", "false");
+        //                 location.href = "index.html";
+        //             } else {
+        //                 $.notify({
+        //                     title: "",
+        //                     message: response.data?.msg,
+        //                     icon: 'fa fa-times'
+        //                 }, {
+        //                     type: "danger",
+        //                 });
+        //             }
+        //         }
+        //     }, (error) => {
+        //         console.log('error', error);
+        //         endLoader()
+        //         $.notify({
+        //             title: "",
+        //             message: `Something went wrong! Please try again.`,
+        //             icon: 'fa fa-times'
+        //         }, {
+        //             type: "danger"
+        //         });
+        //     })
+        // }
+        // function setEditForm(g_id) {
+        //     let gameNow = userList?.filter(m => m?.admin_user_id === `${g_id}`)
+        //     if (gameNow?.length > 0) {
+        //         document.getElementById('edit_user_name').value = gameNow[0]?.admin_fullname
+        //         document.getElementById('edit_user_phone').value = gameNow[0]?.admin_phonenumber
+        //         document.getElementById('edit_user_email').value = gameNow[0]?.admin_email_id
+        //         document.getElementById('edit_save_btn').setAttribute("onClick", `updateGameRate(${g_id})`);
+        //     }
+        // }
+        // function updateGameRate(g_id) {
+        //     startLoader()
+        //     let edit_user_name = document.getElementById('edit_user_name').value
+        //     let edit_user_phone = document.getElementById('edit_user_phone').value
+        //     let edit_user_email = document.getElementById('edit_user_email').value
+        //     if (edit_user_name === "" || edit_user_phone === "") {
+        //         endLoader()
+        //         $.notify({
+        //             title: "",
+        //             message: `Please enter all details.`,
+        //             icon: 'fa fa-times'
+        //         }, {
+        //             type: "danger"
+        //         });
+        //         return
+        //     }
+        //     let dataToPost = {
+        //         full_name: edit_user_name,
+        //         phone_number: edit_user_phone,
+        //         email: edit_user_email,
+        //     };
+
+        //     $('#edit_game_rate_modal').modal('hide');
+        //     axiosInstance.post('edit_admin_user', {
+        //         ...dataToPost
+        //     }).then((response) => {
+        //         endLoader()
+        //         if (response.status === 200) {
+        //             $.notify({
+        //                 title: "",
+        //                 message: response.data?.msg,
+        //                 icon: 'fa fa-check'
+        //             }, {
+        //                 type: "success",
+        //             });
+        //             getUserList();
+        //         } else {
+        //             if (response?.data?.is_logged_out) {
+        //                 localStorage.setItem("isLoggedIn", "false");
+        //                 location.href = "index.html";
+        //             } else {
+        //                 $.notify({
+        //                     title: "",
+        //                     message: response.data?.msg,
+        //                     icon: 'fa fa-times'
+        //                 }, {
+        //                     type: "danger",
+        //                 });
+        //             }
+        //         }
+        //     }, (error) => {
+        //         console.log('error', error);
+        //         endLoader()
+        //         $.notify({
+        //             title: "",
+        //             message: `Something went wrong! Please try again.`,
+        //             icon: 'fa fa-times'
+        //         }, {
+        //             type: "danger"
+        //         });
+        //     })
+        // }
+        // function deleteGameRate(g_id) {
+        //     swal({
+        //         title: "Are you sure?",
+        //         text: "You will not be able to recover this rate!",
+        //         type: "warning",
+        //         showCancelButton: true,
+        //         confirmButtonText: "Yes, delete it!",
+        //         cancelButtonText: "No, cancel plx!",
+        //         closeOnConfirm: true,
+        //         closeOnCancel: false
+        //     }, function (isConfirm) {
+        //         if (isConfirm) {
+        //             startLoader()
+        //             axiosInstance.post('delete_admin_user', {
+        //                 "user_id": g_id
+        //             }).then((response) => {
+        //                 endLoader()
+        //                 if (response.status === 200) {
+        //                     $.notify({
+        //                         title: "",
+        //                         message: response.data?.msg,
+        //                         icon: 'fa fa-check'
+        //                     }, {
+        //                         type: "success",
+        //                     });
+        //                     getUserList();
+        //                 } else {
+        //                     if (response?.data?.is_logged_out) {
+        //                         localStorage.setItem("isLoggedIn", "false");
+        //                         location.href = "index.html";
+        //                     } else {
+        //                         $.notify({
+        //                             title: "",
+        //                             message: response.data?.msg,
+        //                             icon: 'fa fa-times'
+        //                         }, {
+        //                             type: "danger",
+        //                         });
+        //                     }
+        //                 }
+        //             }, (error) => {
+        //                 console.log('error', error);
+        //                 endLoader()
+        //                 $.notify({
+        //                     title: "",
+        //                     message: `Something went wrong! Please try again.`,
+        //                     icon: 'fa fa-times'
+        //                 }, {
+        //                     type: "danger"
+        //                 });
+        //             })
+        //         } else {
+        //             swal("Cancelled", "Your game rate is safe.", "error");
+        //         }
+        //     });
+        // }
+    </script>
+</body>
+
+</html>
