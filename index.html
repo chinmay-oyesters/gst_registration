@@ -108,6 +108,8 @@
             <button class="button_primary pl-5 pr-5  pt-3 pb-3 mt-5">Get Started -></button>
         </section>
     </section>
+    <section class="services" id="service-container">
+    </section>
     <section class="features">
         <h1 class="features-title">Features</h1>
         <div class="features-cards">
@@ -161,6 +163,72 @@
             </div>
         </div>
     </section>
+    <script>
+        let serviceList = [
+            {
+                'name': 'GST',
+                'logo': './images/gst_logo.png',
+                'color': '#6993FF'
+            },
+            {
+                'name': 'IEC',
+                'logo': './images/iec_logo.png',
+                'color': '#FFAA07'
+            },
+            {
+                'name': 'Udhyam Registration',
+                'logo': './images/ur_logo.png',
+                'color': '#8D56FC'
+            },
+            {
+                'name': 'PAN',
+                'logo': './images/pan_logo.png',
+                'color': '#F64E60'
+            },
+            {
+                'name': 'GST',
+                'logo': './images/gst_logo.png',
+                'color': '#6993FF'
+            },
+            {
+                'name': 'IEC',
+                'logo': './images/iec_logo.png',
+                'color': '#FFAA07'
+            },
+            {
+                'name': 'Udhyam Registration',
+                'logo': './images/ur_logo.png',
+                'color': '#8D56FC'
+            },
+            {
+                'name': 'PAN',
+                'logo': './images/pan_logo.png',
+                'color': '#F64E60'
+            },
+        ]
+        let service_container = document.getElementById('service-container');
+
+        service_container.innerHTML = ''
+        for (let i = 0; i < serviceList.length; i++) {
+            const element = serviceList[i];
+            service_container.innerHTML = service_container.innerHTML +
+                `
+                <div class="service_card cp">
+             <div class="flip-card-inner">
+                <div class="flip-card-front"  style="background-color: ${element?.color};">
+                    <img src="${element?.logo}" alt="">
+                    <p>${element?.name}</p>
+                </div>
+                <div class="flip-card-back" style="background-color: ${element?.color};box-shadow: -6px 4px 108px 15px rgba(0,0,0,0.75) inset;">
+                    <p>SOme description fljds fdsjk ods lsdos ofdsa ljds fdsjk ods lsdos  ljds fdsjk ods lsdos ljds fdsjk ods lsdos </p>
+                    <button class="button_primary" style="background-color: ${element?.color};" >Try Now -></button>
+                </div>
+            </div>
+             </div>
+            `
+
+        }
+    </script>
 </body>
 
 </html>

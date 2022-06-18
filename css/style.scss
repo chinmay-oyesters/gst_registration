@@ -133,25 +133,92 @@ $danger: #dc3545;
     line-height: 10px;
     color: #d2c7c7;
   }
-  #landing-top-right{
+  #landing-top-right {
     position: absolute;
     z-index: -1;
     right: 0;
     bottom: 0;
     height: 60vh;
   }
-  #landing-left-one{
+  #landing-left-one {
     position: absolute;
     z-index: -1;
     left: 3vw;
     top: 0;
     height: 40vh;
   }
-  #landing-left-two{
+  #landing-left-two {
     position: absolute;
     z-index: -1;
     left: 8vw;
     top: 0;
     height: 25vh;
+  }
+}
+.services {
+  background: $default-bg-2;
+  padding: 80px 10px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  .service_card {
+    background-color: transparent;
+    margin: 20px 30px;
+    height: 312px;
+    width: 242px;
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      .flip-card-front {
+        background-image: url(../images/service_card_fame.png);
+        border: 2px solid #ffffff;
+        border-radius: 28px;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+        p {
+          font-weight: 600;
+          font-size: 30px;
+        }
+        img {
+          background: white;
+          border-radius: 50%;
+        }
+      }
+      .flip-card-back {
+        background-image: url(../images/service_card_fame.png);
+        border: 2px solid #ffffff;
+        border-radius: 28px;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        transform: rotateY(180deg);
+        padding: 30px;
+        button{
+          border-radius: 10px;
+          border-color: white;
+          position: absolute;
+          bottom: 20px;
+          left: 30px;
+          right: 30px;
+        }
+      }
+    }
+    &:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
   }
 }
