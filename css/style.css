@@ -1,18 +1,180 @@
-:root{
-    --primary: #6993ff ;
-    --secondary: #ffc107;
-    --danger:  #dc3545;
-}
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 /* global */
-.card_primary{
-    background: var(--primary);
+.card_primary {
+  background: #6993ff;
 }
-.card_secondary{
-    background: var(--secondary);
+
+.card_secondary {
+  background: #ffc107;
 }
-.card_danger{
-    background: var(--danger);
+
+.card_danger {
+  background: #dc3545;
 }
-.cp{
-    cursor: pointer;
+
+.button_primary {
+  color: white;
+  background-color: #6924fe;
+  border-radius: 56px;
+  padding: 8px 24px;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
 }
+
+.cp {
+  cursor: pointer;
+}
+
+/* /////////////////////////
+  /////////  Landing Page //////////
+  ////////////////////////////
+  */
+.landing-page {
+  background: #0c1a32;
+}
+
+.landing-hero {
+  position: relative;
+  height: 100vh;
+}
+
+.landing-hero .landing_top_one {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 15px 30px 15px 75px;
+}
+
+.landing_top_two {
+  background-color: #1b2a45;
+  height: 40px;
+}
+
+.landing_top_two a {
+  float: right;
+  font-size: 14px;
+  color: white;
+  text-align: center;
+  padding: 8px 16px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.landing_top_two .dropdown_nav {
+  float: right;
+  overflow: hidden;
+}
+
+.landing_top_two .dropdown_nav .dropbtn {
+  font-size: 14px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 8px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+  font-weight: 700;
+}
+
+.landing_top_two .dropdown_nav .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #193866;
+  min-width: 160px;
+  -webkit-box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.landing_top_two .dropdown_nav .dropdown-content a {
+  float: none;
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.landing_top_two .dropdown_nav .dropdown-content a:hover {
+  background-color: #1b2a45;
+}
+
+.landing_top_two .dropdown_nav:hover .dropdown-content {
+  display: block;
+}
+
+.landing_top_three {
+  height: calc(100vh - 110px);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  position: relative;
+}
+
+.landing_top_three h1 {
+  font-size: 60px;
+  font-weight: 800;
+}
+
+.landing_top_three h1 span {
+  background: linear-gradient(88.17deg, #aa42fc 28.24%, #2704ff 42.65%);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+}
+
+.landing_top_three h1 span:nth-child(2) {
+  background: radial-gradient(37.24% 2061.22% at 69.68% 73.47%, #330aff 12.82%, #aa42fc 100%);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+}
+
+.landing_top_three p {
+  margin-top: 10px;
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 10px;
+  color: #d2c7c7;
+}
+
+.landing_top_three #landing-top-right {
+  position: absolute;
+  z-index: -1;
+  right: 0;
+  bottom: 0;
+  height: 60vh;
+}
+
+.landing_top_three #landing-left-one {
+  position: absolute;
+  z-index: -1;
+  left: 3vw;
+  top: 0;
+  height: 40vh;
+}
+
+.landing_top_three #landing-left-two {
+  position: absolute;
+  z-index: -1;
+  left: 8vw;
+  top: 0;
+  height: 25vh;
+}
+/*# sourceMappingURL=style.css.map */
