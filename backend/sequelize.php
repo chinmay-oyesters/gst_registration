@@ -41,6 +41,50 @@ $database_tables = array(
     		REFERENCES user_table(user_id) 
     		ON DELETE CASCADE
     )"
+    ,
+    "
+    CREATE TABLE IF NOT EXISTS `form_table` (
+        `form_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
+        `form_name` VARCHAR(255) NOT NULL,
+        `form_fields` VARCHAR(255) NOT NULL,
+        `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+        `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+    ",
+    "
+    CREATE TABLE IF NOT EXISTS `form_field_table` (
+        `form_field_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
+        `form_field_tag1` VARCHAR(255) DEFAULT NULL,
+        `form_field_title` VARCHAR(255) NOT NULL,
+        `form_field_type` VARCHAR(255) NOT NULL,
+        `form_field_associated_to` VARCHAR(255) DEFAULT NULL,
+        `form_field_values` VARCHAR(255) DEFAULT NULL,
+        `form_field_validation` VARCHAR(255) DEFAULT NULL,
+        `form_field_required` BOOLEAN DEFAULT NULL,
+        `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+        `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+    ",
+    "
+    CREATE TABLE IF NOT EXISTS `form_response_table` (
+        `form_response_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
+        `form_response_form_id` INT(255) NOT NULL,
+        `form_response_form_field_id` INT(255) NOT NULL,
+        `form_response_user_id` INT(255) NOT NULL,
+        `form_response_answer` VARCHAR(255) DEFAULT NULL,
+        `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+        `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (form_response_form_id)
+    		REFERENCES form_table(form_id)
+    		ON DELETE CASCADE,
+        FOREIGN KEY (form_response_form_field_id)
+    		REFERENCES form_field_table(form_field_id)
+    		ON DELETE CASCADE,
+        FOREIGN KEY (form_response_user_id)
+    		REFERENCES user_table(user_id) 
+    		ON DELETE CASCADE
+    )
+    "
 );
 
 require_once("dbcon.php");

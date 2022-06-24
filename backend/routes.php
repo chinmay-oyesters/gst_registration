@@ -37,3 +37,13 @@ $router->endpoint('admin_fetch_payments', 'admin/admin_payments/admin_fetch_paym
 $router->endpoint('fetch_customers', 'admin/users/customers/fetch_customers', ['GET'], FALSE, []);
 $router->endpoint('edit_customers', 'admin/users/customers/edit_customers', ['POST'], FALSE, []);
 $router->endpoint('delete_customers', 'admin/users/customers/delete_customers', ['POST'], FALSE, []);
+
+// all endpoints specified for form related operations
+// creation of form
+$router->endpoint('create_form', 'form/create_form', ['POST'], FALSE, ['form_name', 'form_fields']);
+// creation of form fields
+$router->endpoint('create_field', 'form/create_field', ['POST'], FALSE, []);
+// fetch form
+$router->endpoint('fetch_form', 'form/fetch_form', ['POST'], FALSE, ['form_id']);
+// save form
+$router->endpoint('save_form', 'form/save_form', ['POST'], FALSE, ['form_values']);
