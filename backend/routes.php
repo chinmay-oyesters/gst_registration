@@ -47,3 +47,5 @@ $router->endpoint('create_field', 'form/create_field', ['POST'], FALSE, []);
 $router->endpoint('fetch_form', 'form/fetch_form', ['POST'], FALSE, ['form_id']);
 // save form
 $router->endpoint('save_form', 'form/save_form', ['POST'], FALSE, ['form_values']);
+// fetch dependencies
+$router->endpoint('fetch_dependencies', 'form/fetch_dependencies', ['POST'], FALSE, ['fetch_field']);
