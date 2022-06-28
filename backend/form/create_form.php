@@ -35,10 +35,7 @@ if($query->execute()){
     $status = 200;
     $response = [
         "msg" => "Form created successfully",
-        "form" => [
-            "form_id" => $form_id,
-            "form_name" => $form_name
-        ]
+        "form" => "Test Response"
     ];
 }else{
     $status = 203;
