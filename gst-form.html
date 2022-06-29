@@ -12,6 +12,8 @@
     <!-- Font-icon css-->
     <link rel="stylesheet" type="text/css"
         href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 
 <body class="app sidebar-mini">
@@ -87,43 +89,6 @@
     <script type="text/javascript" src="js/plugins/chart.js"></script>
     <script src="js/globalFunction.js"></script>
     <script type="text/javascript">
-        // startLoader()
-        // <div class="form-group">
-        //                 <label class="control-label">Full Name</label>
-        //                 <input class="form-control" type="text" placeholder="Enter full name">
-        //             </div>
-        //             <div class="form-group">
-        //                 <label class="control-label">Email</label>
-        //                 <input class="form-control" type="email" placeholder="Enter email address">
-        //             </div>
-        //             <div class="form-group">
-        //                 <label class="control-label">Address</label>
-        //                 <textarea class="form-control" rows="4" placeholder="Enter your address"></textarea>
-        //             </div>
-        //             <div class="form-group">
-        //                 <label class="control-label">Gender</label>
-        //                 <div class="form-check">
-        //                     <label class="form-check-label">
-        //                         <input class="form-check-input" type="radio" name="gender">Male
-        //                     </label>
-        //                 </div>
-        //                 <div class="form-check">
-        //                     <label class="form-check-label">
-        //                         <input class="form-check-input" type="radio" name="gender">Female
-        //                     </label>
-        //                 </div>
-        //             </div>
-        //             <div class="form-group">
-        //                 <label class="control-label">Identity Proof</label>
-        //                 <input class="form-control" type="file">
-        //             </div>
-        //             <div class="form-group">
-        //                 <div class="form-check">
-        //                     <label class="form-check-label">
-        //                         <input class="form-check-input" type="checkbox">I accept the terms and conditions
-        //                     </label>
-        //                 </div>
-        //             </div>
         let fetchedFiels = [
             {
                 "field_id": "1",
@@ -153,7 +118,7 @@
                 "field_type": "Radio-Button",
                 "field_required": true,
                 "field_associated_to": null,
-                "field_values": [['Permanent Account Number(PAN)', 7], ['Do not have a Permanent Account Number(PAN)', 8]]
+                "field_values": [['Permanent Account Number(PAN)', '7'], ['Do not have a Permanent Account Number(PAN)', '8']]
             },
             {
                 "field_id": "4",
@@ -161,7 +126,7 @@
                 "field_type": "Toggle",
                 "field_required": true,
                 "field_associated_to": null,
-                "field_values": [['No'], ['Yes', 15]]
+                "field_values": [['No'], ['Yes', '15']]
             },
             {
                 "field_id": "5",
@@ -169,40 +134,42 @@
                 "field_type": "Dropdown",
                 "field_required": "1",
                 "field_associated_to": null,
-                "field_values": [['Tax Deductor', '9', '10'], ['Tax Collector', 9], ['Tax Payer', 10]]
+                "field_values": [['Tax Deductor', '2', '2'], ['Tax Collector', '2'], ['Tax Payer']]
             }
         ]
-        let gst_form = document.getElementById('gst_form')
-        gst_form.innerHTML = ''
-        for (let i = 0; i < fetchedFiels.length; i++) {
-            const element = fetchedFiels[i];
-            switch (element?.field_type) {
-                case 'Text':
-                    gst_form.innerHTML = gst_form.innerHTML +
-                        `
+        function setFields(container_id_n, nowFields) {
+            console.log(container_id_n, nowFields)
+            let container_id = document.getElementById(container_id_n)
+            container_id.innerHTML = ''
+            for (let i = 0; i < nowFields.length; i++) {
+                const element = nowFields[i];
+                switch (element?.field_type) {
+                    case 'Text':
+                        container_id.innerHTML = container_id.innerHTML +
+                            `
                     <div class="form-group" id='${element?.field_type}_${element?.field_id}'>
                     <label class="control-label">${element?.field_title}</label>
                         <input class="form-control" type="text" placeholder='${element?.field_title?.toLocaleLowerCase()}'>
                     </div>
                     `
-                    break;
-                case 'Radio-Button':
-                    gst_form.innerHTML = gst_form.innerHTML +
-                        `<div class="form-group" id='${element?.field_type}_${element?.field_id}'>
+                        break;
+                    case 'Radio-Button':
+                        container_id.innerHTML = container_id.innerHTML +
+                            `<div class="form-group" id='${element?.field_type}_${element?.field_id}'>
                         <label class="control-label">${element?.field_title}</label>
                         ${element?.field_values?.map(fieldValue => (
-                            `<div class="form-check">
+                                `<div class="form-check">
                                 <label class="form-check-label">
                                    <input class="form-check-input" type="radio" name='${element?.field_type}_${element?.field_id}'>${fieldValue[0]}
                                 </label>
                             </div>`
-                        )).join('')}
+                            )).join('')}
                         </div>
                         `
-                    break;
-                case 'Toggle':
-                    gst_form.innerHTML = gst_form.innerHTML +
-                        `
+                        break;
+                    case 'Toggle':
+                        container_id.innerHTML = container_id.innerHTML +
+                            `
                     <div class="form-group" id='${element?.field_type}_${element?.field_id}'>
                     <label class="control-label">${element?.field_title}</label>
                     <div class="toggle-flip">
@@ -212,21 +179,76 @@
                      </div>
                     </div>
                     `
-                    break;
-                case 'Dropdown':
-                    gst_form.innerHTML = gst_form.innerHTML +
-                        `
+                        break;
+                    case 'Dropdown':
+                        container_id.innerHTML = container_id.innerHTML +
+                            `
                         <div class="form-group">
                              <label for='${element?.field_type}_${element?.field_id}'>${element?.field_title}</label>
-                            <select class="form-control" id='${element?.field_type}_${element?.field_id}'>
+                            <select onchange="updateFieldValueAssociateDropDown(${element?.field_id})" class="form-control" id='${element?.field_type}_${element?.field_id}'>
+                                <option value="" >-Select One - </option>
                                 ${element?.field_values?.map(fieldValue => (
-                            `<option value='${fieldValue[0]}'>${fieldValue[0]}</option>`
-                        )).join('')}
+                                `<option value='${fieldValue}'>${fieldValue[0]}</option>`
+                            )).join('')}
                             </select>
                         </div>
+                        <div id="field_value_associate_${element?.field_id}" ></div>
                         `
-                default:
-                    break;
+                    default:
+                        break;
+                }
+            }
+        }
+        setFields('gst_form', fetchedFiels)
+        function updateFieldValueAssociateDropDown(id) {
+            let selectDropDown = document.getElementById(`Dropdown_${id}`);
+            let arrOfData = selectDropDown.value.split(',');
+            let theRemovedElement = arrOfData.shift();
+            let arrOfNum = arrOfData.map(str => {
+                return Number(str);
+            });
+            if (arrOfNum?.length > 0) {
+                startLoader()
+                axiosInstance.post('fetch_dependencies', {
+                    "fetch_field": arrOfNum
+                }).then((response) => {
+                    console.log(response)
+                    let nowGG1 = [
+                        {
+                            "field_id": "1",
+                            "field_title": "Full Name",
+                            "field_type": "Text",
+                            "field_required": true,
+                            "field_associated_to": "[6]"
+                        },
+                        {
+                            "field_id": "6",
+                            "field_title": "Gender",
+                            "field_type": "Radio-Button",
+                            "field_required": true,
+                            "field_associated_to": null,
+                            "field_values": [['Male'], ['Female']]
+                        },
+                    ]
+                    let nowGG2 = [
+                        {
+                            "field_id": "6",
+                            "field_title": "Gender",
+                            "field_type": "Radio-Button",
+                            "field_required": true,
+                            "field_associated_to": null,
+                            "field_values": [['Male'], ['Female']]
+                        },
+                    ]
+                    setFields(`field_value_associate_${id}`, arrOfNum?.length > 1 ? nowGG1 : nowGG2)
+
+                    endLoader()
+                }, (error) => {
+                    console.log('error', error);
+                    endLoader()
+                })
+            } else {
+                document.getElementById(`field_value_associate_${id}`).innerHTML = ''
             }
         }
     </script>
