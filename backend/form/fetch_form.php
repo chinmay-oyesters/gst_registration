@@ -19,6 +19,7 @@ $query->execute();
 
 
 function getFieldsArray($field, $fields, $field_ids_done, $con){
+    
     $field_array = [
         "field_id" => $field->form_field_id,
         "field_title" => $field->form_field_title,
@@ -28,7 +29,7 @@ function getFieldsArray($field, $fields, $field_ids_done, $con){
     ];
 
     if(strtolower($field->form_field_type) === "dropdown"){
-        $field_array["field_values"] = $field->form_field_values;
+        $field_array["field_values"] = json_decode(str_replace("'", "\"", $field->form_field_values));
     }
     
     $values = $field->form_field_values;
@@ -79,31 +80,33 @@ function getFieldsArray($field, $fields, $field_ids_done, $con){
     array_push($fields, $field_array);
 
     $form_field_associated_to = json_decode($field_array['field_associated_to']);
-    
-    foreach ($form_field_associated_to as $form_field_associated_to_id) {
-        $sql = "SELECT
-            form_field_id,
-            form_field_title,
-            form_field_type,
-            form_field_required,
-            form_field_values,
-            form_field_associated_to
-            FROM form_field_table WHERE form_field_id = $form_field_associated_to_id";
-        
-        $query = $con -> prepare($sql);
-        $query->execute();
 
-        $fields_result = $query->fetchAll(PDO::FETCH_OBJ);
+    if($form_field_associated_to != NULL){
+        foreach ($form_field_associated_to as $form_field_associated_to_id) {
+            $sql = "SELECT
+                form_field_id,
+                form_field_title,
+                form_field_type,
+                form_field_required,
+                form_field_values,
+                form_field_associated_to
+                FROM form_field_table WHERE form_field_id = $form_field_associated_to_id";
+            
+            $query = $con -> prepare($sql);
+            $query->execute();
 
-        foreach ($fields_result as $inner_field) {
-            $get_fields_result = getFieldsArray(
-                $inner_field,
-                $fields,
-                $field_ids_done,
-                $con
-            );
-            $fields = $get_fields_result[0];
-            $field_ids_done = $get_fields_result[1];
+            $fields_result = $query->fetchAll(PDO::FETCH_OBJ);
+
+            foreach ($fields_result as $inner_field) {
+                $get_fields_result = getFieldsArray(
+                    $inner_field,
+                    $fields,
+                    $field_ids_done,
+                    $con
+                );
+                $fields = $get_fields_result[0];
+                $field_ids_done = $get_fields_result[1];
+            }
         }
     }
     
