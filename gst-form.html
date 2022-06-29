@@ -69,42 +69,7 @@
             <h3 class="tile-title">Your Form</h3>
             <div class="tile-body">
                 <form id="gst_form">
-                    <div class="form-group">
-                        <label class="control-label">Full Name</label>
-                        <input class="form-control" type="text" placeholder="Enter full name">
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Email</label>
-                        <input class="form-control" type="email" placeholder="Enter email address">
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Address</label>
-                        <textarea class="form-control" rows="4" placeholder="Enter your address"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Gender</label>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="radio" name="gender">Male
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="radio" name="gender">Female
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Identity Proof</label>
-                        <input class="form-control" type="file">
-                    </div>
-                    <div class="form-group">
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox">I accept the terms and conditions
-                            </label>
-                        </div>
-                    </div>
+
                 </form>
             </div>
             <div class="tile-footer">
@@ -122,8 +87,148 @@
     <script type="text/javascript" src="js/plugins/chart.js"></script>
     <script src="js/globalFunction.js"></script>
     <script type="text/javascript">
-        startLoader()
-        console.log("gg")
+        // startLoader()
+        // <div class="form-group">
+        //                 <label class="control-label">Full Name</label>
+        //                 <input class="form-control" type="text" placeholder="Enter full name">
+        //             </div>
+        //             <div class="form-group">
+        //                 <label class="control-label">Email</label>
+        //                 <input class="form-control" type="email" placeholder="Enter email address">
+        //             </div>
+        //             <div class="form-group">
+        //                 <label class="control-label">Address</label>
+        //                 <textarea class="form-control" rows="4" placeholder="Enter your address"></textarea>
+        //             </div>
+        //             <div class="form-group">
+        //                 <label class="control-label">Gender</label>
+        //                 <div class="form-check">
+        //                     <label class="form-check-label">
+        //                         <input class="form-check-input" type="radio" name="gender">Male
+        //                     </label>
+        //                 </div>
+        //                 <div class="form-check">
+        //                     <label class="form-check-label">
+        //                         <input class="form-check-input" type="radio" name="gender">Female
+        //                     </label>
+        //                 </div>
+        //             </div>
+        //             <div class="form-group">
+        //                 <label class="control-label">Identity Proof</label>
+        //                 <input class="form-control" type="file">
+        //             </div>
+        //             <div class="form-group">
+        //                 <div class="form-check">
+        //                     <label class="form-check-label">
+        //                         <input class="form-check-input" type="checkbox">I accept the terms and conditions
+        //                     </label>
+        //                 </div>
+        //             </div>
+        let fetchedFiels = [
+            {
+                "field_id": "1",
+                "field_title": "Full Name",
+                "field_type": "Text",
+                "field_required": true,
+                "field_associated_to": "[6]"
+            },
+            {
+                "field_id": "6",
+                "field_title": "Gender",
+                "field_type": "Radio-Button",
+                "field_required": true,
+                "field_associated_to": null,
+                "field_values": [['Male'], ['Female']]
+            },
+            {
+                "field_id": "2",
+                "field_title": "Age",
+                "field_type": "Text",
+                "field_required": true,
+                "field_associated_to": null
+            },
+            {
+                "field_id": "3",
+                "field_title": "I have a",
+                "field_type": "Radio-Button",
+                "field_required": true,
+                "field_associated_to": null,
+                "field_values": [['Permanent Account Number(PAN)', 7], ['Do not have a Permanent Account Number(PAN)', 8]]
+            },
+            {
+                "field_id": "4",
+                "field_title": "Are you a Regular Tax Payer",
+                "field_type": "Toggle",
+                "field_required": true,
+                "field_associated_to": null,
+                "field_values": [['No'], ['Yes', 15]]
+            },
+            {
+                "field_id": "5",
+                "field_title": "I am a",
+                "field_type": "Dropdown",
+                "field_required": "1",
+                "field_associated_to": null,
+                "field_values": [['Tax Deductor', '9', '10'], ['Tax Collector', 9], ['Tax Payer', 10]]
+            }
+        ]
+        let gst_form = document.getElementById('gst_form')
+        gst_form.innerHTML = ''
+        for (let i = 0; i < fetchedFiels.length; i++) {
+            const element = fetchedFiels[i];
+            switch (element?.field_type) {
+                case 'Text':
+                    gst_form.innerHTML = gst_form.innerHTML +
+                        `
+                    <div class="form-group" id='${element?.field_type}_${element?.field_id}'>
+                    <label class="control-label">${element?.field_title}</label>
+                        <input class="form-control" type="text" placeholder='${element?.field_title?.toLocaleLowerCase()}'>
+                    </div>
+                    `
+                    break;
+                case 'Radio-Button':
+                    gst_form.innerHTML = gst_form.innerHTML +
+                        `<div class="form-group" id='${element?.field_type}_${element?.field_id}'>
+                        <label class="control-label">${element?.field_title}</label>
+                        ${element?.field_values?.map(fieldValue => (
+                            `<div class="form-check">
+                                <label class="form-check-label">
+                                   <input class="form-check-input" type="radio" name='${element?.field_type}_${element?.field_id}'>${fieldValue[0]}
+                                </label>
+                            </div>`
+                        )).join('')}
+                        </div>
+                        `
+                    break;
+                case 'Toggle':
+                    gst_form.innerHTML = gst_form.innerHTML +
+                        `
+                    <div class="form-group" id='${element?.field_type}_${element?.field_id}'>
+                    <label class="control-label">${element?.field_title}</label>
+                    <div class="toggle-flip">
+                         <label>
+                     <input type="checkbox"><span class="flip-indecator" data-toggle-on='${element?.field_values[1][0]}' data-toggle-off='${element?.field_values[0][0]}'></span>
+                     </label>
+                     </div>
+                    </div>
+                    `
+                    break;
+                case 'Dropdown':
+                    gst_form.innerHTML = gst_form.innerHTML +
+                        `
+                        <div class="form-group">
+                             <label for='${element?.field_type}_${element?.field_id}'>${element?.field_title}</label>
+                            <select class="form-control" id='${element?.field_type}_${element?.field_id}'>
+                                ${element?.field_values?.map(fieldValue => (
+                            `<option value='${fieldValue[0]}'>${fieldValue[0]}</option>`
+                        )).join('')}
+                            </select>
+                        </div>
+                        `
+                default:
+                    break;
+            }
+        }
     </script>
 </body>
 
