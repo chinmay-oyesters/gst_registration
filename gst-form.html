@@ -132,13 +132,13 @@
                 "field_id": "5",
                 "field_title": "I am a",
                 "field_type": "Dropdown",
-                "field_required": false,
+                "field_required": true,
                 "field_associated_to": null,
                 "field_values": [['Tax Deductor', '2', '2'], ['Tax Collector', '2'], ['Tax Payer']]
             }
         ]
+        let fieldsAssociate = [];
         function setFields(container_id_n, nowFields) {
-            console.log(container_id_n, nowFields)
             let container_id = document.getElementById(container_id_n)
             container_id.innerHTML = ''
             for (let i = 0; i < nowFields.length; i++) {
@@ -149,18 +149,18 @@
                             `
                             <div class="form-group" >
                             <label class="control-label">${element?.field_title}</label>
-                            <input class="form-control" id='${element?.field_type}_${element?.field_id}' type="text" placeholder='${element?.field_title?.toLocaleLowerCase()}'>
+                            <input class="form-control" id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}' type="text" placeholder='${element?.field_title?.toLocaleLowerCase()}'>
                             </div>
                             `
                         break;
                     case 'Radio-Button':
                         container_id.innerHTML = container_id.innerHTML +
-                            `<div class="form-group" id='${element?.field_type}_${element?.field_id}'>
+                            `<div class="form-group" >
                              <label class="control-label">${element?.field_title}</label>
-                             ${element?.field_values?.map(fieldValue => (
+                             ${element?.field_values?.map((fieldValue, index) => (
                                 `<div class="form-check">
                                 <label class="form-check-label">
-                                   <input class="form-check-input" type="radio" name='${element?.field_type}_${element?.field_id}'>${fieldValue[0]}
+                                   <input class="form-check-input" type="radio"  id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}_${index}' name='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}'>${fieldValue[0]}
                                 </label>
                             </div>`
                             )).join('')}
@@ -170,13 +170,17 @@
                     case 'Toggle':
                         container_id.innerHTML = container_id.innerHTML +
                             `
-                    <div class="form-group" id='${element?.field_type}_${element?.field_id}'>
+                    <div class="form-group" >
                     <label class="control-label">${element?.field_title}</label>
-                    <div class="toggle-flip">
-                         <label>
-                     <input type="checkbox"><span class="flip-indecator" data-toggle-on='${element?.field_values[1][0]}' data-toggle-off='${element?.field_values[0][0]}'></span>
-                     </label>
-                     </div>
+                        <div class="d-flex justify-content-between align-items-center" style="max-width:100px;">
+                            <p> ${element?.field_values[0][0]}</p>
+                         <div class="toggle lg ">
+                        <label>
+                          <input type="checkbox"  id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}'><span class="button-indecator" ></span>
+                        </label>   
+                       </div>
+                       <p> ${element?.field_values[1][0]}</p>
+                            </div>
                     </div>
                     `
                         break;
@@ -184,15 +188,15 @@
                         container_id.innerHTML = container_id.innerHTML +
                             `
                         <div class="form-group">
-                             <label for='${element?.field_type}_${element?.field_id}'>${element?.field_title}</label>
-                            <select onchange="updateFieldValueAssociateDropDown(${element?.field_id})" class="form-control" id='${element?.field_type}_${element?.field_id}'>
+                             <label for='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}'>${element?.field_title}</label>
+                            <select onchange="updateFieldValueAssociateDropDown(${element?.field_id}${element?.field_parent_id || ''})" class="form-control" id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}'>
                                 <option value="" >-Select One - </option>
                                 ${element?.field_values?.map(fieldValue => (
                                 `<option value='${fieldValue}'>${fieldValue[0]}</option>`
                             )).join('')}
                             </select>
                         </div>
-                        <div id="field_value_associate_${element?.field_id}" ></div>
+                        <div id="field_value_associate_${element?.field_id}${element?.field_parent_id || ''}" ></div>
                         `
                     default:
                         break;
@@ -240,29 +244,75 @@
                             "field_values": [['Male'], ['Female']]
                         },
                     ]
-                    setFields(`field_value_associate_${id}`, arrOfNum?.length > 1 ? nowGG1 : nowGG2)
+                    let currentFieldAssociate = fieldsAssociate?.filter(fa => fa?.field_parent_id != id)
 
+                    if (arrOfNum?.length > 1) {
+                        nowGG1.forEach(object => {
+                            object.field_parent_id = id;
+                        });
+                        fieldsAssociate = [...currentFieldAssociate, ...nowGG1]
+                    } else {
+                        nowGG2.forEach(object => {
+                            object.field_parent_id = id;
+                        });
+                        fieldsAssociate = [...currentFieldAssociate, ...nowGG2]
+                    }
+                    setFields(`field_value_associate_${id}`, arrOfNum?.length > 1 ? nowGG1 : nowGG2)
+                    console.log(fieldsAssociate)
                     endLoader()
                 }, (error) => {
                     console.log('error', error);
                     endLoader()
                 })
             } else {
+                let currentFieldAssociate = fieldsAssociate?.filter(fa => fa?.field_parent_id != id)
+                fieldsAssociate = [...currentFieldAssociate]
                 document.getElementById(`field_value_associate_${id}`).innerHTML = ''
             }
         }
-        function submitForm() {
-            for (let i = 0; i < fetchedFiels.length; i++) {
-                const element = fetchedFiels[i];
+        function validateAllFields(validateFieldList) {
+            for (let i = 0; i < validateFieldList.length; i++) {
+                const element = validateFieldList[i];
                 if (element?.field_required) {
-                    let nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}`).value
-                    console.log(nowValue)
-                    if (nowValue == "" || nowValue == null || nowValue == undefined) {
-                        alert(`Please enter ${element?.field_title}`)
-                        return;
+                    switch (element?.field_type) {
+                        case 'Text':
+                            let nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).value
+                            if (nowValue == "" || nowValue == null || nowValue == undefined) {
+                                alert(`Please enter ${element?.field_title}`)
+                                return false;
+                            }
+                            break;
+                        case 'Radio-Button':
+                            let radioButtons = document.querySelectorAll(`input[name='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}']`);
+                            let selectedSize = null
+                            for (let radioButton of radioButtons) {
+                                if (radioButton.checked) {
+                                    selectedSize = radioButton.value;
+                                    break;
+                                }
+                            }
+                            if (selectedSize == null) {
+                                alert(`Please select ${element?.field_title}`)
+                                return false;
+                            }
+                            break;
+                        case 'Dropdown':
+                            let nowDropDown = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).value
+                            if (nowDropDown == "") {
+                                alert(`Please select ${element?.field_title}`)
+                                return false;
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
+            return true
+        }
+        function submitForm() {
+            let validateFirst = validateAllFields(fetchedFiels)
+            let validateSecond = validateAllFields(fieldsAssociate)
         }
     </script>
 </body>
