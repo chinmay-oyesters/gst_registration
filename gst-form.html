@@ -90,52 +90,59 @@
     <script src="js/globalFunction.js"></script>
     <script type="text/javascript" src="js/plugins/bootstrap-notify.min.js"></script>
     <script type="text/javascript">
-        let fetchedFiels = [
+        let fetchedFields = [
             {
                 "field_id": "1",
-                "field_title": "Full Name",
+                "field_title": "Trade Name",
                 "field_type": "Text",
-                "field_required": true,
-                "field_associated_to": [6]
+                "field_required": false,
+                "field_associated_to": null
             },
             {
                 "field_id": "6",
-                "field_title": "Gender",
-                "field_type": "Radio-Button",
+                "field_title": "Constitution of Business",
+                "field_type": "Dropdown",
                 "field_required": true,
                 "field_associated_to": null,
-                "field_values": [['Male'], ['Female']]
+                "field_values": [["Foreign Company"], ["Foreign Limited Liability Partnership"], ["Government Department"], ["Hindu Undivided Family"], ["Limited Liability Partnership"], ["Local Authority"], ["Others", "20"]]
             },
             {
                 "field_id": "2",
-                "field_title": "Age",
+                "field_title": "District",
+                "field_type": "Dropdown",
+                "field_required": true,
+                "field_associated_to": null,
+                "field_values": [["Ahmednagar"], ["Akola"], ["Amravati"], ["Aurangabad"], ["Beed"], ["Bhandara"], ["Buldhana"], ["Chandrapur"], ["Dhule"], ["Gadchiroli"], ["Gondia"], ["Hingoli"]]
+            },
+            {
+                "field_id": "3",
+                "field_title": "Are you applying for registration as a casual taxable person?",
+                "field_type": "Toggle",
+                "field_required": false,
+                "field_associated_to": null,
+                "field_values": [["No"], ["Yes", "21", "22", "23"]]
+            },
+            {
+                "field_id": "4",
+                "field_title": "Reason to obtain registration",
+                "field_type": "Dropdown",
+                "field_required": true,
+                "field_associated_to": null,
+                "field_values": [["Crossing the Threshold"], ["Inter-State supply"], ["Liability to pay as recipient of goods or services"], ["Transfer / Succession of business"], ["Death of the Proprietor"], ["De-merger"], ["Change in constitution of business"], ["Merger /Amalgamation"]]
+            },
+            {
+                "field_id": "5",
+                "field_title": "Date of commencement of Business",
                 "field_type": "Text",
                 "field_required": true,
                 "field_associated_to": null
             },
             {
-                "field_id": "3",
-                "field_title": "I have a",
-                "field_type": "Radio-Button",
+                "field_id": "6",
+                "field_title": "Date on which liability to register arises",
+                "field_type": "Text",
                 "field_required": true,
-                "field_associated_to": null,
-                "field_values": [['Permanent Account Number(PAN)', '7'], ['Do not have a Permanent Account Number(PAN)', '8']]
-            },
-            {
-                "field_id": "4",
-                "field_title": "Are you a Regular Tax Payer",
-                "field_type": "Toggle",
-                "field_required": true,
-                "field_associated_to": null,
-                "field_values": [['No'], ['Yes', '15']]
-            },
-            {
-                "field_id": "5",
-                "field_title": "I am a",
-                "field_type": "Dropdown",
-                "field_required": true,
-                "field_associated_to": null,
-                "field_values": [['Tax Deductor', '2', '2'], ['Tax Collector', '2'], ['Tax Payer']]
+                "field_associated_to": null
             }
         ]
         let fieldsAssociate = [];
@@ -149,7 +156,7 @@
                         container_id.innerHTML = container_id.innerHTML +
                             `
                             <div class="form-group" >
-                            <label class="control-label">${element?.field_title}</label>
+                            <label class="control-label">${element?.field_title}</label>${element?.field_required ? '<span class="text-danger" style="font-size:23px;" >*</span>' : ''}
                             <input class="form-control" id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}' type="text" placeholder='${element?.field_title?.toLocaleLowerCase()}'>
                             </div>
                             `
@@ -157,7 +164,7 @@
                     case 'Radio-Button':
                         container_id.innerHTML = container_id.innerHTML +
                             `<div class="form-group" >
-                             <label class="control-label">${element?.field_title}</label>
+                             <label class="control-label">${element?.field_title}</label>${element?.field_required ? '<span class="text-danger" style="font-size:23px;" >*</span>' : ''}
                              ${element?.field_values?.map((fieldValue, index) => (
                                 `<div class="form-check">
                                 <label class="form-check-label">
@@ -172,25 +179,26 @@
                         container_id.innerHTML = container_id.innerHTML +
                             `
                     <div class="form-group" >
-                    <label class="control-label">${element?.field_title}</label>
+                    <label class="control-label">${element?.field_title}</label>${element?.field_required ? '<span class="text-danger" style="font-size:23px;" >*</span>' : ''}
                         <div class="d-flex justify-content-between align-items-center" style="max-width:100px;">
                             <p> ${element?.field_values[0][0]}</p>
                          <div class="toggle lg ">
                         <label>
-                          <input type="checkbox"  id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}'><span class="button-indecator" ></span>
+                          <input type="checkbox" onchange="updateFieldValueAssociateDropDown(${element?.field_id}${element?.field_parent_id || ''},'Toggle','${element?.field_values[1]}')"  id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}'><span class="button-indecator" ></span>
                         </label>   
                        </div>
                        <p> ${element?.field_values[1][0]}</p>
                             </div>
                     </div>
+                    <div id="field_value_associate_${element?.field_id}${element?.field_parent_id || ''}" ></div>
                     `
                         break;
                     case 'Dropdown':
                         container_id.innerHTML = container_id.innerHTML +
                             `
                         <div class="form-group">
-                             <label for='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}'>${element?.field_title}</label>
-                            <select onchange="updateFieldValueAssociateDropDown(${element?.field_id}${element?.field_parent_id || ''})" class="form-control" id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}'>
+                             <label for='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}'>${element?.field_title}</label>${element?.field_required ? '<span class="text-danger" style="font-size:23px;" >*</span>' : ''}
+                            <select onchange="updateFieldValueAssociateDropDown(${element?.field_id}${element?.field_parent_id || ''},'Dropdown','dropdown')" class="form-control" id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}'>
                                 <option value="" >-Select One - </option>
                                 ${element?.field_values?.map(fieldValue => (
                                 `<option value='${fieldValue}'>${fieldValue[0]}</option>`
@@ -204,61 +212,78 @@
                 }
             }
         }
-        setFields('gst_form', fetchedFiels)
-        function updateFieldValueAssociateDropDown(id) {
-            let selectDropDown = document.getElementById(`Dropdown_${id}`);
-            let arrOfData = selectDropDown.value.split(',');
-            let theRemovedElement = arrOfData.shift();
-            let arrOfNum = arrOfData.map(str => {
-                return Number(str);
-            });
+        setFields('gst_form', fetchedFields)
+        function updateFieldValueAssociateDropDown(id, field_id_type, get_fieldValue) {
+            console.log(get_fieldValue)
+            let arrOfData = null
+            let arrOfNum = []
+            switch (field_id_type) {
+                case 'Toggle':
+                    let selectedToggle = document.getElementById(`${field_id_type}_${id}`)
+                    if (selectedToggle.checked) {
+                        arrOfData = get_fieldValue.split(',')
+                    }
+                    break;
+                case 'Dropdown':
+                    let selectDropDown = document.getElementById(`${field_id_type}_${id}`);
+                    arrOfData = selectDropDown.value.split(',');
+                    break;
+                default:
+                    break;
+            }
+            if (arrOfData?.length > 1) {
+                let theRemovedElement = arrOfData.shift();
+                arrOfNum = arrOfData.map(str => {
+                    return Number(str);
+                });
+            }
+            console.log(arrOfNum)
             if (arrOfNum?.length > 0) {
                 startLoader()
                 axiosInstance.post('fetch_dependencies', {
                     "fetch_field": arrOfNum
                 }).then((response) => {
                     console.log(response)
-                    let nowGG1 = [
-                        {
-                            "field_id": "1",
-                            "field_title": "Full Name",
-                            "field_type": "Text",
-                            "field_required": true,
-                            "field_associated_to": "[6]"
-                        },
-                        {
-                            "field_id": "6",
-                            "field_title": "Gender",
-                            "field_type": "Radio-Button",
-                            "field_required": true,
-                            "field_associated_to": null,
-                            "field_values": [['Male'], ['Female']]
-                        },
-                    ]
-                    let nowGG2 = [
-                        {
-                            "field_id": "6",
-                            "field_title": "Gender",
-                            "field_type": "Radio-Button",
-                            "field_required": true,
-                            "field_associated_to": null,
-                            "field_values": [['Male'], ['Female']]
-                        },
-                    ]
-                    let currentFieldAssociate = fieldsAssociate?.filter(fa => fa?.field_parent_id != id)
-
-                    if (arrOfNum?.length > 1) {
-                        nowGG1.forEach(object => {
-                            object.field_parent_id = id;
-                        });
-                        fieldsAssociate = [...currentFieldAssociate, ...nowGG1]
-                    } else {
-                        nowGG2.forEach(object => {
-                            object.field_parent_id = id;
-                        });
-                        fieldsAssociate = [...currentFieldAssociate, ...nowGG2]
+                    let newGG = []
+                    if (id == 6) {
+                        newGG = [
+                            {
+                                "field_id": "20",
+                                "field_title": "Others (Please specify)",
+                                "field_type": "Text",
+                                "field_required": true,
+                                "field_associated_to": null
+                            }
+                        ]
                     }
-                    setFields(`field_value_associate_${id}`, arrOfNum?.length > 1 ? nowGG1 : nowGG2)
+                    if (id == 3) {
+                        newGG = [
+                            {
+                                "field_id": "21",
+                                "field_title": "Period for which registration is required",
+                                "field_type": "Text",
+                                "field_required": true,
+                                "field_associated_to": null
+                            },
+                            {
+                                "field_id": "22",
+                                "field_title": "Integrated Tax Turnover",
+                                "field_type": "Text",
+                                "field_required": true,
+                                "field_associated_to": null
+                            },
+                            {
+                                "field_id": "23",
+                                "field_title": "Integrated Tax Net Liability",
+                                "field_type": "Text",
+                                "field_required": true,
+                                "field_associated_to": null
+                            }
+                        ]
+                    }
+                    let currentFieldAssociate = fieldsAssociate?.filter(fa => fa?.field_parent_id != id)
+                    fieldsAssociate = [...currentFieldAssociate, ...newGG]
+                    setFields(`field_value_associate_${id}`, newGG);
                     console.log(fieldsAssociate)
                     endLoader()
                 }, (error) => {
@@ -271,12 +296,14 @@
                 document.getElementById(`field_value_associate_${id}`).innerHTML = ''
             }
         }
+
         function validateAllFields(validateFieldList) {
             for (let i = 0; i < validateFieldList.length; i++) {
                 const element = validateFieldList[i];
                 if (element?.field_required) {
                     switch (element?.field_type) {
                         case 'Text':
+                            console.log(element)
                             let nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).value
                             if (nowValue == "" || nowValue == null || nowValue == undefined) {
                                 $.notify({
@@ -330,11 +357,11 @@
             return true
         }
         function submitForm() {
-            let validateFirst = validateAllFields(fetchedFiels)
-            let validateSecond = validateAllFields(fieldsAssociate)
+            let validateFirst = validateAllFields(fetchedFields)
             if (!validateFirst) {
                 return
             }
+            let validateSecond = validateAllFields(fieldsAssociate)
             if (!validateSecond) {
                 return
             }
