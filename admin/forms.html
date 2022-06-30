@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IEC Form - GST Admin</title>
+    <title>Customer - GST Admin</title>
     <!-- Main CSS-->
     <link rel="stylesheet" type="text/css" href="../css/main.css">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
@@ -129,26 +129,16 @@
                         class="app-menu__icon fa fa-user"></i><span class="app-menu__label">Users</span><i
                         class="treeview-indicator fa fa-angle-right"></i></a>
                 <ul class="treeview-menu">
-                    <li><a class="treeview-item " href="staff.html"><i class="icon fa fa-circle-o"></i> Staff</a>
-                    </li>
-                    <li><a class="treeview-item" href="customer.html"><i class="icon fa fa-circle-o"></i> Customer</a>
+                    <li><a class="treeview-item " href="staff.html"><i class="icon fa fa-circle-o"></i> Staff</a></li>
+                    <li><a class="treeview-item " href="customer.html"><i class="icon fa fa-circle-o"></i>
+                            Customer</a>
                     </li>
                 </ul>
             </li>
             <li><a class="app-menu__item" href="payments.html"><i class="app-menu__icon fa fa-money"></i><span
                         class="app-menu__label">Payments</span></a></li>
-            <li class="treeview"><a class="app-menu__item active" href="#" data-toggle="treeview"><i
-                        class="app-menu__icon fa fa-edit"></i><span class="app-menu__label">Forms</span><i
-                        class="treeview-indicator fa fa-angle-right"></i></a>
-                <ul class="treeview-menu">
-                    <li><a class="treeview-item " href="gst-form.html"><i class="icon fa fa-circle-o"></i>
-                            GST</a></li>
-                    <li><a class="treeview-item active" href="iec-form.html"><i class="icon fa fa-circle-o"></i>IEC
-                        </a></li>
-                    <li><a class="treeview-item" href="pt-form.html"><i class="icon fa fa-circle-o"></i>
-                            PT</a></li>
-                </ul>
-            </li>
+            <li><a class="app-menu__item active" href="forms.html"><i class="app-menu__icon fa fa-file-text-o"
+                        aria-hidden="true"></i><span class="app-menu__label">Forms</span></a></li>
             <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
                         class="app-menu__icon fa fa-cog"></i><span class="app-menu__label">Settings</span><i
                         class="treeview-indicator fa fa-angle-right"></i></a>
@@ -164,25 +154,32 @@
     <main class="app-content">
         <div class="app-title">
             <div>
-                <h1><i class="fa fa-users" aria-hidden="true"></i>&nbsp;IEC FORM</h1>
+                <h1><i class="fa fa-users" aria-hidden="true"></i>&nbsp;Customer</h1>
             </div>
         </div>
-        <div class="tile">
-            <div class="tile-body">
-                <div class="table-responsive">
-                    <table class="table table-hover table-bordered" id="sampleTable">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone Number</th>
-                                <th style="width: 135px;">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
+        <div class="row">
+            <div class="col-md-6 col-lg-4 ">
+                <div class="p-4 card_primary m-2 cp user_dashboard_card" onclick="location.href='gst-form.html'">
+                    <img src="../images/gst_logo.png" alt="">
+                    <h4>GST</h4>
+                    <h6>Total Forms: 67</h6>
+                    <h6>Total Completed: 67</h6>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4   ">
+                <div class="p-4 card_secondary m-2  cp user_dashboard_card"  onclick="location.href='iec-form.html'">
+                    <img src="../images/iec_logo.png" alt="">
+                    <h4>IEC</h4>
+                    <h6>Total Forms: 67</h6>
+                    <h6>Total Completed: 67</h6>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4  ">
+                <div class="p-4 card_danger m-2  cp user_dashboard_card" onclick="location.href='pan-form.html'">
+                    <img src="../images/pan_logo.png" alt="">
+                    <h4>PAN</h4>
+                    <h6>Total Forms: 67</h6>
+                    <h6>Total Completed: 67</h6>
                 </div>
             </div>
         </div>

@@ -7,3 +7,10 @@ function endLoader() {
   $("div.spanner").removeClass("show");
   $("div.overlay").removeClass("show");
 }
+
+// baseURL: `/gst/backend/`,
+const axiosInstance = axios.create({
+  baseURL: `/backend/`,
+  credentials: "include",
+  withCredentials: true,
+});
