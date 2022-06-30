@@ -88,6 +88,7 @@
     <script src="js/plugins/pace.min.js"></script>
     <script type="text/javascript" src="js/plugins/chart.js"></script>
     <script src="js/globalFunction.js"></script>
+    <script type="text/javascript" src="js/plugins/bootstrap-notify.min.js"></script>
     <script type="text/javascript">
         let fetchedFiels = [
             {
@@ -278,7 +279,13 @@
                         case 'Text':
                             let nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).value
                             if (nowValue == "" || nowValue == null || nowValue == undefined) {
-                                alert(`Please enter ${element?.field_title}`)
+                                $.notify({
+                                    title: "",
+                                    message: `Please enter ${element?.field_title.toLocaleLowerCase()}`,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
                                 return false;
                             }
                             break;
@@ -292,14 +299,26 @@
                                 }
                             }
                             if (selectedSize == null) {
-                                alert(`Please select ${element?.field_title}`)
+                                $.notify({
+                                    title: "",
+                                    message: `Please select ${element?.field_title.toLocaleLowerCase()}`,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
                                 return false;
                             }
                             break;
                         case 'Dropdown':
                             let nowDropDown = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).value
                             if (nowDropDown == "") {
-                                alert(`Please select ${element?.field_title}`)
+                                $.notify({
+                                    title: "",
+                                    message: `Please select ${element?.field_title.toLocaleLowerCase()}`,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
                                 return false;
                             }
                             break;
@@ -313,6 +332,20 @@
         function submitForm() {
             let validateFirst = validateAllFields(fetchedFiels)
             let validateSecond = validateAllFields(fieldsAssociate)
+            if (!validateFirst) {
+                return
+            }
+            if (!validateSecond) {
+                return
+            }
+            $('#gst_form')[0].reset();
+            $.notify({
+                title: "",
+                message: `Form submitted successfully`,
+                icon: 'fa fa-times'
+            }, {
+                type: "success",
+            });
         }
     </script>
 </body>
