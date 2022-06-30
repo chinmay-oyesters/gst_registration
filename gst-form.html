@@ -276,6 +276,9 @@
                             }
                         ]
                     }
+                    newGG.forEach(object => {
+                        object.field_parent_id = id;
+                    });
                     let currentFieldAssociate = fieldsAssociate?.filter(fa => fa?.field_parent_id != id)
                     fieldsAssociate = [...currentFieldAssociate, ...newGG]
                     setFields(`field_value_associate_${id}`, newGG);
@@ -288,6 +291,7 @@
             } else {
                 let currentFieldAssociate = fieldsAssociate?.filter(fa => fa?.field_parent_id != id)
                 fieldsAssociate = [...currentFieldAssociate]
+                console.log(fieldsAssociate)
                 document.getElementById(`field_value_associate_${id}`).innerHTML = ''
             }
         }
@@ -356,6 +360,7 @@
             if (!validateFirst) {
                 return
             }
+            console.log(fieldsAssociate)
             let validateSecond = validateAllFields(fieldsAssociate)
             if (!validateSecond) {
                 return
