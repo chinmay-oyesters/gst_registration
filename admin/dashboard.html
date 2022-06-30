@@ -94,18 +94,8 @@
             </li>
             <li><a class="app-menu__item" href="payments.html"><i class="app-menu__icon fa fa-money"></i><span
                         class="app-menu__label">Payments</span></a></li>
-            <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
-                        class="app-menu__icon fa fa-edit"></i><span class="app-menu__label">Forms</span><i
-                        class="treeview-indicator fa fa-angle-right"></i></a>
-                <ul class="treeview-menu">
-                    <li><a class="treeview-item" href="gst-form.html"><i class="icon fa fa-circle-o"></i>
-                            GST</a></li>
-                    <li><a class="treeview-item" href="iec-form.html"><i class="icon fa fa-circle-o"></i>IEC
-                        </a></li>
-                    <li><a class="treeview-item" href="pt-form.html"><i class="icon fa fa-circle-o"></i>
-                            PT</a></li>
-                </ul>
-            </li>
+            <li><a class="app-menu__item" href="forms.html"><i class="app-menu__icon fa fa-file-text-o" aria-hidden="true"></i><span
+                        class="app-menu__label">Forms</span></a></li>
             <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
                         class="app-menu__icon fa fa-cog"></i><span class="app-menu__label">Settings</span><i
                         class="treeview-indicator fa fa-angle-right"></i></a>
@@ -159,20 +149,70 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
-                <div class="tile">
+            <div class="col-md-4">
+                <div class="tile" style="max-height: 426px;min-height:425px;overflow: auto;">
                     <h3 class="tile-title">Monthly Sales</h3>
                     <div class="embed-responsive embed-responsive-16by9">
                         <canvas class="embed-responsive-item" id="lineChartDemo"></canvas>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div class="tile">
-                    <h3 class="tile-title">Support Requests</h3>
-                    <div class="embed-responsive embed-responsive-16by9">
-                        <canvas class="embed-responsive-item" id="pieChartDemo"></canvas>
-                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr style="border-top: none;">
+                                <th></th>
+                                <th>GST</th>
+                                <th>IEC</th>
+                                <th>DGFT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>No. of visitors</td>
+                                <td>10</td>
+                                <td>23</td>
+                                <td>45</td>
+                            </tr>
+                            <tr>
+                                <td>Users registered</td>
+                                <td>10</td>
+                                <td>23</td>
+                                <td>45</td>
+                            </tr>
+                            <tr>
+                                <td>Users Converted</td>
+                                <td>10</td>
+                                <td>23</td>
+                                <td>45</td>
+                            </tr>
+                            <tr>
+                                <td>Applications in-progress (user)</td>
+                                <td>10</td>
+                                <td>23</td>
+                                <td>45</td>
+                            </tr>
+                            <tr>
+                                <td>Applications in-progress (Admin)</td>
+                                <td>10</td>
+                                <td>23</td>
+                                <td>45</td>
+                            </tr>
+                            <tr>
+                                <td>Reg Completed</td>
+                                <td>10</td>
+                                <td>23</td>
+                                <td>45</td>
+                            </tr>
+                            <tr>
+                                <td>Docs uploaded</td>
+                                <td>10</td>
+                                <td>23</td>
+                                <td>45</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
