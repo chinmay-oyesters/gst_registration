@@ -17,17 +17,22 @@ $field_validation = $_POST['field_validation'];
 $field_required = $_POST['field_required'];
 
 // looking for the max form field id in database
+// need to return id for new field that will be created
+// so manually replicating AUTO_INCREMENT functionality of mysql
 $sql = "SELECT max(form_field_id) AS form_field_id FROM form_field_table";
 $query = $con -> prepare($sql);
 $query->execute();
 
 $form_field_id = $query->fetchAll(PDO::FETCH_OBJ)[0]->form_field_id;
 
+// if the max form field is not defined, make it 0
 if($form_field_id == NULL){
     $form_field_id = 0;
 }
+// increment the id for adding a new field
 $form_field_id += 1;
 
+// query to add a new form field in the table
 $sql = "INSERT INTO form_field_table
         (
             form_field_tag1,
@@ -50,6 +55,7 @@ $sql = "INSERT INTO form_field_table
         )";
 $query = $con -> prepare($sql);
 
+// binding the parameters to the sql query in order to insert new data
 $query->bindParam(':field_tag1', $field_tag1, PDO::PARAM_STR);
 $query->bindParam(':field_title', $field_title, PDO::PARAM_STR);
 $query->bindParam(':field_type', $field_type, PDO::PARAM_STR);
@@ -58,6 +64,7 @@ $query->bindParam(':field_values', $field_values, PDO::PARAM_STR);
 $query->bindParam(':field_validation', $field_validation, PDO::PARAM_STR);
 $query->bindParam(':field_required', $field_required, PDO::PARAM_STR);
 
+// success
 if($query->execute()){
     $form = $query->fetchAll(PDO::FETCH_OBJ);
     $status = 200;
@@ -67,7 +74,9 @@ if($query->execute()){
             "form_field_id" => $form_field_id
         ]
     ];
-}else{
+}
+// failure
+else{
     $status = 203;
     $response = [
         "msg" => "Internal Server Error - Form Field creation failed"
