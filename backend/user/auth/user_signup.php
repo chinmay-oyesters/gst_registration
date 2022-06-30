@@ -8,15 +8,15 @@ $_POST = json_decode(file_get_contents("php://input"), true);
 
 // retrieve required variables
 $username = $_POST['username'];
-$password = md5($_POST['password']);
-$entity_name = $_POST['entity_name'];
+$user_password = md5($_POST['user_password']);
+$entity_fullname = $_POST['entity_fullname'];
 $entity_pan = $_POST['entity_pan'];
 $entity_phonenumber = $_POST['entity_phonenumber'];
 $entity_email = $_POST['entity_email'];
-$person_name = $_POST['person_name'];
-$person_email = $_POST['person_email'];
-$person_phonenumber = $_POST['person_phonenumber'];
-
+$user_fullname = $_POST['user_fullname'];
+$user_email = $_POST['user_email'];
+$user_phonenumber = $_POST['user_phonenumber'];
+$datetime = date("Y-m-d H:i:s");
 
 
 //Finding is the particular user already signed up
@@ -28,30 +28,27 @@ $query->execute();
 if($query->rowCount() === 0){
 
     $sql = "INSERT INTO 
-    user_table (username, password, entity_name, entity_pan, entity_phonenumber, entity_email, person_name, person_email, person_phonenumber) VALUES 
-    (:username, :password, :entity_name, :entity_pan, :entity_phonenumber, :entity_email, :person_name, :person_email, :person_phonenumber)";
+    user_table (username, user_password, entity_fullname, entity_pan, entity_phonenumber, entity_email, user_fullname, user_email, user_phonenumber, created_at, updated_at) VALUES 
+    (:username, :user_password, :entity_fullname, :entity_pan, :entity_phonenumber, :entity_email, :user_fullname, :user_email, :user_phonenumber, :created_at, :updated_at)";
     $query = $con -> prepare($sql);
     $query->bindParam(':username', $username, PDO::PARAM_STR);
-    $query->bindParam(':password', $password, PDO::PARAM_STR);
-    $query->bindParam(':entity_name', $entity_name, PDO::PARAM_STR);
+    $query->bindParam(':user_password', $user_password, PDO::PARAM_STR);
+    $query->bindParam(':entity_fullname', $entity_fullname, PDO::PARAM_STR);
     $query->bindParam(':entity_pan', $entity_pan, PDO::PARAM_STR);
     $query->bindParam(':entity_phonenumber', $entity_phonenumber, PDO::PARAM_STR);
     $query->bindParam(':entity_email', $entity_email, PDO::PARAM_STR);
-    $query->bindParam(':person_name', $person_name, PDO::PARAM_STR);
-    $query->bindParam(':person_email', $person_email, PDO::PARAM_STR);
-    $query->bindParam(':person_phonenumber', $person_phonenumber, PDO::PARAM_STR);
+    $query->bindParam(':user_fullname', $user_fullname, PDO::PARAM_STR);
+    $query->bindParam(':user_email', $user_email, PDO::PARAM_STR);
+    $query->bindParam(':user_phonenumber', $user_phonenumber, PDO::PARAM_STR);
+    $query->bindparam(":created_at", $datetime, PDO::PARAM_STR);
+    $query->bindparam(":updated_at", $datetime, PDO::PARAM_STR);
     
 
     if($query->execute()){
         $user = $query->fetchAll(PDO::FETCH_OBJ);
         $status = 200;
         $response = [
-            "msg" => "User created successfully",
-            "user" => [
-                "person_name" => $person_name,
-                "person_email" => $person_email,
-                "person_phonenumber" => $person_phonenumber
-            ]
+            "msg" => "User created successfully"
         ];
     }else{
         $status = 203;
