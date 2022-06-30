@@ -14,3 +14,13 @@ const axiosInstance = axios.create({
   credentials: "include",
   withCredentials: true,
 });
+// render file
+var loadFile = function (event, preview_id) {
+  var output = document.getElementById(preview_id);
+  output.src = URL.createObjectURL(event.target.files[0]);
+  logoFileData = event.target?.files[0];
+  console.log(logoFileData);
+  output.onload = function () {
+    URL.revokeObjectURL(output.src); // free memory
+  };
+};
