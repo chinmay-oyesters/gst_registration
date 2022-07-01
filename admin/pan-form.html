@@ -33,77 +33,12 @@
             aria-label="Hide Sidebar"></a>
         <!-- Navbar Right Menu-->
         <ul class="app-nav">
-            <!--Notification Menu-->
-            <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown"
-                    aria-label="Show notifications"><i class="fa fa-bell-o fa-lg"></i></a>
-                <ul class="app-notification dropdown-menu dropdown-menu-right">
-                    <li class="app-notification__title">You have 4 new notifications.</li>
-                    <div class="app-notification__content">
-                        <li><a class="app-notification__item" href="javascript:;"><span
-                                    class="app-notification__icon"><span class="fa-stack fa-lg"><i
-                                            class="fa fa-circle fa-stack-2x text-primary"></i><i
-                                            class="fa fa-envelope fa-stack-1x fa-inverse"></i></span></span>
-                                <div>
-                                    <p class="app-notification__message">Lisa sent you a mail</p>
-                                    <p class="app-notification__meta">2 min ago</p>
-                                </div>
-                            </a></li>
-                        <li><a class="app-notification__item" href="javascript:;"><span
-                                    class="app-notification__icon"><span class="fa-stack fa-lg"><i
-                                            class="fa fa-circle fa-stack-2x text-danger"></i><i
-                                            class="fa fa-hdd-o fa-stack-1x fa-inverse"></i></span></span>
-                                <div>
-                                    <p class="app-notification__message">Mail server not working</p>
-                                    <p class="app-notification__meta">5 min ago</p>
-                                </div>
-                            </a></li>
-                        <li><a class="app-notification__item" href="javascript:;"><span
-                                    class="app-notification__icon"><span class="fa-stack fa-lg"><i
-                                            class="fa fa-circle fa-stack-2x text-success"></i><i
-                                            class="fa fa-money fa-stack-1x fa-inverse"></i></span></span>
-                                <div>
-                                    <p class="app-notification__message">Transaction complete</p>
-                                    <p class="app-notification__meta">2 days ago</p>
-                                </div>
-                            </a></li>
-                        <div class="app-notification__content">
-                            <li><a class="app-notification__item" href="javascript:;"><span
-                                        class="app-notification__icon"><span class="fa-stack fa-lg"><i
-                                                class="fa fa-circle fa-stack-2x text-primary"></i><i
-                                                class="fa fa-envelope fa-stack-1x fa-inverse"></i></span></span>
-                                    <div>
-                                        <p class="app-notification__message">Lisa sent you a mail</p>
-                                        <p class="app-notification__meta">2 min ago</p>
-                                    </div>
-                                </a></li>
-                            <li><a class="app-notification__item" href="javascript:;"><span
-                                        class="app-notification__icon"><span class="fa-stack fa-lg"><i
-                                                class="fa fa-circle fa-stack-2x text-danger"></i><i
-                                                class="fa fa-hdd-o fa-stack-1x fa-inverse"></i></span></span>
-                                    <div>
-                                        <p class="app-notification__message">Mail server not working</p>
-                                        <p class="app-notification__meta">5 min ago</p>
-                                    </div>
-                                </a></li>
-                            <li><a class="app-notification__item" href="javascript:;"><span
-                                        class="app-notification__icon"><span class="fa-stack fa-lg"><i
-                                                class="fa fa-circle fa-stack-2x text-success"></i><i
-                                                class="fa fa-money fa-stack-1x fa-inverse"></i></span></span>
-                                    <div>
-                                        <p class="app-notification__message">Transaction complete</p>
-                                        <p class="app-notification__meta">2 days ago</p>
-                                    </div>
-                                </a></li>
-                        </div>
-                    </div>
-                    <li class="app-notification__footer"><a href="#">See all notifications.</a></li>
-                </ul>
-            </li>
+
             <!-- User Menu-->
             <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown"
                     aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
                 <ul class="dropdown-menu settings-menu dropdown-menu-right">
-                    <li><a class="dropdown-item" href="page-user.html"><i class="fa fa-user fa-lg"></i> Profile</a></li>
+                    <li><a class="dropdown-item" href="profile.html"><i class="fa fa-user fa-lg"></i> Profile</a></li>
                     <li><a class="dropdown-item" href="page-login.html"><i class="fa fa-sign-out fa-lg"></i> Logout</a>
                     </li>
                 </ul>
@@ -135,20 +70,12 @@
                     </li>
                 </ul>
             </li>
+            <li><a class="app-menu__item" href="roles.html"><i class="app-menu__icon fa fa-male"
+                        aria-hidden="true"></i><span class="app-menu__label">Roles</span></a></li>
             <li><a class="app-menu__item" href="payments.html"><i class="app-menu__icon fa fa-money"></i><span
                         class="app-menu__label">Payments</span></a></li>
-            <li class="treeview"><a class="app-menu__item active" href="#" data-toggle="treeview"><i
-                        class="app-menu__icon fa fa-edit"></i><span class="app-menu__label">Forms</span><i
-                        class="treeview-indicator fa fa-angle-right"></i></a>
-                <ul class="treeview-menu">
-                    <li><a class="treeview-item " href="gst-form.html"><i class="icon fa fa-circle-o"></i>
-                            GST</a></li>
-                    <li><a class="treeview-item " href="iec-form.html"><i class="icon fa fa-circle-o"></i>IEC
-                        </a></li>
-                    <li><a class="treeview-item active" href="pt-form.html"><i class="icon fa fa-circle-o"></i>
-                            PT</a></li>
-                </ul>
-            </li>
+            <li><a class="app-menu__item" href="forms.html"><i class="app-menu__icon fa fa-file-text-o"
+                        aria-hidden="true"></i><span class="app-menu__label">Forms</span></a></li>
             <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
                         class="app-menu__icon fa fa-cog"></i><span class="app-menu__label">Settings</span><i
                         class="treeview-indicator fa fa-angle-right"></i></a>
