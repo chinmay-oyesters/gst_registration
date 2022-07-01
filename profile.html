@@ -14,8 +14,6 @@
         href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <!-- jquery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
 <body class="app sidebar-mini">
@@ -123,7 +121,7 @@
                         </div>
                     </div>
                     <div class="col-12 d-flex justify-content-center mt-4">
-                        <button class="btn btn-success">Submit</button>
+                        <button class="btn btn-success" onclick="saveProfile()">Submit</button>
                     </div>
                 </div>
                 <hr />
@@ -154,6 +152,7 @@
     <script src="js/main.js"></script>
     <script src="js/plugins/pace.min.js"></script>
     <script type="text/javascript" src="js/plugins/chart.js"></script>
+    <script type="text/javascript" src="js/plugins/bootstrap-notify.min.js"></script>
     <script src="js/globalFunction.js"></script>
     <script>
         authenticate()
@@ -178,6 +177,119 @@
                     name.value = dataSet?.user_fullname
                     email.value = dataSet?.user_email
                     mobile.value = dataSet?.user_phonenumber
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+                console.log(response)
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
+        function saveProfile() {
+            startLoader();
+            if (entity_name.value == "" || entity_email.value == "" || entity_pan.value == "" || entity_mobile.value == "" || name.value == "" || email.value == "" || mobile.value == "") {
+                $.notify({
+                    title: "",
+                    message: `Please enter all the fields.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            if (!validateEmail(entity_email.value)) {
+                $.notify({
+                    title: "",
+                    message: `Please enter a valid entity email.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            if (!validateEmail(email.value)) {
+                $.notify({
+                    title: "",
+                    message: `Please enter a valid email.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            if (!validatePAN(entity_pan.value)) {
+                $.notify({
+                    title: "",
+                    message: `Please enter a valid PAN number.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            if (entity_mobile.value?.length != 10) {
+                $.notify({
+                    title: "",
+                    message: `Please enter a valid entity mobile number.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            if (mobile.value?.length != 10) {
+                $.notify({
+                    title: "",
+                    message: `Please enter a valid mobile number.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            axiosInstance.post('user_save_profile', {
+                "user_fullname": name.value,
+                "user_email": email.value,
+                "user_phonenumber": mobile.value,
+                "entity_pan": entity_pan.value,
+                "entity_fullname": entity_name.value,
+                "entity_email": entity_email.value,
+                "entity_phonenumber": entity_mobile.value
+            }).then((response) => {
+                endLoader()
+                if (response.status === 200) {
+                    $.notify({
+                        title: "",
+                        message: response.data?.msg,
+                        icon: 'fa fa-check'
+                    }, {
+                        type: "success",
+                    });
                 } else {
                     if (response?.data?.is_logged_out) {
                         localStorage.setItem("isLoggedIn", "false");
