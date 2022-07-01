@@ -140,6 +140,7 @@
             container.classList.add("sign-up-mode");
             document.getElementById("auth_logo").classList.add("sign-up-mode");
             document.getElementById('reg_form').value = reg_form_value
+            sessionStorage.removeItem('reg_form')
         }
         sign_up_btn.addEventListener("click", () => {
             container.classList.add("sign-up-mode");
