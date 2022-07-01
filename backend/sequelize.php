@@ -28,6 +28,7 @@ $database_tables = array(
         `purchase_form_name` VARCHAR(255) NOT NULL,
         `form_status` VARCHAR(255) NOT NULL,
         `form_progress` VARCHAR(255) NOT NULL,
+        `form_image` BLOB,
         `created_at` DATETIME,
         `updated_at` DATETIME,
         FOREIGN KEY (user_id) 
@@ -37,14 +38,15 @@ $database_tables = array(
     		REFERENCES payments_table(payment_id) 
     		ON DELETE CASCADE,
         FOREIGN KEY (form_id)
-    		REFERENCES forms_table(form_id) 
+    		REFERENCES form_table(form_id) 
     		ON DELETE CASCADE
     )",
     "
-    CREATE TABLE IF NOT EXISTS `forms_table` (
+    CREATE TABLE IF NOT EXISTS `form_table` (
         `form_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
         `form_name` VARCHAR(255) NOT NULL,
         `form_fields` VARCHAR(255) NOT NULL,
+        `form_image` BLOB,
         `created_at` DATETIME,
         `updated_at` DATETIME 
     )",
