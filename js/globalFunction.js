@@ -12,7 +12,7 @@ function authenticate() {
   if (isLoggedIn === "false" || isLoggedIn === null) {
     location.href = "index.html";
   }
-  let cookieData = getCookie("admin_jwt");
+  let cookieData = getCookie("user_jwt");
   if (!cookieData?.admin_phonenumber) {
     localStorage.setItem("isLoggedIn", "false");
     location.href = "index.html";
