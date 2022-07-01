@@ -26,7 +26,7 @@ if(auth($token)){
     $user_subscriptions = [];
     $home_data = [];
     
-    $sql = "SELECT purchase_form_name, form_status, form_progress FROM user_subscription_details WHERE user_id=:user_id";
+    $sql = "SELECT purchase_form_name, form_status, form_progress, form_image FROM user_subscription_details WHERE user_id=:user_id";
     $query = $con -> prepare($sql);
     $query->bindParam(':user_id', $user_id, PDO::PARAM_STR);
     
@@ -41,7 +41,7 @@ if(auth($token)){
         }
 
         // check which subscription user has not availed
-        $sql = "SELECT form_name FROM forms_table ";
+        $sql = "SELECT form_name, form_image FROM form_table ";
         $query = $con -> prepare($sql);
 
         if($query->execute()){
@@ -54,6 +54,7 @@ if(auth($token)){
                     $form_data['form_name'] = $not_subscribed_form['form_name'];
                     $form_data['form_status'] = "Pay to Avail the Service";
                     $form_data['form_progress'] = "NULL";
+                    $form_data['form_image'] = $not_subscribed_form['form_image'];
                     
                     array_push($home_data, $form_data);
                 }
