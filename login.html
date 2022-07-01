@@ -340,8 +340,8 @@
                 return
             }
             axiosInstance.post('user_signin', {
-                "user_email": email,
-                "user_password": password
+                "user_email": email.value,
+                "user_password": password.value
             }).then((response) => {
                 console.log(response)
                 endLoader()

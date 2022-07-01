@@ -7,6 +7,19 @@ function endLoader() {
   $("div.spanner").removeClass("show");
   $("div.overlay").removeClass("show");
 }
+function parseJwt(token) {
+  var base64Url = token.split(".")[1];
+  var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  var jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split("")
+      .map(function (c) {
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join("")
+  );
+  return JSON.parse(jsonPayload);
+}
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -25,15 +38,14 @@ function authenticate() {
     location.href = "index.html";
   }
   let cookieData = getCookie("user_jwt");
-  console.log(cookieData);
-  // if (!cookieData?.admin_phonenumber) {
-  //   localStorage.setItem("isLoggedIn", "false");
-  //   location.href = "index.html";
-  // }
+  if (!cookieData?.user_email) {
+    localStorage.setItem("isLoggedIn", "false");
+    location.href = "index.html";
+  }
 }
 // baseURL: `/gst/backend/`,
 const axiosInstance = axios.create({
-  baseURL: `/backend/`,
+  baseURL: `/gst/backend/`,
   credentials: "include",
   withCredentials: true,
 });
