@@ -7,7 +7,6 @@ require("./dbcon.php");
 $_POST = json_decode(file_get_contents("php://input"), true);
 
 // retrieve required variables
-$username = $_POST['username'];
 $user_password = md5($_POST['user_password']);
 $entity_fullname = $_POST['entity_fullname'];
 $entity_pan = $_POST['entity_pan'];
@@ -20,18 +19,17 @@ $datetime = date("Y-m-d H:i:s");
 
 
 //Finding is the particular user already signed up
-$sql = "SELECT * FROM user_table WHERE user_table.username=:username";
+$sql = "SELECT * FROM user_table WHERE user_email=:user_email";
 $query = $con -> prepare($sql);
-$query->bindParam(':username', $username, PDO::PARAM_STR);
+$query->bindParam(':user_email', $user_email, PDO::PARAM_STR);
 $query->execute();
 
 if($query->rowCount() === 0){
 
     $sql = "INSERT INTO 
-    user_table (username, user_password, entity_fullname, entity_pan, entity_phonenumber, entity_email, user_fullname, user_email, user_phonenumber, created_at, updated_at) VALUES 
-    (:username, :user_password, :entity_fullname, :entity_pan, :entity_phonenumber, :entity_email, :user_fullname, :user_email, :user_phonenumber, :created_at, :updated_at)";
+    user_table (user_password, entity_fullname, entity_pan, entity_phonenumber, entity_email, user_fullname, user_email, user_phonenumber, created_at, updated_at) VALUES 
+    (:user_password, :entity_fullname, :entity_pan, :entity_phonenumber, :entity_email, :user_fullname, :user_email, :user_phonenumber, :created_at, :updated_at)";
     $query = $con -> prepare($sql);
-    $query->bindParam(':username', $username, PDO::PARAM_STR);
     $query->bindParam(':user_password', $user_password, PDO::PARAM_STR);
     $query->bindParam(':entity_fullname', $entity_fullname, PDO::PARAM_STR);
     $query->bindParam(':entity_pan', $entity_pan, PDO::PARAM_STR);
@@ -61,7 +59,7 @@ if($query->rowCount() === 0){
 
     $status = 203;
     $response = [
-        "msg" => "Bad Request - Username already exists"
+        "msg" => "Bad Request - Email Id already exists"
     ];
 
 }

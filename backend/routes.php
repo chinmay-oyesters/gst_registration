@@ -4,8 +4,8 @@
 
 //all endpoints specified for user
 // authorization routes
-$router->endpoint('user_signin', 'user/auth/user_signin', ['POST'], FALSE, ['username', 'user_password']);
-$router->endpoint('user_signup', 'user/auth/user_signup', ['POST'], FALSE, ['username', 'user_password', 'entity_fullname', 'entity_pan', 'entity_phonenumber', 'entity_email', 'user_fullname', 'user_email', 'user_phonenumber']);
+$router->endpoint('user_signin', 'user/auth/user_signin', ['POST'], FALSE, ['user_email', 'user_password']);
+$router->endpoint('user_signup', 'user/auth/user_signup', ['POST'], FALSE, ['user_password', 'entity_fullname', 'entity_pan', 'entity_phonenumber', 'entity_email', 'user_fullname', 'user_email', 'user_phonenumber']);
 $router->endpoint('user_logout', 'user/auth/user_logout', ['POST'], FALSE, []);
 $router->endpoint('user_reset_password', 'user/auth/user_reset_password', ['POST'], FALSE, ['old_password', 'new_password']);
 
@@ -27,8 +27,8 @@ $router->endpoint('user_fetch_payments', 'user/user_paymentsuser_fetch_payments'
 
 //all endpoints specified for admin
 // authorization routes
-$router->endpoint('admin_signin', 'admin/auth/admin_signin', ['POST'], FALSE, ['admin_username', 'admin_password']);
-$router->endpoint('admin_signup', 'admin/auth/admin_signup', ['POST'], FALSE, ['admin_username', 'admin_password', 'admin_fullname', 'admin_phonenumber', 'admin_email']);
+$router->endpoint('admin_signin', 'admin/auth/admin_signin', ['POST'], FALSE, ['admin_email', 'admin_password']);
+$router->endpoint('admin_signup', 'admin/auth/admin_signup', ['POST'], FALSE, ['admin_password', 'admin_fullname', 'admin_phonenumber', 'admin_email']);
 $router->endpoint('admin_logout', 'admin/auth/admin_logout', ['POST'], FALSE, []);
 $router->endpoint('admin_reset_password', 'admin/auth/admin_reset_password', ['POST'], FALSE, ['old_password', 'new_password']);
 

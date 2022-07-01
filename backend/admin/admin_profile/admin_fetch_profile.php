@@ -24,7 +24,8 @@ if(auth($token)){
     //extracting payload from jwt
     $payload = JWT::decode($token, new Key($SECRET_KEY, 'HS512'));
 
-    $sql = "SELECT admin_username, admin_fullname, admin_phonenumber, admin_email, admin_profileimage FROM admin_user_table WHERE admin_user_id=:admin_user_id";
+    $sql = "SELECT admin_email, admin_fullname, admin_phonenumber, admin_profileimage FROM admin_user_table 
+    WHERE admin_user_id=:admin_user_id";
     $query = $con -> prepare($sql);
     $query->bindParam(':admin_user_id', $payload->admin_user_id, PDO::PARAM_STR);
     $query->execute();

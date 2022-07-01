@@ -25,13 +25,12 @@ if(auth($token)){
     $payload = JWT::decode($token, new Key($SECRET_KEY, 'HS512'));
     
     // retrieve required variables
-    $username = $_POST['username'];
+    $user_email = $_POST['user_email'];
     $entity_fullname = $_POST['entity_fullname'];
     $entity_pan = $_POST['entity_pan'];
     $entity_phonenumber = $_POST['entity_phonenumber'];
     $entity_email = $_POST['entity_email'];
     $user_fullname = $_POST['user_fullname'];
-    $user_email = $_POST['user_email'];
     $user_phonenumber = $_POST['user_phonenumber'];
     
     
@@ -43,17 +42,15 @@ if(auth($token)){
     if($query->rowCount() != 0){
 
         $sql = "UPDATE user_table SET 
-            username = :username,
+            user_email = :user_email,
             entity_fullname = :entity_fullname,
             entity_pan = :entity_pan,
             entity_phonenumber=:entity_phonenumber,
             entity_email = :entity_email,
             user_fullname = :user_fullname,
-            user_email = :user_email,
             user_phonenumber = :user_phonenumber
             WHERE user_id=:user_id";
         $query = $con -> prepare($sql);
-        $query->bindParam(':username', $username, PDO::PARAM_STR);
         $query->bindParam(':entity_fullname', $entity_fullname, PDO::PARAM_STR);
         $query->bindParam(':entity_pan', $entity_pan, PDO::PARAM_STR);
         $query->bindParam(':entity_phonenumber', $entity_phonenumber, PDO::PARAM_STR);

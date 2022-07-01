@@ -5,7 +5,6 @@ $database_tables = array(
     "
     CREATE TABLE IF NOT EXISTS `user_table` (
         `user_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
-        `username` VARCHAR(255) NOT NULL,
         `user_password` varchar(255) NOT NULL,
         `user_fullname` VARCHAR(255) NOT NULL,
         `user_email` VARCHAR(255) NOT NULL,
@@ -52,7 +51,6 @@ $database_tables = array(
     "
     CREATE TABLE IF NOT EXISTS `admin_user_table` (
         `admin_user_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
-        `admin_username` VARCHAR(255) NOT NULL,
         `admin_fullname` VARCHAR(255) NOT NULL,
         `admin_password` VARCHAR(255) NOT NULL,
         `admin_phonenumber` VARCHAR(255) NOT NULL,

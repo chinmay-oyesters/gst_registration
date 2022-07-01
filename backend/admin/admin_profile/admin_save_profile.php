@@ -25,9 +25,8 @@ if(auth($token)){
     $payload = JWT::decode($token, new Key($SECRET_KEY, 'HS512'));
     
     // retrieve required variables
-    $admin_username = $_POST['admin_username'];
-    $admin_fullname = $_POST['admin_fullname'];
     $admin_email = $_POST['admin_email'];
+    $admin_fullname = $_POST['admin_fullname'];
     $admin_phonenumber = $_POST['admin_phonenumber'];
     
     
@@ -39,13 +38,11 @@ if(auth($token)){
     if($query->rowCount() != 0){
 
         $sql = "UPDATE admin_user_table SET 
-            admin_username = :admin_username,
             admin_fullname = :admin_fullname,
             admin_email = :admin_email,
             admin_phonenumber=:admin_phonenumber
             WHERE admin_user_id=:admin_user_id";
         $query = $con -> prepare($sql);
-        $query->bindParam(':admin_username', $admin_username, PDO::PARAM_STR);
         $query->bindParam(':admin_fullname', $admin_fullname, PDO::PARAM_STR);
         $query->bindParam(':admin_email', $admin_email, PDO::PARAM_STR);
         $query->bindParam(':admin_phonenumber', $admin_phonenumber, PDO::PARAM_STR);

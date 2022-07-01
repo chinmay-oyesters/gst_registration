@@ -17,13 +17,13 @@ $SECRET_KEY = $_ENV['SECRET_KEY'];
 $_POST = json_decode(file_get_contents("php://input"), true);
 
 // retrieve required variables
-$username = $_POST['username'];
+$user_email = $_POST['user_email'];
 $user_password = md5($_POST['user_password']);
 
 // looking for the user in database
-$sql = "SELECT * FROM user_table WHERE user_table.username=:username";
+$sql = "SELECT * FROM user_table WHERE user_table.user_email=:user_email";
 $query = $con -> prepare($sql);
-$query->bindParam(':username', $username, PDO::PARAM_STR);
+$query->bindParam(':user_email', $user_email, PDO::PARAM_STR);
 $query->execute();
 
 if($query->rowCount() === 0){
@@ -51,7 +51,7 @@ if($query->rowCount() === 0){
             'nbf'  => $issuedAt->getTimestamp(),                        
             'exp'  => $expire,                                          
             'user_id' =>  $user->user_id,                               
-            'username' => $user->username,                          
+            'user_email' => $user->user_email,                          
             'user_phonenumber' => $user->user_phonenumber          
         ];
 
