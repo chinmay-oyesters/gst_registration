@@ -28,14 +28,14 @@
                 <form action="#" class="sign-in-form">
                     <h2 class="title">Sign in</h2>
                     <div class="input-field">
-                        <i class="fas fa-user"></i>
-                        <input type="email" placeholder="Email" />
+                        <i class="fa fa-user"></i>
+                        <input type="email" placeholder="Email" id="sign_in_email" />
                     </div>
                     <div class="input-field">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" placeholder="Password" />
+                        <i class="fa fa-lock"></i>
+                        <input type="password" placeholder="Password" id="sign_in_password" />
                     </div>
-                    <input type="button" value="Login" onclick="location.href='dashboard.html'" class="btn solid" />
+                    <input type="button" value="Login" onclick="handleSignIn()" class="btn solid" />
                     <p>or</p>
                     <div style="margin-top: 10px;">
                         <a href="forgot-password.html" style="color: rgb(168, 165, 165);text-decoration: none;">Forgot
@@ -156,6 +156,10 @@
         integrity="sha512-thJ99QHPSIGxvufiC1cqtmE5PgfRjYfa8PXpuhjAwiLij9VhATR+lApJU5Y4t7kQepIVq1n9QkAqVx5YIt2UFw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
+        let isLoggedIn = localStorage.getItem("isLoggedIn");
+        if (isLoggedIn === "true") {
+            location.href = "dashboard.html";
+        }
         const sign_in_btn = document.querySelector("#sign-in-btn");
         const sign_up_btn = document.querySelector("#sign-up-btn");
         const container = document.querySelector(".container");
@@ -288,6 +292,69 @@
                         container.classList.remove("sign-up-mode");
                         document.getElementById("auth_logo").classList.remove("sign-up-mode");
                     }, 1000);
+                } else {
+                    $.notify({
+                        title: "",
+                        message: response.data?.msg,
+                        icon: 'fa fa-times'
+                    }, {
+                        type: "danger",
+                    });
+                }
+            }, (error) => {
+                endLoader()
+                console.log('error', error);
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
+        function handleSignIn() {
+            startLoader()
+            let email = document.getElementById('sign_in_email')
+            let password = document.getElementById('sign_in_password')
+            if (email.value == "" || password.value == '') {
+                $.notify({
+                    title: "",
+                    message: `Please enter all the fields.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            if (!validateEmail(email.value)) {
+                $.notify({
+                    title: "",
+                    message: `Please enter a valid email.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            axiosInstance.post('user_signin', {
+                "user_email": email,
+                "user_password": password
+            }).then((response) => {
+                console.log(response)
+                endLoader()
+                if (response.status === 200) {
+                    $.notify({
+                        title: "",
+                        message: response.data?.msg,
+                        icon: 'fa fa-check'
+                    }, {
+                        type: "success",
+                    });
+                    localStorage.setItem('isLoggedIn', 'true')
+                    location.href = "dashboard.html";
                 } else {
                     $.notify({
                         title: "",
