@@ -54,7 +54,7 @@ if(auth($token)){
                     $form_data['form_name'] = $not_subscribed_form['form_name'];
                     $form_data['form_status'] = "Pay to Avail the Service";
                     $form_data['form_progress'] = "NULL";
-                    $form_data['form_image'] = $not_subscribed_form['form_image'];
+                    // $form_data['form_image'] = $not_subscribed_form['form_image'];
                     
                     array_push($home_data, $form_data);
                 }                 

@@ -70,4 +70,3 @@ $router->endpoint('save_form', 'form/save_form', ['POST'], FALSE, ['form_values'
 $router->endpoint('fetch_dependencies', 'form/fetch_dependencies', ['POST'], FALSE, ['fetch_field']);
 
 // general
-$router->endpoint('home', 'admin/general/home', ['POST'], FALSE, ['user_id']);
