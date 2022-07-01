@@ -7,16 +7,29 @@ function endLoader() {
   $("div.spanner").removeClass("show");
   $("div.overlay").removeClass("show");
 }
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  let cookieNow = "";
+  let cookieData = null;
+  if (parts.length === 2) cookieNow = parts.pop().split(";").shift();
+  if (cookieNow !== "") {
+    cookieData = parseJwt(cookieNow);
+    return cookieData;
+  }
+  return cookieData;
+}
 function authenticate() {
   let isLoggedIn = localStorage.getItem("isLoggedIn");
   if (isLoggedIn === "false" || isLoggedIn === null) {
     location.href = "index.html";
   }
   let cookieData = getCookie("user_jwt");
-  if (!cookieData?.admin_phonenumber) {
-    localStorage.setItem("isLoggedIn", "false");
-    location.href = "index.html";
-  }
+  console.log(cookieData);
+  // if (!cookieData?.admin_phonenumber) {
+  //   localStorage.setItem("isLoggedIn", "false");
+  //   location.href = "index.html";
+  // }
 }
 // baseURL: `/gst/backend/`,
 const axiosInstance = axios.create({
@@ -38,11 +51,11 @@ const validateEmail = (email) => {
   var re = /\S+@\S+\.\S+/;
   return re.test(email);
 };
-function validatePAN(panVal){
+function validatePAN(panVal) {
   var regpan = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;
-  if(regpan.test(panVal)){
-      return true;
+  if (regpan.test(panVal)) {
+    return true;
   } else {
-      return false;
+    return false;
   }
 }

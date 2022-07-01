@@ -9,6 +9,10 @@
   <!-- Main CSS-->
   <link rel="stylesheet" type="text/css" href="css/main.css">
   <link rel="stylesheet" type="text/css" href="css/style.css">
+  <!-- axios -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <!-- jquery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <!-- Font-icon css-->
   <link rel="stylesheet" type="text/css"
     href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -52,40 +56,8 @@
   </aside>
   <main class="app-content">
 
-    <div class="row">
-      <div class="col-md-6 col-lg-4 ">
-        <div class="p-4 card_primary m-2 cp user_dashboard_card" onclick="location.href='gst-form.html'">
-          <img src="./images/gst_logo.png" alt="">
-          <h4>GST</h4>
-          <p>Already Paid</p>
-          <div class="progress_bar_container mt-5">
-            <div style="width:25%">25%</div>
-          </div>
-          <button>Fill the Form</button>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4   ">
-        <div class="p-4 card_secondary m-2  cp user_dashboard_card">
-          <img src="./images/iec_logo.png" alt="">
-          <h4>IEC</h4>
-          <p>Pay to Avail the Service</p>
-          <div class="progress_bar_container mt-5">
-            <div style="width:2%">2%</div>
-          </div>
-          <button>Pay</button>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4  ">
-        <div class="p-4 card_danger m-2  cp user_dashboard_card">
-          <img src="./images/pan_logo.png" alt="">
-          <h4>PAN</h4>
-          <p>Pay to Avail the Service</p>
-          <div class="progress_bar_container mt-5">
-            <div style="width:75%">75%</div>
-          </div>
-          <button>Pay</button>
-        </div>
-      </div>
+    <div class="row" id="cards_container">
+
     </div>
   </main>
   <script src="js/jquery-3.3.1.min.js"></script>
@@ -97,6 +69,61 @@
   <script src="js/globalFunction.js"></script>
   <script>
     authenticate()
+    window.onload = function () {
+      startLoader()
+      axiosInstance.get('home').then((response) => {
+        endLoader()
+        if (response.status === 200) {
+          let dataSet = response?.data?.home_data
+          console.log(dataSet)
+          let cards_container = document.getElementById('cards_container')
+          cards_container.innerHTML = '';
+          // for (let i = 0; i < dataSet.length; i++) {
+          //   const element = dataSet[i];
+          //   cards_container.innerHTML = cards_container.innerHTML +
+          //     `
+          //     <div class="col-md-6 col-lg-4 ">
+          //     <div class="p-4 card_primary m-2 cp user_dashboard_card" onclick="location.href='form.html?type=${element?.form_name}'">
+          //      <img src="./images/gst_logo.png" alt="">
+          //      <h4>${element?.form_name}</h4>
+          //      <p>${element?.form_status}</p>
+          //      ${element?.form_status != 'Pay to Avail the Service' ?
+          //       `<div class="progress_bar_container mt-5">
+          //     <div style="width:${element?.form_progress}%">25%</div>
+          //     </div>` : ''
+          //     }
+          //     <button>${element?.form_status == 'Pay to Avail the Service' ? 'Pay Now' : 'Fill the Form'}</button>
+          //      </div>
+          //     </div>
+          //   `
+          // }
+        } else {
+          if (response?.data?.is_logged_out) {
+            localStorage.setItem("isLoggedIn", "false");
+            location.href = "index.html";
+          } else {
+            $.notify({
+              title: "",
+              message: response.data?.msg,
+              icon: 'fa fa-times'
+            }, {
+              type: "danger",
+            });
+          }
+        }
+        console.log(response)
+      }, (error) => {
+        console.log('error', error);
+        endLoader()
+        $.notify({
+          title: "",
+          message: `Something went wrong! Please try again.`,
+          icon: 'fa fa-times'
+        }, {
+          type: "danger"
+        });
+      })
+    }
   </script>
 </body>
 
