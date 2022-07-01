@@ -339,7 +339,7 @@
                 endLoader();
                 return
             }
-            axiosInstance.post('user_signin', {
+            axios.post('gst.oyesters.in/backend/user_signin', {
                 "user_email": email,
                 "user_password": password
             }).then((response) => {

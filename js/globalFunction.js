@@ -33,7 +33,7 @@ function authenticate() {
 }
 // baseURL: `/gst/backend/`,
 const axiosInstance = axios.create({
-  baseURL: `/gst/backend/`,
+  baseURL: `/backend/`,
   credentials: "include",
   withCredentials: true,
 });
