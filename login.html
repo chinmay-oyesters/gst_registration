@@ -4,12 +4,24 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="css/auth.css" />
     <title>Sign in & Sign up Form</title>
+    <!-- custom css -->
+    <link rel="stylesheet" href="css/auth.css" />
+    <!-- Font-icon css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!--  -->
 </head>
 
 <body>
+    <!-- NOTE: START: -->
+    <!-- loader -->
+    <div class="overlay"></div>
+    <div class="spanner">
+        <div class="loader"></div>
+    </div>
+    <!-- END: -->
     <div class="container">
         <div class="forms-container">
             <div class="signin-signup">
@@ -34,45 +46,48 @@
                     <h2 class="title">Sign up</h2>
                     <div style="width: 100%;display: flex;justify-content: space-between;">
                         <div class="input-field">
-                            <i class="fas fa-user"></i>
-                            <input type="text" placeholder="Entity Name" />
+                            <i class="fa fa-user"></i>
+                            <input type="text" placeholder="Entity Name" id="sign_up_entity_name" />
                         </div>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <div class="input-field">
-                            <i class="fas fa-envelope"></i>
-                            <input type="text" placeholder="Entity Email" />
+                            <i class="fa fa-envelope"></i>
+                            <input type="email" placeholder="Entity Email" id="sign_up_entity_email" />
                         </div>
                     </div>
                     <div style="width: 100%;display: flex;justify-content: space-between;">
                         <div class="input-field">
                             <i class="fa fa-id-card-o" aria-hidden="true"></i>
-                            <input type="text" placeholder="Entity PAN" />
-                        </div>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <div class="input-field">
-                            <i class="fas fa-envelope"></i>
-                            <input type="text" placeholder="Entity Mobile Number" />
-                        </div>
-                    </div>
-                    <div style="width: 100%;display: flex;justify-content: space-between;">
-                        <div class="input-field">
-                            <i class="fas fa-user"></i>
-                            <input type="text" placeholder="Name" />
-                        </div>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <div class="input-field">
-                            <i class="fas fa-envelope"></i>
-                            <input type="text" placeholder="Email" />
-                        </div>
-                    </div>
-                    <div style="width: 100%;display: flex;justify-content: space-between;">
-                        <div class="input-field">
-                            <i class="fa fa-phone" aria-hidden="true"></i>
-                            <input type="text" placeholder="Mobile" />
+                            <input type="text" placeholder="Entity PAN" onkeyup="this.value = this.value.toUpperCase();"
+                                id="sign_up_entity_pan" />
                         </div>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <div class="input-field">
                             <i class="fa fa-phone" aria-hidden="true"></i>
+                            <input type="text" placeholder="Entity Mobile Number" maxlength="10"
+                                oninput="this.value=this.value.replace(/[^0-9]/g,'');" id="sign_up_entity_mobile" />
+                        </div>
+                    </div>
+                    <div style="width: 100%;display: flex;justify-content: space-between;">
+                        <div class="input-field">
+                            <i class="fa fa-user"></i>
+                            <input type="text" placeholder="Name" id="sign_up_name" />
+                        </div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <div class="input-field">
+                            <i class="fa fa-envelope"></i>
+                            <input type="email" placeholder="Email" id="sign_up_email" />
+                        </div>
+                    </div>
+                    <div style="width: 100%;display: flex;justify-content: space-between;">
+                        <div class="input-field">
+                            <i class="fa fa-phone"></i>
+                            <input type="text" placeholder="Mobile" maxlength="10"
+                                oninput="this.value=this.value.replace(/[^0-9]/g,'');" id="sign_up_mobile" />
+                        </div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <div class="input-field">
+                            <i class="fa fa-file-text" aria-hidden="true"></i>
                             <select name="" id="reg_form" style="border:none;background: none;outline: none;">
                                 <option value=""><span style="color:gray;">-- Select Form --</span></option>
                                 <option value="GST">GST</option>
@@ -85,15 +100,15 @@
                     <div style="width: 100%;display: flex;justify-content: space-between;">
                         <div class="input-field">
                             <i class="fa fa-lock" aria-hidden="true"></i>
-                            <input type="password" placeholder="Password" />
+                            <input type="password" placeholder="Password" id="sign_up_password" />
                         </div>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <div class="input-field">
                             <i class="fa fa-lock" aria-hidden="true"></i>
-                            <input type="password" placeholder="Confirm Password" />
+                            <input type="password" placeholder="Confirm Password" id="sign_up_confirm_password" />
                         </div>
                     </div>
-                    <input type="submit" class="btn" value="Sign up" />
+                    <input type="button" class="btn" onclick="handleSignUp()" value="Sign up" />
                 </form>
             </div>
         </div>
@@ -130,7 +145,16 @@
             <h2 onclick="location.href='index.html'" style="cursor:pointer;">GST - ®️</h2>
         </div>
     </div>
-
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/globalFunction.js"></script>
+    <script src="js/plugins/pace.min.js"></script>
+    <script type="text/javascript" src="js/plugins/bootstrap-notify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-notify/0.2.0/js/bootstrap-notify.min.js"
+        integrity="sha512-vCgNjt5lPWUyLz/tC5GbiUanXtLX1tlPXVFaX5KAQrUHjwPcCwwPOLn34YBFqws7a7+62h7FRvQ1T0i/yFqANA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-notify/0.2.0/js/bootstrap-notify.js"
+        integrity="sha512-thJ99QHPSIGxvufiC1cqtmE5PgfRjYfa8PXpuhjAwiLij9VhATR+lApJU5Y4t7kQepIVq1n9QkAqVx5YIt2UFw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         const sign_in_btn = document.querySelector("#sign-in-btn");
         const sign_up_btn = document.querySelector("#sign-up-btn");
@@ -151,7 +175,140 @@
             container.classList.remove("sign-up-mode");
             document.getElementById("auth_logo").classList.remove("sign-up-mode");
         });
-
+        function handleSignUp() {
+            startLoader()
+            let entity_name = document.getElementById('sign_up_entity_name')
+            let entity_email = document.getElementById('sign_up_entity_email')
+            let entity_pan = document.getElementById('sign_up_entity_pan')
+            let entity_mobile = document.getElementById('sign_up_entity_mobile')
+            let name = document.getElementById('sign_up_name')
+            let email = document.getElementById('sign_up_email')
+            let mobile = document.getElementById('sign_up_mobile')
+            let password = document.getElementById('sign_up_password')
+            let confirm_password = document.getElementById('sign_up_confirm_password')
+            if (entity_name.value == "" || entity_email.value == "" || entity_pan.value == "" || entity_mobile.value == "" || name.value == "" || email.value == "" || mobile.value == "" || password.value == "" || confirm_password.value == "") {
+                $.notify({
+                    title: "",
+                    message: `Please enter all the fields.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            if (!validateEmail(entity_email.value)) {
+                $.notify({
+                    title: "",
+                    message: `Please enter a valid entity email.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            if (!validateEmail(email.value)) {
+                $.notify({
+                    title: "",
+                    message: `Please enter a valid email.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            if (!validatePAN(entity_pan.value)) {
+                $.notify({
+                    title: "",
+                    message: `Please enter a valid PAN number.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            if (entity_mobile.value?.length != 10) {
+                $.notify({
+                    title: "",
+                    message: `Please enter a valid entity mobile number.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            if (mobile.value?.length != 10) {
+                $.notify({
+                    title: "",
+                    message: `Please enter a valid mobile number.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            if (password.value != confirm_password.value) {
+                $.notify({
+                    title: "",
+                    message: `Password didn't match.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            endLoader()
+            axiosInstance.post('user_signup', {
+                "user_password": password.value,
+                "user_fullname": name.value,
+                "user_email": email.value,
+                "user_phonenumber": mobile.value,
+                "entity_pan": entity_pan.value,
+                "entity_fullname": entity_name.value,
+                "entity_email": entity_email.value,
+                "entity_phonenumber": entity_mobile.value
+            }).then((response) => {
+                console.log(response)
+                endLoader()
+                if (response.status === 200) {
+                    $.notify({
+                        title: "",
+                        message: response.data?.msg,
+                        icon: 'fa fa-check'
+                    }, {
+                        type: "success",
+                    });
+                    setTimeout(() => {
+                        container.classList.remove("sign-up-mode");
+                        document.getElementById("auth_logo").classList.remove("sign-up-mode");
+                    }, 1000);
+                } else {
+                    $.notify({
+                        title: "",
+                        message: response.data?.msg,
+                        icon: 'fa fa-times'
+                    }, {
+                        type: "danger",
+                    });
+                }
+            }, (error) => {
+                endLoader()
+                console.log('error', error);
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
     </script>
 </body>
 
