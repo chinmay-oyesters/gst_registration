@@ -7,10 +7,20 @@ function endLoader() {
   $("div.spanner").removeClass("show");
   $("div.overlay").removeClass("show");
 }
-
+function authenticate() {
+  let isLoggedIn = localStorage.getItem("isLoggedIn");
+  if (isLoggedIn === "false" || isLoggedIn === null) {
+    location.href = "index.html";
+  }
+  let cookieData = getCookie("user_jwt");
+  if (!cookieData?.admin_phonenumber) {
+    localStorage.setItem("isLoggedIn", "false");
+    location.href = "index.html";
+  }
+}
 // baseURL: `/gst/backend/`,
 const axiosInstance = axios.create({
-  baseURL: `/backend/`,
+  baseURL: `/gst/backend/`,
   credentials: "include",
   withCredentials: true,
 });
@@ -24,3 +34,15 @@ var loadFile = function (event, preview_id) {
     URL.revokeObjectURL(output.src); // free memory
   };
 };
+const validateEmail = (email) => {
+  var re = /\S+@\S+\.\S+/;
+  return re.test(email);
+};
+function validatePAN(panVal){
+  var regpan = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;
+  if(regpan.test(panVal)){
+      return true;
+  } else {
+      return false;
+  }
+}

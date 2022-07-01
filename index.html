@@ -74,8 +74,8 @@
     </svg>
     <section class="landing-hero">
         <section class="landing_top_one">
-            <h4>GST - ®️</h4>
-            <button class="button_primary" onclick="location.href='login.html'" >Login/Sign In</button>
+            <h4 onclick="location.href='index.html'" class="cp">GST - ®️</h4>
+            <button class="button_primary" onclick="location.href='login.html'">Login/Sign In</button>
         </section>
         <section class="landing_top_two">
             <a href="#home">About</a>
@@ -105,13 +105,14 @@
             <img src="./images/landing-left-2.png" id="landing-left-two" alt="">
             <h1>Save <span>time</span>. Save <span>money</span>.</h1>
             <p>India’s first registration and tax services platform</p>
-            <button class="button_primary pl-5 pr-5  pt-3 pb-3 mt-5" onclick="location.href='login.html'">Get Started -></button>
+            <button class="button_primary pl-5 pr-5  pt-3 pb-3 mt-5" onclick="location.href='login.html'">Get Started
+                -></button>
         </section>
     </section>
     <section class="services" id="service-container">
     </section>
-    <section class="ready_section" >
-        
+    <section class="ready_section">
+
     </section>
     <script>
         let serviceList = [
@@ -171,12 +172,16 @@
                 </div>
                 <div class="flip-card-back" style="background-color: ${element?.color};box-shadow: -6px 4px 108px 15px rgba(0,0,0,0.75) inset;">
                     <p>SOme description fljds fdsjk ods lsdos ofdsa ljds fdsjk ods lsdos  ljds fdsjk ods lsdos ljds fdsjk ods lsdos </p>
-                    <button class="button_primary" style="background-color: ${element?.color};" >Try Now -></button>
+                    <button class="button_primary" style="background-color: ${element?.color};" onclick="pushForm('${element?.name}')" >Try Now -></button>
                 </div>
             </div>
              </div>
             `
 
+        }
+        function pushForm(fomrName) {
+            sessionStorage.setItem('reg_form', fomrName);
+            location.href = 'login.html'
         }
     </script>
 </body>

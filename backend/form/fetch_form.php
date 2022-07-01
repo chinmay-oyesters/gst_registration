@@ -39,8 +39,8 @@ function getFieldsArray($field, $fields, $field_ids_done, $con){
         $field_array['field_required'] = false;
     }
 
-    // check if field_type is dropdown (to add field_values)
-    if(strtolower($field->form_field_type) === "dropdown"){
+    // check if field_values exist
+    if( $field->form_field_values != NULL){
         $field_array["field_values"] = json_decode(str_replace("'", "\"", $field->form_field_values));
     }
     
