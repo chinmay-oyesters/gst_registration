@@ -71,3 +71,10 @@ function validatePAN(panVal) {
     return false;
   }
 }
+
+function getColorCode(index) {
+  let colorArray = ["#6993FF", "#FFAA07", "#8D56FC", "#F64E60"];
+  let indexReturn = index % 4;
+  if (indexReturn == 0) indexReturn = 4;
+  return colorArray[indexReturn];
+}

@@ -85,25 +85,25 @@
           console.log(dataSet)
           let cards_container = document.getElementById('cards_container')
           cards_container.innerHTML = '';
-          // for (let i = 0; i < dataSet.length; i++) {
-          //   const element = dataSet[i];
-          //   cards_container.innerHTML = cards_container.innerHTML +
-          //     `
-          //     <div class="col-md-6 col-lg-4 ">
-          //     <div class="p-4 card_primary m-2 cp user_dashboard_card" onclick="location.href='form.html?type=${element?.form_name}'">
-          //      <img src="./images/gst_logo.png" alt="">
-          //      <h4>${element?.form_name}</h4>
-          //      <p>${element?.form_status}</p>
-          //      ${element?.form_status != 'Pay to Avail the Service' ?
-          //       `<div class="progress_bar_container mt-5">
-          //     <div style="width:${element?.form_progress}%">25%</div>
-          //     </div>` : ''
-          //     }
-          //     <button>${element?.form_status == 'Pay to Avail the Service' ? 'Pay Now' : 'Fill the Form'}</button>
-          //      </div>
-          //     </div>
-          //   `
-          // }
+          for (let i = 0; i < dataSet.length; i++) {
+            const element = dataSet[i];
+            cards_container.innerHTML = cards_container.innerHTML +
+              `
+              <div class="col-md-6 col-lg-4 ">
+              <div class="p-4  m-2 cp user_dashboard_card" style="background: ${getColorCode(i+1)};"  onclick="location.href='form.html?type=${element?.form_name}'">
+               <img src="data:image/png;base64, ${element?.form_image}" alt="" style="height:50px;width:50px;border-radius:50%;border:1px solid white;">
+               <h4>${element?.form_name}</h4>
+               <p>${element?.form_status}</p>
+               ${element?.form_status != 'Pay to Avail the Service' ?
+                `<div class="progress_bar_container mt-5">
+              <div style="width:${element?.form_progress}%">${element?.form_progress}%</div>
+              </div>` : ''
+              }
+              <button>${element?.form_status == 'Pay to Avail the Service' ? 'Pay Now' : 'Fill the Form'}</button>
+               </div>
+              </div>
+            `
+          }
         } else {
           if (response?.data?.is_logged_out) {
             localStorage.setItem("isLoggedIn", "false");
