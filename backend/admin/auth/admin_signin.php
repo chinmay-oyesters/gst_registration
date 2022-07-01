@@ -42,7 +42,7 @@ if($query->rowCount() === 0){
 
         // if admin is authenticated then generate a token with JWT
         $issuedAt   = new DateTimeImmutable();
-        $expire     = $issuedAt->modify('+60 minutes')->getTimestamp();             // Add 60 seconds
+        $expire     = $issuedAt->modify('+30 days')->getTimestamp();             // Add 30 days
         $serverName = "http://localhost/gst_registration/backend/user_signin";     // Retrieved from filtered POST data
 
         $data = [
