@@ -57,13 +57,13 @@ if(auth($token)){
                     $form_data['form_image'] = $not_subscribed_form['form_image'];
                     
                     array_push($home_data, $form_data);
-                }
-                $status = 200;
-                $response = [
-                    "msg" => "Home data fetched successfully",
-                    "home_data" => $home_data
-                ];                   
+                }                 
             }
+            $status = 200;
+            $response = [
+                "msg" => "Home data fetched successfully",
+                "home_data" => $home_data
+            ];  
         }else{
             $status = 203;
             $response = [
