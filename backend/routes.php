@@ -18,8 +18,11 @@ $router->endpoint('user_save_profile', 'user/user_profile/user_save_profile', ['
 $router->endpoint('user_fetch_profile', 'user/user_profile/user_fetch_profile', ['GET'], FALSE, []);
 $router->endpoint('user_image_upload', 'user/user_profile/user_image_upload', ['POST'], FALSE, []);
 
+//home page
+$router->endpoint('home', 'user/home', ['GET'], FALSE, []);
+
 //payments
-$router->endpoint('user_fetch_payments', 'user/user_payments/user_fetch_payments', ['GET'], FALSE, []);
+$router->endpoint('user_fetch_payments', 'user/user_paymentsuser_fetch_payments', ['GET'], FALSE, []);
 
 
 //all endpoints specified for admin
