@@ -88,6 +88,28 @@ $database_tables = array(
     		REFERENCES user_table(user_id) 
     		ON DELETE CASCADE
     )
+    ",
+    "
+    CREATE TABLE IF NOT EXISTS `payments_table` (
+        `payment_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
+        `payment_user_id` INT(255),
+        `payment_amount` INT(11),
+        `created_at` DATETIME ,
+        `updated_at` DATETIME ,
+        FOREIGN KEY (payment_user_id)
+    		REFERENCES user_table(user_id) 
+    		ON DELETE CASCADE
+    )
+    ",
+    "
+    CREATE TABLE IF NOT EXISTS `roles_table` (
+        `role_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
+        `role_name` VARCHAR(255),
+        `role_description` VARCHAR(500),
+        `role_permissions` VARCHAR(500),
+        `created_at` DATETIME ,
+        `updated_at` DATETIME
+    )
     "
 );
 

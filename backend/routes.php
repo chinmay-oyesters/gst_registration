@@ -46,6 +46,14 @@ $router->endpoint('fetch_customers', 'admin/users/customers/fetch_customers', ['
 $router->endpoint('edit_customers', 'admin/users/customers/edit_customers', ['POST'], FALSE, []);
 $router->endpoint('delete_customers', 'admin/users/customers/delete_customers', ['POST'], FALSE, []);
 
+// users/staff
+$router->endpoint('fetch_staff', 'admin/users/staff/fetch_staff', ['GET'], FALSE, []);
+// $router->endpoint('add_staff', 'admin/users/staff/add_staff', ['POST'], FALSE, ['fullname', 'phonenumber', 'role_id', 'email', 'password']);
+
+// role
+$router->endpoint('fetch_roles', 'admin/roles/fetch_roles', ['GET'], FALSE, []);
+$router->endpoint('add_role', 'admin/roles/add_role', ['POST'], FALSE, ['role_name', 'role_description', 'role_permissions']);
+
 // all endpoints specified for form related operations
 // creation of form
 $router->endpoint('create_form', 'form/create_form', ['POST'], FALSE, ['form_name', 'form_fields']);
@@ -57,3 +65,6 @@ $router->endpoint('fetch_form', 'form/fetch_form', ['POST'], FALSE, ['form_id'])
 $router->endpoint('save_form', 'form/save_form', ['POST'], FALSE, ['form_values']);
 // fetch dependencies
 $router->endpoint('fetch_dependencies', 'form/fetch_dependencies', ['POST'], FALSE, ['fetch_field']);
+
+// general
+$router->endpoint('home', 'admin/general/home', ['POST'], FALSE, ['user_id']);
