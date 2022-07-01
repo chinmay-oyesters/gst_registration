@@ -26,11 +26,34 @@
                     <input type="button" value="Login" onclick="location.href='dashboard.html'" class="btn solid" />
                     <p>or</p>
                     <div style="margin-top: 10px;">
-                        <a href="forgot-password.html" style="color: rgb(168, 165, 165);text-decoration: none;">Forgot Password ?</a>
+                        <a href="forgot-password.html" style="color: rgb(168, 165, 165);text-decoration: none;">Forgot
+                            Password ?</a>
                     </div>
                 </form>
                 <form action="#" class="sign-up-form">
                     <h2 class="title">Sign up</h2>
+                    <div style="width: 100%;display: flex;justify-content: space-between;">
+                        <div class="input-field">
+                            <i class="fas fa-user"></i>
+                            <input type="text" placeholder="Entity Name" />
+                        </div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <div class="input-field">
+                            <i class="fas fa-envelope"></i>
+                            <input type="text" placeholder="Entity Email" />
+                        </div>
+                    </div>
+                    <div style="width: 100%;display: flex;justify-content: space-between;">
+                        <div class="input-field">
+                            <i class="fa fa-id-card-o" aria-hidden="true"></i>
+                            <input type="text" placeholder="Entity PAN" />
+                        </div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <div class="input-field">
+                            <i class="fas fa-envelope"></i>
+                            <input type="text" placeholder="Entity Mobile Number" />
+                        </div>
+                    </div>
                     <div style="width: 100%;display: flex;justify-content: space-between;">
                         <div class="input-field">
                             <i class="fas fa-user"></i>
@@ -44,13 +67,19 @@
                     </div>
                     <div style="width: 100%;display: flex;justify-content: space-between;">
                         <div class="input-field">
-                            <i class="fa fa-id-card-o" aria-hidden="true"></i>
-                            <input type="email" placeholder="PAN" />
+                            <i class="fa fa-phone" aria-hidden="true"></i>
+                            <input type="text" placeholder="Mobile" />
                         </div>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <div class="input-field">
                             <i class="fa fa-phone" aria-hidden="true"></i>
-                            <input type="text" placeholder="Mobile" />
+                            <select name="" id="reg_form" style="border:none;background: none;outline: none;">
+                                <option value=""><span style="color:gray;">-- Select Form --</span></option>
+                                <option value="GST">GST</option>
+                                <option value="IEC">IEC</option>
+                                <option value="PAN">PAN</option>
+                                <option value="Udhyam Registration">Udhyam Registration</option>
+                            </select>
                         </div>
                     </div>
                     <div style="width: 100%;display: flex;justify-content: space-between;">
@@ -98,7 +127,7 @@
             </div>
         </div>
         <div id="auth_logo">
-            <h2>GST - ®️</h2>
+            <h2 onclick="location.href='index.html'" style="cursor:pointer;">GST - ®️</h2>
         </div>
     </div>
 
@@ -106,7 +135,12 @@
         const sign_in_btn = document.querySelector("#sign-in-btn");
         const sign_up_btn = document.querySelector("#sign-up-btn");
         const container = document.querySelector(".container");
-
+        let reg_form_value = sessionStorage.getItem('reg_form')
+        if (reg_form_value) {
+            container.classList.add("sign-up-mode");
+            document.getElementById("auth_logo").classList.add("sign-up-mode");
+            document.getElementById('reg_form').value = reg_form_value
+        }
         sign_up_btn.addEventListener("click", () => {
             container.classList.add("sign-up-mode");
             document.getElementById("auth_logo").classList.add("sign-up-mode");
@@ -116,6 +150,7 @@
             container.classList.remove("sign-up-mode");
             document.getElementById("auth_logo").classList.remove("sign-up-mode");
         });
+
     </script>
 </body>
 
