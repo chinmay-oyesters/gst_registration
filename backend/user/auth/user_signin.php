@@ -18,7 +18,7 @@ $_POST = json_decode(file_get_contents("php://input"), true);
 
 // retrieve required variables
 $username = $_POST['username'];
-$password = md5($_POST['password']);
+$user_password = md5($_POST['user_password']);
 
 // looking for the user in database
 $sql = "SELECT * FROM user_table WHERE user_table.username=:username";
@@ -38,10 +38,9 @@ if($query->rowCount() === 0){
     // fetching row of that user
     $user = $query->fetchAll(PDO::FETCH_OBJ)[0];
 
-    if($user->password === $password){
+    if($user->user_password === $user_password){
 
         // if user is authenticated then generate a token with JWT
-        // $secretKey  = 'bGS6lzFqvvSQ8ALbOxatm7/Vk7mLQyzqaS34Q4oR1ew=';
         $issuedAt   = new DateTimeImmutable();
         $expire     = $issuedAt->modify('+60 minutes')->getTimestamp();             // Add 60 seconds
         $serverName = "http://localhost/gst_registration/backend/user_signin";     // Retrieved from filtered POST data
@@ -53,7 +52,7 @@ if($query->rowCount() === 0){
             'exp'  => $expire,                                          
             'user_id' =>  $user->user_id,                               
             'username' => $user->username,                          
-            'person_phonenumber' => $user->person_phonenumber          
+            'user_phonenumber' => $user->user_phonenumber          
         ];
 
         $jwt =  JWT::encode(

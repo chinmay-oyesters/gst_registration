@@ -4,10 +4,14 @@
 
 //all endpoints specified for user
 // authorization routes
-$router->endpoint('user_signin', 'user/auth/user_signin', ['POST'], FALSE, ['username', 'password']);
-$router->endpoint('user_signup', 'user/auth/user_signup', ['POST'], FALSE, ['username', 'password', 'entity_name', 'entity_pan', 'entity_phonenumber', 'entity_email', 'person_name', 'person_email', 'person_phonenumber']);
+$router->endpoint('user_signin', 'user/auth/user_signin', ['POST'], FALSE, ['username', 'user_password']);
+$router->endpoint('user_signup', 'user/auth/user_signup', ['POST'], FALSE, ['username', 'user_password', 'entity_fullname', 'entity_pan', 'entity_phonenumber', 'entity_email', 'user_fullname', 'user_email', 'user_phonenumber']);
 $router->endpoint('user_logout', 'user/auth/user_logout', ['POST'], FALSE, []);
-$router->endpoint('user_forgot_password', 'user/auth/user_forgot_password', ['POST'], FALSE, ['old_password', 'new_password', 'phone_number']);
+$router->endpoint('user_reset_password', 'user/auth/user_reset_password', ['POST'], FALSE, ['old_password', 'new_password']);
+
+//forgot password routes
+$router->endpoint('user_send_otp', 'user/auth/forgot_password/user_send_otp', ['POST'], FALSE, ['user_email']);
+$router->endpoint('user_verify_otp', 'user/auth/forgot_password/user_verify_otp', ['POST'], FALSE, ['user_email', 'otp', 'new_password']);
 
 //profile routes
 $router->endpoint('user_save_profile', 'user/user_profile/user_save_profile', ['POST'], FALSE, []);
@@ -23,7 +27,11 @@ $router->endpoint('user_fetch_payments', 'user/user_payments/user_fetch_payments
 $router->endpoint('admin_signin', 'admin/auth/admin_signin', ['POST'], FALSE, ['admin_username', 'admin_password']);
 $router->endpoint('admin_signup', 'admin/auth/admin_signup', ['POST'], FALSE, ['admin_username', 'admin_password', 'admin_fullname', 'admin_phonenumber', 'admin_email']);
 $router->endpoint('admin_logout', 'admin/auth/admin_logout', ['POST'], FALSE, []);
-$router->endpoint('admin_forgot_password', 'admin/auth/admin_forgot_password', ['POST'], FALSE, ['old_password', 'new_password', 'phone_number']);
+$router->endpoint('admin_reset_password', 'admin/auth/admin_reset_password', ['POST'], FALSE, ['old_password', 'new_password']);
+
+//forgot password routes
+$router->endpoint('admin_send_otp', 'admin/auth/forgot_password/admin_send_otp', ['POST'], FALSE, ['admin_email']);
+$router->endpoint('admin_verify_otp', 'admin/auth/forgot_password/admin_verify_otp', ['POST'], FALSE, ['admin_email', 'otp', 'new_password']);
 
 //profile routes
 $router->endpoint('admin_save_profile', 'admin/admin_profile/admin_save_profile', ['POST'], FALSE, []);
