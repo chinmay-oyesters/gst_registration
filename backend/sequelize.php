@@ -17,7 +17,36 @@ $database_tables = array(
         `profile_image` BLOB,
         `otp` INTEGER(10),
         `otp_created_at` VARCHAR(255),
-        `created_at` DATETIME ,
+        `created_at` DATETIME,
+        `updated_at` DATETIME 
+    )",
+    "
+    CREATE TABLE IF NOT EXISTS `user_subscription_details` (
+        `subscription_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
+        `user_id` INT(11) NOT NULL,
+        `payment_id` INT(11) NOT NULL,
+        `form_id` INT(11) NOT NULL,
+        `purchase_form_name` VARCHAR(255) NOT NULL,
+        `form_status` VARCHAR(255) NOT NULL,
+        `form_progress` VARCHAR(255) NOT NULL,
+        `created_at` DATETIME,
+        `updated_at` DATETIME,
+        FOREIGN KEY (user_id) 
+    		REFERENCES user_table(user_id) 
+    		ON DELETE CASCADE,
+        FOREIGN KEY (payment_id)
+    		REFERENCES payments_table(payment_id) 
+    		ON DELETE CASCADE,
+        FOREIGN KEY (form_id)
+    		REFERENCES forms_table(form_id) 
+    		ON DELETE CASCADE
+    )",
+    "
+    CREATE TABLE IF NOT EXISTS `forms_table` (
+        `form_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
+        `form_name` VARCHAR(255) NOT NULL,
+        `form_fields` VARCHAR(255) NOT NULL,
+        `created_at` DATETIME,
         `updated_at` DATETIME 
     )",
     "
@@ -31,7 +60,7 @@ $database_tables = array(
         `admin_profileimage` BLOB,
         `otp` INTEGER(10),
         `otp_created_at` VARCHAR(255),
-        `created_at` DATETIME ,
+        `created_at` DATETIME,
         `updated_at` DATETIME 
     )",
     "
@@ -39,22 +68,12 @@ $database_tables = array(
         `payment_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
         `user_id` INT(255),
         `payment_amount` VARCHAR(255) NOT NULL,
-        `created_at` DATETIME ,
-        `updated_at` DATETIME ,
+        `created_at` DATETIME,
+        `updated_at` DATETIME,
         FOREIGN KEY (user_id) 
     		REFERENCES user_table(user_id) 
     		ON DELETE CASCADE
-    )"
-    ,
-    "
-    CREATE TABLE IF NOT EXISTS `form_table` (
-        `form_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
-        `form_name` VARCHAR(255) NOT NULL,
-        `form_fields` VARCHAR(255) NOT NULL,
-        `created_at` DATETIME ,
-        `updated_at` DATETIME 
-    )
-    ",
+    )",
     "
     CREATE TABLE IF NOT EXISTS `form_field_table` (
         `form_field_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
@@ -65,7 +84,7 @@ $database_tables = array(
         `form_field_values` VARCHAR(255) DEFAULT NULL,
         `form_field_validation` VARCHAR(255) DEFAULT NULL,
         `form_field_required` BOOLEAN DEFAULT NULL,
-        `created_at` DATETIME ,
+        `created_at` DATETIME,
         `updated_at` DATETIME 
     )
     ",
@@ -76,8 +95,8 @@ $database_tables = array(
         `form_response_form_field_id` INT(255) NOT NULL,
         `form_response_user_id` INT(255) NOT NULL,
         `form_response_answer` VARCHAR(255) DEFAULT NULL,
-        `created_at` DATETIME ,
-        `updated_at` DATETIME ,
+        `created_at` DATETIME,
+        `updated_at` DATETIME,
         FOREIGN KEY (form_response_form_id)
     		REFERENCES form_table(form_id)
     		ON DELETE CASCADE,
