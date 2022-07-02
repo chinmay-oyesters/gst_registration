@@ -28,7 +28,6 @@ if(auth($token)){
     $role_id = $_POST['role_id'];
     $admin_fullname = $_POST['admin_fullname'];
     $admin_phonenumber = $_POST['admin_phonenumber'];
-    $admin_password = md5($_POST['admin_password']);
     $datetime = date("Y-m-d H:i:s");
 
     //fetch details from market
@@ -37,7 +36,6 @@ if(auth($token)){
     role_id  = :role_id, 
     admin_fullname  = :admin_fullname, 
     admin_phonenumber = :admin_phonenumber, 
-    admin_password = :admin_password, 
     updated_at = :updated_at
     WHERE admin_user_id = :admin_user_id";
     $query = $con -> prepare($sql);
@@ -46,7 +44,6 @@ if(auth($token)){
     $query->bindParam(':admin_fullname', $admin_fullname, PDO::PARAM_STR);
     $query->bindParam(':role_id', $role_id, PDO::PARAM_STR);
     $query->bindParam(':admin_phonenumber', $admin_phonenumber, PDO::PARAM_STR);
-    $query->bindParam(':admin_password', $admin_password, PDO::PARAM_STR);
     $query->bindparam(":updated_at", $datetime, PDO::PARAM_STR);
     if($query->execute()){
         $status = 200;

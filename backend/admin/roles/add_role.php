@@ -17,6 +17,11 @@ if(auth($token)){
     $role_permissions = $_POST['role_permissions'];
     $datetime = date("Y-m-d H:i:s");
 
+    //array to string conversion of role permissions
+    $role_permissions = implode(",", $role_permissions);
+
+    // print_r($role_permissions);
+
     $sql = "INSERT INTO roles_table (role_name, role_description, role_permissions, created_at, updated_at) 
     VALUES (:role_name, :role_description, :role_permissions, :created_at, :updated_at)";
     $query = $con -> prepare($sql);

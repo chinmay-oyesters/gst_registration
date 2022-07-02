@@ -13,15 +13,8 @@ if(auth($token)){
     $_POST = json_decode(file_get_contents("php://input"), true);
 
     //fetch details from market
-    $sql = "SELECT
-        entity_fullname,
-        entity_pan,
-        entity_phonenumber,
-        entity_email,
-        user_fullname,
-        user_email,
-        user_phonenumber
-        FROM user_table ORDER BY user_id DESC";
+    $sql = "SELECT user_id, entity_fullname, entity_pan, entity_phonenumber, entity_email, user_fullname, user_email, user_phonenumber
+    FROM user_table ORDER BY user_id DESC";
     $query = $con -> prepare($sql);
 
     if($query->execute()){
@@ -33,6 +26,7 @@ if(auth($token)){
         foreach ($customers as $customer) {
             array_push($customers_array,
                 [
+                    "user_id" => $customer->user_id,
                     "entity_name" => $customer->entity_fullname,
                     "entity_pan" => $customer->entity_pan,
                     "entity_mobilenumber" => $customer->entity_phonenumber,

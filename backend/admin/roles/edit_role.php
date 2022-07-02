@@ -18,6 +18,9 @@ if(auth($token)){
     $role_permissions = $_POST['role_permissions'];
     $datetime = date("Y-m-d H:i:s");
 
+    //array to string conversion of role permissions
+    $role_permissions = implode(",", $role_permissions);
+
     $sql = "UPDATE roles_table SET 
     role_name = :role_name, 
     role_description = :role_description, 

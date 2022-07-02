@@ -52,7 +52,7 @@ $router->endpoint('delete_customers', 'admin/users/customers/delete_customers', 
 // add new staff
 $router->endpoint('fetch_staff', 'admin/users/staff/fetch_staff', ['GET'], FALSE, []);
 $router->endpoint('add_staff', 'admin/users/staff/add_staff', ['POST'], FALSE, ['admin_fullname', 'admin_phonenumber', 'role_id', 'admin_email', 'admin_password']);
-$router->endpoint('edit_staff', 'admin/users/staff/edit_staff', ['POST'], FALSE, ['admin_user_id', 'admin_fullname', 'admin_phonenumber', 'role_id', 'admin_email', 'admin_password']);
+$router->endpoint('edit_staff', 'admin/users/staff/edit_staff', ['POST'], FALSE, ['admin_user_id', 'admin_fullname', 'admin_phonenumber', 'role_id', 'admin_email']);
 
 // role
 $router->endpoint('fetch_roles', 'admin/roles/fetch_roles', ['GET'], FALSE, []);

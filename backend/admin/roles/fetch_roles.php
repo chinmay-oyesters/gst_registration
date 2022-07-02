@@ -19,11 +19,25 @@ if(auth($token)){
     if($query->execute()){
         
         $roles = $query->fetchAll(PDO::FETCH_OBJ);
+
+        $roles_array = array();
+
+        foreach ($roles as $role) {
+            $role->role_permissions = explode(",", $role->role_permissions);
+            array_push($roles_array,
+                [
+                    "role_id" => $role->role_id,
+                    "role_name" => $role->role_name,
+                    "role_description" => $role->role_description,
+                    "role_permissions" => $role->role_permissions
+                ]
+            );
+        }
         
         $status = 200;
         $response = [
             "msg" => "Roles Fetched",
-            "roles" => $roles
+            "roles" => $roles_array
         ];
         
     }else{
