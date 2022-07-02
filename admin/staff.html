@@ -36,7 +36,8 @@
                     aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
                 <ul class="dropdown-menu settings-menu dropdown-menu-right">
                     <li><a class="dropdown-item" href="profile.html"><i class="fa fa-user fa-lg"></i> Profile</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="adminSignOut()"><i class="fa fa-sign-out fa-lg"></i> Logout</a>
+                    <li><a class="dropdown-item" href="#" onclick="adminSignOut()"><i class="fa fa-sign-out fa-lg"></i>
+                            Logout</a>
                     </li>
                 </ul>
             </li>
@@ -104,7 +105,7 @@
                                 <th>Email</th>
                                 <th>Mobile</th>
                                 <th>Role</th>
-                                <th style="width: 75px;">Action</th>
+                                <th style="width: 135px;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -240,9 +241,10 @@
     <!-- Data table plugin-->
     <script type="text/javascript" src="../js/plugins/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="../js/plugins/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript">$('#sampleTable').DataTable();</script>
+    <!-- alert  -->
     <script type="text/javascript" src="../js/plugins/bootstrap-notify.min.js"></script>
     <script type="text/javascript" src="../js/plugins/sweetalert.min.js"></script>
-    <script type="text/javascript">$('#sampleTable').DataTable();</script>
     <script type="text/javascript">
         authenticateAdmin();
         let userList = [];
@@ -299,7 +301,9 @@
                                     render: function (data) {
                                         return `<div class="d-flex justify-content-around" >
                                                   <button class="btn-sm btn-info" onclick="setEditForm(${data})" data-toggle="modal" data-target="#edit_game_rate_modal" ><i
-                                                  class="fa fa-pencil cp" aria-hidden="true"></i>&nbsp;Edit</button>
+                                                  class="fa fa-pencil cp" aria-hidden="true"></i>&nbsp;Edit</button><button
+                                         class="btn-sm btn-danger" onclick="deleteRow(${data})" ><i class="fa fa-trash cp"
+                                           aria-hidden="true"></i>&nbsp;Delete</button>
                                                  </div > `;
                                     },
                                 },
@@ -489,6 +493,62 @@
                     type: "danger"
                 });
             })
+        }
+        function deleteRow(m_id) {
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: true,
+                closeOnCancel: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    startLoader()
+                    axiosInstance.post('delete_staff', {
+                        "user_id": m_id
+                    }).then((response) => {
+                        endLoader()
+                        if (response.status === 200) {
+                            $.notify({
+                                title: "",
+                                message: response.data?.msg,
+                                icon: 'fa fa-check'
+                            }, {
+                                type: "success",
+                            });
+                            getUserList();
+                        } else {
+                            if (response?.data?.is_logged_out) {
+                                localStorage.setItem("isAdminLoggedIn", "false");
+                                location.href = "index.html";
+                            } else {
+                                $.notify({
+                                    title: "",
+                                    message: response.data?.msg,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
+                            }
+                        }
+                    }, (error) => {
+                        console.log('error', error);
+                        endLoader()
+                        $.notify({
+                            title: "",
+                            message: `Something went wrong! Please try again.`,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger"
+                        });
+                    })
+                } else {
+                    swal("Cancelled", "Your data is safe.", "error");
+                }
+            });
         }
     </script>
 </body>
