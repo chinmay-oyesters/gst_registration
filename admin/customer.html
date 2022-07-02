@@ -229,7 +229,7 @@
                     });
                 } else {
                     if (response?.data?.is_logged_out) {
-                        localStorage.setItem("isLoggedIn", "false");
+                        localStorage.setItem("isAdminLoggedIn", "false");
                         location.href = "index.html";
                     } else {
                         $.notify({

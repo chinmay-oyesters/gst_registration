@@ -94,15 +94,16 @@
         </div>
         <div class="tile">
             <div class="tile-body">
-                <button class="btn btn-sm btn-primary mb-4" data-toggle="modal" data-target="#add_role_modal">+ Add
+                <button class="btn btn-sm btn-primary mb-4" data-toggle="modal" data-target="#add_modal">+ Add
                     Role</button>
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered" id="sampleTable">
                         <thead>
                             <tr>
                                 <th>Role Name</th>
-                                <th>No of staff</th>
-                                <th>Action</th>
+                                <th>Description</th>
+                                <th>Permission</th>
+                                <th style="width: 75px;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -114,7 +115,7 @@
         </div>
     </main>
     <!-- add role modal -->
-    <div class="modal fade" id="add_role_modal" role="dialog">
+    <div class="modal fade" id="add_modal" role="dialog">
         <div class="modal-dialog  modal-dialog-centered ">
 
             <!-- Modal content-->
@@ -128,15 +129,42 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" id="uploadPreAssessmentId">
+                    <form class="form-horizontal" id="add_modal_form">
                         <div class="form-group row">
                             <label class="control-label col-md-3">Role Name</label>
                             <div class="col-md-8">
-                                <input class="form-control" type="text" placeholder="-" id="add_market_name">
+                                <input class="form-control" type="text" placeholder="-" id="add_name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Role Description</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" placeholder="-" id="add_description">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Permissions</label>
+                            <div class="col-md-8">
+                                <input type="checkbox" id="markAll_add" onclick="markAllDays('add')">
+                                <label for="markAll_add" class="ml-2">Mark All</label>
+                                <div class="d-flex justify-content-between pt-2" style="border-top: 1px solid gray;">
+                                    <div>
+                                        <input type="checkbox" id="asd_add">
+                                        <label for="asd_add" class="ml-2">asd</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="zyx_add">
+                                        <label for="zyx_add" class="ml-2">xyz</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="tug_add">
+                                        <label for="tug_add" class="ml-2">tug</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer " style="justify-content: center;margin-top:20px;">
-                            <button class="btn btn-success" type="button" onclick="addMarket()">Save</button>
+                            <button class="btn btn-success" type="button" onclick="submitModal()">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -160,24 +188,36 @@
                 <div class="modal-body">
                     <form class="form-horizontal" id="uploadPreAssessmentId">
                         <div class="form-group row">
-                            <label class="control-label col-md-3">Name</label>
+                            <label class="control-label col-md-3">Role Name</label>
                             <div class="col-md-8">
-                                <input class="form-control" type="text" placeholder="-" id="edit_user_name">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label class="control-label col-md-3">Email</label>
-                            <div class="col-md-8">
-                                <input class="form-control" type="email" placeholder="-" id="edit_user_email">
+                                <input class="form-control" type="text" placeholder="-" id="edit_name">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="control-label col-md-3">Phone Number</label>
+                            <label class="control-label col-md-3">Role Description</label>
                             <div class="col-md-8">
-                                <input class="form-control" type="text" maxlength="10"
-                                    oninput="this.value=this.value.replace(/[^0-9]/g,'');" placeholder="-"
-                                    id="edit_user_phone">
+                                <input class="form-control" type="text" placeholder="-" id="edit_description">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Permissions</label>
+                            <div class="col-md-8">
+                                <input type="checkbox" id="markAll_edit" onclick="markAllDays('edit')">
+                                <label for="markAll_edit" class="ml-2">Mark All</label>
+                                <div class="d-flex justify-content-between pt-2" style="border-top: 1px solid gray;">
+                                    <div>
+                                        <input type="checkbox" id="asd_edit">
+                                        <label for="asd_edit" class="ml-2">asd</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="zyx_edit">
+                                        <label for="zyx_edit" class="ml-2">xyz</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="tug_edit">
+                                        <label for="tug_edit" class="ml-2">tug</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer " style="justify-content: center;margin-top:20px;">
@@ -202,200 +242,253 @@
     <script type="text/javascript" src="../js/plugins/sweetalert.min.js"></script>
     <script type="text/javascript">$('#sampleTable').DataTable();</script>
     <script type="text/javascript">
-        // authenticate();
-        // let userList = [];
-        // window.onload = function () {
-        //     getUserList()
-        // }
-        // function getUserList() {
-        //     startLoader()
-        //     axiosInstance.get('fetch_admin_user').then((response) => {
-        //         endLoader()
-        //         console.log(response)
-        //         if (response.status === 200) {
-        //             let dataSet = response.data?.msg
-        //             userList = dataSet
-        //             $(document).ready(function () {
-        //                 $('#sampleTable').DataTable().destroy();
-        //                 $('#sampleTable').DataTable({
-        //                     data: dataSet,
-        //                     columns: [
-        //                         {
-        //                             data: 'admin_fullname',
-        //                         },
-        //                         {
-        //                             data: 'admin_email_id',
-        //                         },
-        //                         {
-        //                             data: 'admin_phonenumber',
-        //                         },
-        //                         {
-        //                             data: 'admin_user_id',
-        //                             render: function (data) {
-        //                                 return `<div class="d-flex justify-content-around" >
-        //                                     <button class="btn-sm btn-info" onclick="setEditForm(${data})" data-toggle="modal" data-target="#edit_game_rate_modal" ><i
-        //                                   class="fa fa-pencil cp" aria-hidden="true"></i>&nbsp;Edit</button><button
-        //                                  class="btn-sm btn-danger" onclick="deleteGameRate(${data})" ><i class="fa fa-trash cp"
-        //                                    aria-hidden="true"></i>&nbsp;Delete</button>
-        //                                     </div>`;
-        //                             },
-        //                         },
-        //                     ],
-        //                 });
-        //             });
-        //         } else {
-        //             if (response?.data?.is_logged_out) {
-        //                 localStorage.setItem("isLoggedIn", "false");
-        //                 location.href = "index.html";
-        //             } else {
-        //                 $.notify({
-        //                     title: "",
-        //                     message: response.data?.msg,
-        //                     icon: 'fa fa-times'
-        //                 }, {
-        //                     type: "danger",
-        //                 });
-        //             }
-        //         }
-        //     }, (error) => {
-        //         console.log('error', error);
-        //         endLoader()
-        //         $.notify({
-        //             title: "",
-        //             message: `Something went wrong! Please try again.`,
-        //             icon: 'fa fa-times'
-        //         }, {
-        //             type: "danger"
-        //         });
-        //     })
-        // }
-        // function setEditForm(g_id) {
-        //     let gameNow = userList?.filter(m => m?.admin_user_id === `${g_id}`)
-        //     if (gameNow?.length > 0) {
-        //         document.getElementById('edit_user_name').value = gameNow[0]?.admin_fullname
-        //         document.getElementById('edit_user_phone').value = gameNow[0]?.admin_phonenumber
-        //         document.getElementById('edit_user_email').value = gameNow[0]?.admin_email_id
-        //         document.getElementById('edit_save_btn').setAttribute("onClick", `updateGameRate(${g_id})`);
-        //     }
-        // }
-        // function updateGameRate(g_id) {
-        //     startLoader()
-        //     let edit_user_name = document.getElementById('edit_user_name').value
-        //     let edit_user_phone = document.getElementById('edit_user_phone').value
-        //     let edit_user_email = document.getElementById('edit_user_email').value
-        //     if (edit_user_name === "" || edit_user_phone === "") {
-        //         endLoader()
-        //         $.notify({
-        //             title: "",
-        //             message: `Please enter all details.`,
-        //             icon: 'fa fa-times'
-        //         }, {
-        //             type: "danger"
-        //         });
-        //         return
-        //     }
-        //     let dataToPost = {
-        //         full_name: edit_user_name,
-        //         phone_number: edit_user_phone,
-        //         email: edit_user_email,
-        //     };
+        authenticateAdmin();
+        let userList = [];
+        window.onload = function () {
+            getUserList()
+        }
+        function getUserList() {
+            startLoader()
+            axiosInstance.get('fetch_roles').then((response) => {
+                endLoader()
+                console.log(response)
+                if (response.status === 200) {
+                    let dataSet = response.data?.roles
+                    userList = dataSet
+                    $(document).ready(function () {
+                        $('#sampleTable').DataTable().destroy();
+                        $('#sampleTable').DataTable({
+                            data: dataSet,
+                            columns: [
+                                {
+                                    data: 'role_name',
+                                },
+                                {
+                                    data: 'role_description',
+                                },
+                                {
+                                    data: 'role_permissions',
+                                    // render: function (data)
+                                    // {
+                                    //     return `
+                                    //      ${data?.map((d) => d)}
+                                    //     `
+                                    // }
+                                },
+                                {
+                                    data: 'role_id',
+                                    render: function (data) {
+                                        return `<div class="d-flex justify-content-around" >
+                                                  <button class="btn-sm btn-info" onclick="setEditForm(${data})" data-toggle="modal" data-target="#edit_game_rate_modal" ><i
+                                                  class="fa fa-pencil cp" aria-hidden="true"></i>&nbsp;Edit</button>
+                                                 </div > `;
+                                    },
+                                },
+                            ],
+                        });
+                    });
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isAdminLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
+        function markAllDays(keyNow) {
+            var markAll = document.getElementById(`markAll_${keyNow}`);
+            var asd_id = document.getElementById(`asd_${keyNow}`)
+            var zyx_id = document.getElementById(`zyx_${keyNow}`)
+            var tug_id = document.getElementById(`tug_${keyNow}`)
+            if (markAll.checked == true) {
+                asd_id.checked = true
+                zyx_id.checked = true
+                tug_id.checked = true
+            } else {
+                asd_id.checked = false
+                zyx_id.checked = false
+                tug_id.checked = false
+            }
+        }
+        function submitModal() {
+            startLoader()
+            let name = document.getElementById('add_name')
+            let description = document.getElementById('add_description')
 
-        //     $('#edit_game_rate_modal').modal('hide');
-        //     axiosInstance.post('edit_admin_user', {
-        //         ...dataToPost
-        //     }).then((response) => {
-        //         endLoader()
-        //         if (response.status === 200) {
-        //             $.notify({
-        //                 title: "",
-        //                 message: response.data?.msg,
-        //                 icon: 'fa fa-check'
-        //             }, {
-        //                 type: "success",
-        //             });
-        //             getUserList();
-        //         } else {
-        //             if (response?.data?.is_logged_out) {
-        //                 localStorage.setItem("isLoggedIn", "false");
-        //                 location.href = "index.html";
-        //             } else {
-        //                 $.notify({
-        //                     title: "",
-        //                     message: response.data?.msg,
-        //                     icon: 'fa fa-times'
-        //                 }, {
-        //                     type: "danger",
-        //                 });
-        //             }
-        //         }
-        //     }, (error) => {
-        //         console.log('error', error);
-        //         endLoader()
-        //         $.notify({
-        //             title: "",
-        //             message: `Something went wrong! Please try again.`,
-        //             icon: 'fa fa-times'
-        //         }, {
-        //             type: "danger"
-        //         });
-        //     })
-        // }
-        // function deleteGameRate(g_id) {
-        //     swal({
-        //         title: "Are you sure?",
-        //         text: "You will not be able to recover this rate!",
-        //         type: "warning",
-        //         showCancelButton: true,
-        //         confirmButtonText: "Yes, delete it!",
-        //         cancelButtonText: "No, cancel plx!",
-        //         closeOnConfirm: true,
-        //         closeOnCancel: false
-        //     }, function (isConfirm) {
-        //         if (isConfirm) {
-        //             startLoader()
-        //             axiosInstance.post('delete_admin_user', {
-        //                 "user_id": g_id
-        //             }).then((response) => {
-        //                 endLoader()
-        //                 if (response.status === 200) {
-        //                     $.notify({
-        //                         title: "",
-        //                         message: response.data?.msg,
-        //                         icon: 'fa fa-check'
-        //                     }, {
-        //                         type: "success",
-        //                     });
-        //                     getUserList();
-        //                 } else {
-        //                     if (response?.data?.is_logged_out) {
-        //                         localStorage.setItem("isLoggedIn", "false");
-        //                         location.href = "index.html";
-        //                     } else {
-        //                         $.notify({
-        //                             title: "",
-        //                             message: response.data?.msg,
-        //                             icon: 'fa fa-times'
-        //                         }, {
-        //                             type: "danger",
-        //                         });
-        //                     }
-        //                 }
-        //             }, (error) => {
-        //                 console.log('error', error);
-        //                 endLoader()
-        //                 $.notify({
-        //                     title: "",
-        //                     message: `Something went wrong! Please try again.`,
-        //                     icon: 'fa fa-times'
-        //                 }, {
-        //                     type: "danger"
-        //                 });
-        //             })
-        //         } else {
-        //             swal("Cancelled", "Your game rate is safe.", "error");
-        //         }
-        //     });
-        // }
+            var markAll = document.getElementById(`markAll_add`);
+            var asd_id = document.getElementById(`asd_add`)
+            var zyx_id = document.getElementById(`zyx_add`)
+            var tug_id = document.getElementById(`tug_add`)
+            if (name.value == "" || description.value == "") {
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Please enter all details.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+                return
+            }
+            let permissions = []
+            if (markAll?.checked) {
+                permissions = ['asd', 'zyx', 'tug']
+            } else {
+                if (asd_id.checked) {
+                    permissions?.push('asd')
+                }
+                if (zyx_id.checked) {
+                    permissions?.push('zyx')
+                }
+                if (tug_id.checked) {
+                    permissions?.push('tug')
+                }
+            }
+            $('#add_modal').modal('hide');
+            axiosInstance.post('add_role', {
+                "role_name": name.value,
+                "role_description": description.value,
+                "role_permissions": permissions
+            }).then((response) => {
+                $('#add_modal_form')[0].reset();
+                endLoader()
+                if (response.status === 200) {
+                    $.notify({
+                        title: "",
+                        message: response.data?.msg,
+                        icon: 'fa fa-check'
+                    }, {
+                        type: "success",
+                    });
+                    getUserList();
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isAdminLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
+        function setEditForm(g_id) {
+            let gameNow = userList?.filter(m => `${m.role_id}` == `${g_id}`)
+            if (gameNow?.length > 0) {
+                document.getElementById('edit_name').value = gameNow[0]?.role_name
+                document.getElementById('edit_description').value = gameNow[0]?.role_description
+                document.getElementById('edit_save_btn').setAttribute("onClick", `updateModal(${g_id})`);
+            }
+        }
+        function updateModal(g_id) {
+            startLoader()
+            let edit_name = document.getElementById('edit_name').value
+            let edit_description = document.getElementById('edit_description').value
+            var markAll = document.getElementById(`markAll_edit`);
+            var asd_id = document.getElementById(`asd_edit`)
+            var zyx_id = document.getElementById(`zyx_edit`)
+            var tug_id = document.getElementById(`tug_edit`)
+            if (edit_name == "" || edit_description == "") {
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Please enter all details.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+                return
+            }
+            let permissions = []
+            if (markAll?.checked) {
+                permissions = ['asd', 'zyx', 'tug']
+            } else {
+                if (asd_id.checked) {
+                    permissions?.push('asd')
+                }
+                if (zyx_id.checked) {
+                    permissions?.push('zyx')
+                }
+                if (tug_id.checked) {
+                    permissions?.push('tug')
+                }
+            }
+            $('#edit_game_rate_modal').modal('hide');
+            axiosInstance.post('edit_role', {
+                "role_id": g_id,
+                "role_name": edit_name,
+                "role_description": edit_description,
+                "role_permissions": permissions
+            }).then((response) => {
+                endLoader()
+                if (response.status === 200) {
+                    $.notify({
+                        title: "",
+                        message: response.data?.msg,
+                        icon: 'fa fa-check'
+                    }, {
+                        type: "success",
+                    });
+                    getUserList();
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isAdminLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
     </script>
 </body>
 
