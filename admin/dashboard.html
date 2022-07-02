@@ -11,9 +11,19 @@
     <!-- Font-icon css-->
     <link rel="stylesheet" type="text/css"
         href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 
 <body class="app sidebar-mini">
+    <!-- NOTE: START: -->
+    <!-- loader -->
+    <div class="overlay"></div>
+    <div class="spanner">
+        <div class="loader"></div>
+        <!-- <p>Uploading music file, please be patient.</p> -->
+    </div>
+    <!-- END: -->
     <!-- Navbar-->
     <header class="app-header"><a class="app-header__logo" href="index.html">GST Admin</a>
         <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
@@ -25,7 +35,8 @@
                     aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
                 <ul class="dropdown-menu settings-menu dropdown-menu-right">
                     <li><a class="dropdown-item" href="profile.html"><i class="fa fa-user fa-lg"></i> Profile</a></li>
-                    <li><a class="dropdown-item" href="page-login.html"><i class="fa fa-sign-out fa-lg"></i> Logout</a>
+                    <li><a class="dropdown-item" href="#" onclick="adminSignOut()"><i class="fa fa-sign-out fa-lg"></i>
+                            Logout</a>
                     </li>
                 </ul>
             </li>
@@ -55,8 +66,8 @@
                     </li>
                 </ul>
             </li>
-            <li><a class="app-menu__item" href="roles.html"><i class="app-menu__icon fa fa-male" aria-hidden="true"></i><span
-                class="app-menu__label">Roles</span></a></li>
+            <li><a class="app-menu__item" href="roles.html"><i class="app-menu__icon fa fa-male"
+                        aria-hidden="true"></i><span class="app-menu__label">Roles</span></a></li>
             <li><a class="app-menu__item" href="payments.html"><i class="app-menu__icon fa fa-money"></i><span
                         class="app-menu__label">Payments</span></a></li>
             <li><a class="app-menu__item" href="forms.html"><i class="app-menu__icon fa fa-file-text-o"
@@ -179,53 +190,9 @@
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/plugins/pace.min.js"></script>
-    <script type="text/javascript" src="../js/plugins/chart.js"></script>
+    <script src="../js/globalFunction.js"></script>
     <script type="text/javascript">
-        var data = {
-            labels: ["January", "February", "March", "April", "May"],
-            datasets: [
-                {
-                    label: "My First dataset",
-                    fillColor: "rgba(220,220,220,0.2)",
-                    strokeColor: "rgba(220,220,220,1)",
-                    pointColor: "rgba(220,220,220,1)",
-                    pointStrokeColor: "#fff",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(220,220,220,1)",
-                    data: [65, 59, 80, 81, 56]
-                },
-                {
-                    label: "My Second dataset",
-                    fillColor: "rgba(151,187,205,0.2)",
-                    strokeColor: "rgba(151,187,205,1)",
-                    pointColor: "rgba(151,187,205,1)",
-                    pointStrokeColor: "#fff",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(151,187,205,1)",
-                    data: [28, 48, 40, 19, 86]
-                }
-            ]
-        };
-        var pdata = [
-            {
-                value: 300,
-                color: "#46BFBD",
-                highlight: "#5AD3D1",
-                label: "Complete"
-            },
-            {
-                value: 50,
-                color: "#F7464A",
-                highlight: "#FF5A5E",
-                label: "In-Progress"
-            }
-        ]
-
-        var ctxl = $("#lineChartDemo").get(0).getContext("2d");
-        var lineChart = new Chart(ctxl).Line(data);
-
-        var ctxp = $("#pieChartDemo").get(0).getContext("2d");
-        var pieChart = new Chart(ctxp).Pie(pdata);
+        authenticateAdmin();
     </script>
 </body>
 

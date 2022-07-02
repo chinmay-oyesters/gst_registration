@@ -56,7 +56,7 @@ function authenticateAdmin() {
 }
 // baseURL: `/gst/backend/`,
 const axiosInstance = axios.create({
-  baseURL: `/backend/`,
+  baseURL: `/gst/backend/`,
   credentials: "include",
   withCredentials: true,
 });
@@ -88,4 +88,49 @@ function getColorCode(index) {
   let indexReturn = index % 4;
   if (indexReturn == 0) indexReturn = 4;
   return colorArray[indexReturn];
+}
+
+function adminSignOut() {
+  startLoader();
+  let cookieData = getCookie("admin_jwt");
+  if (cookieData?.admin_email) {
+    axiosInstance.post("admin_logout").then(
+      (response) => {
+        console.log(response);
+        endLoader();
+        if (response.status === 200) {
+          // localStorage.setItem("isAdminLoggedIn", "false");
+          // location.href = "index.html";
+        } else {
+          $.notify(
+            {
+              title: "",
+              message: response.data?.msg,
+              icon: "fa fa-times",
+            },
+            {
+              type: "danger",
+            }
+          );
+        }
+      },
+      (error) => {
+        endLoader();
+        console.log("error", error);
+        $.notify(
+          {
+            title: "",
+            message: `Something went wrong! Please try again.`,
+            icon: "fa fa-times",
+          },
+          {
+            type: "danger",
+          }
+        );
+      }
+    );
+  } else {
+    localStorage.setItem("isAdminLoggedIn", "false");
+    location.href = "index.html";
+  }
 }
