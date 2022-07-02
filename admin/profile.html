@@ -19,6 +19,14 @@
 </head>
 
 <body class="app sidebar-mini">
+    <!-- NOTE: START: -->
+    <!-- loader -->
+    <div class="overlay"></div>
+    <div class="spanner">
+        <div class="loader"></div>
+        <!-- <p>Uploading music file, please be patient.</p> -->
+    </div>
+    <!-- END: -->
     <!-- Navbar-->
     <header class="app-header"><a class="app-header__logo" href="index.html">GST - ®️</a>
         <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
@@ -99,49 +107,24 @@
                     <div class="col-md-6 col-12">
                         <div class="form-group">
                             <label class="control-label">Name</label>
-                            <input class="form-control" type="text" placeholder="name">
+                            <input class="form-control" type="text" placeholder="name" id="name">
                         </div>
                     </div>
                     <div class="col-md-6 col-12">
                         <div class="form-group">
-                            <label class="control-label">PAN</label>
-                            <input class="form-control" type="text" placeholder="PAN">
+                            <label class="control-label">Email</label>
+                            <input class="form-control" type="email" placeholder="email" id="email">
                         </div>
                     </div>
                     <div class="col-md-6 col-12">
                         <div class="form-group">
                             <label class="control-label">Mobile Number</label>
                             <input class="form-control" maxlength="10" type="text" placeholder="mobile number"
-                                oninput="this.value=this.value.replace(/[^0-9]/g,'');">
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-12">
-                        <div class="form-group">
-                            <label class="control-label">Email</label>
-                            <input class="form-control" type="email" placeholder="email">
+                                id="mobile" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
                         </div>
                     </div>
                     <div class="col-12 d-flex justify-content-center mt-4">
                         <button class="btn btn-success">Submit</button>
-                    </div>
-                </div>
-                <hr />
-                <h5>Reset Password</h5>
-                <div class="row">
-                    <div class="col-md-6 col-12">
-                        <div class="form-group">
-                            <label class="control-label">Password</label>
-                            <input class="form-control" type="password" placeholder="password">
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-12">
-                        <div class="form-group">
-                            <label class="control-label">Confirm Password</label>
-                            <input class="form-control" type="password" placeholder="password">
-                        </div>
-                    </div>
-                    <div class="col-12 d-flex justify-content-center mt-4">
-                        <button class="btn btn-success">Reset Password</button>
                     </div>
                 </div>
             </div>
@@ -152,6 +135,126 @@
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/globalFunction.js"></script>
+    <script>
+        authenticateAdmin()
+        let name = document.getElementById('name')
+        let email = document.getElementById('email')
+        let mobile = document.getElementById('mobile')
+        window.onload = function () {
+            startLoader()
+            axiosInstance.get('admin_fetch_profile').then((response) => {
+                endLoader()
+                if (response.status === 200) {
+                    console.log(response)
+                    let dataSet = response?.data?.admin_profile
+                    name.value = dataSet?.admin_fullname
+                    email.value = dataSet?.admin_email
+                    mobile.value = dataSet?.admin_phonenumber
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isAdminLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+                console.log(response)
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
+        function saveProfile() {
+            startLoader();
+            if (name.value == "" || email.value == "" || mobile.value == "") {
+                $.notify({
+                    title: "",
+                    message: `Please enter all the fields.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            if (!validateEmail(email.value)) {
+                $.notify({
+                    title: "",
+                    message: `Please enter a valid email.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            if (mobile.value?.length != 10) {
+                $.notify({
+                    title: "",
+                    message: `Please enter a valid mobile number.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            axiosInstance.post('admin_save_profile', {
+                "admin_email": email,
+                "admin_password": "",
+                "admin_fullname": name,
+                "admin_phonenumber": mobile
+            }).then((response) => {
+                endLoader()
+                if (response.status === 200) {
+                    $.notify({
+                        title: "",
+                        message: response.data?.msg,
+                        icon: 'fa fa-check'
+                    }, {
+                        type: "success",
+                    });
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isAdminLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+                console.log(response)
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
+    </script>
 </body>
 
 </html>
