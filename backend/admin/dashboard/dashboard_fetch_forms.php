@@ -53,6 +53,7 @@ if(auth($token)){
 
                 array_push($dashboard_data,
                     [
+                        "form_id" => $form['form_id'],
                         "form_name" => $form['form_name'],
                         "form_image" => $form['form_image'],
                         "total_forms" => $form_count['total_forms'],
@@ -62,7 +63,7 @@ if(auth($token)){
             }   
 
         }
-        $status = 203;
+        $status = 200;
         $response = [
             "msg" => "Dashboard data fetched successfully",
             "dashboard_data" => $dashboard_data
