@@ -18,7 +18,7 @@ if(auth($token)){
     $datetime = date("Y-m-d H:i:s");
 
     $sql = "INSERT INTO roles_table (role_name, role_description, role_permissions, created_at, updated_at) 
-    VALUES (:role_name, :role_description, :role_permissions :created_at, :updated_at))";
+    VALUES (:role_name, :role_description, :role_permissions, :created_at, :updated_at)";
     $query = $con -> prepare($sql);
 
     // binding the parameters to the sql query in order to insert new data

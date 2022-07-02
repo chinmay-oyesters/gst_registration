@@ -38,7 +38,7 @@ if(auth($token)){
         $form = $query->fetchAll(PDO::FETCH_OBJ);
         $status = 200;
         $response = [
-            "msg" => "Role edit successfully"
+            "msg" => "Role edited successfully"
         ];
     }
     // failure
