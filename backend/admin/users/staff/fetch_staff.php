@@ -25,33 +25,60 @@ $token = $_COOKIE["admin_jwt"];
 if(auth($token)){
 
     $payload = JWT::decode($token, new Key($SECRET_KEY, 'HS512'));
+    $staff = (object)[];
 
-    //fetch details from market
-    $sql = "SELECT aut.admin_user_id, rt.role_id, rt.role_name, aut.admin_fullname, aut.admin_phonenumber, aut.admin_email FROM admin_user_table as aut 
-    LEFT JOIN roles_table as rt 
-    ON aut.role_id = rt.role_id
-    WHERE aut.admin_user_id != :admin_user_id
-    ORDER BY admin_user_id DESC";
+    try{
+        //fetch details from market
+        $sql = "SELECT aut.admin_user_id, rt.role_id, rt.role_name, aut.admin_fullname, aut.admin_phonenumber, aut.admin_email FROM admin_user_table as aut 
+        LEFT JOIN roles_table as rt 
+        ON aut.role_id = rt.role_id
+        WHERE aut.admin_user_id != :admin_user_id
+        ORDER BY admin_user_id DESC";
 
-    $query = $con -> prepare($sql);
-    $query->bindParam(':admin_user_id', $payload->admin_user_id, PDO::PARAM_STR);
+        $query = $con -> prepare($sql);
+        $query->bindParam(':admin_user_id', $payload->admin_user_id, PDO::PARAM_STR);
 
-    if($query->execute()){
+        if($query->execute()){
+            
+            $staff_details = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            $staff->staff_details = $staff_details;
+        }else{
+            $status = 203;
+            $response = [
+                "msg" => "Staff details can't be fetched now."
+            ];            
+        }
         
-        $staff = $query->fetchAll(PDO::FETCH_ASSOC);
-        
+        $sql = "SELECT role_id, role_name FROM roles_table ORDER BY role_id DESC";
+        $query = $con -> prepare($sql);
+
+        if($query->execute()){
+            
+            $role_details = $query->fetchAll(PDO::FETCH_OBJ);
+            
+            $staff->role_details = $role_details;
+            
+        }else{
+            
+            $status = 203;
+            $response = [
+                "msg" => "Role details can't be fetched"
+            ];
+            
+        }
+
         $status = 200;
         $response = [
-            "msg" => "Staff Fetched Successfully",
+            "msg" => "Staff fetched successfully",
             "staff" => $staff
         ];
-        
-    }else{
-        
+
+    }catch(Exception $e){
         $status = 203;
         $response = [
-            "msg" => "Staff can't be fetched"
+            "msg" => "Staff can't be fetched.",
+            "error" => $e->getMessage()
         ];
-        
     }
 }
