@@ -72,4 +72,6 @@ $router->endpoint('save_form', 'form/save_form', ['POST'], FALSE, ['form_values'
 // fetch dependencies
 $router->endpoint('fetch_dependencies', 'form/fetch_dependencies', ['POST'], FALSE, ['fetch_field']);
 
-// general
+//  Dashboard related routes
+
+$router->endpoint('dashboard_fetch_forms', 'admin/dashboard/dashboard_fetch_forms', ['GET'], FALSE, []);

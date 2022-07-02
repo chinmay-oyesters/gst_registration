@@ -39,6 +39,13 @@ if(auth($token)){
             "msg" => "Roles Fetched",
             "roles" => $roles_array
         ];
+
+        
+        $status = 200;
+        $response = [
+            "msg" => "Roles Fetched",
+            "roles" => $roles
+        ];
         
     }else{
         
