@@ -14,8 +14,6 @@
         href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <!-- jquery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
 <body class="app sidebar-mini">
@@ -231,7 +229,7 @@
                     });
                 } else {
                     if (response?.data?.is_logged_out) {
-                        localStorage.setItem("isLoggedIn", "false");
+                        localStorage.setItem("isAdminLoggedIn", "false");
                         location.href = "index.html";
                     } else {
                         $.notify({

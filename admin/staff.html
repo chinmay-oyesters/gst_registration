@@ -14,8 +14,6 @@
         href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <!-- jquery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
 <body class="app sidebar-mini">
@@ -65,12 +63,13 @@
                 <ul class="treeview-menu">
                     <li><a class="treeview-item active" href="staff.html"><i class="icon fa fa-circle-o"></i> Staff</a>
                     </li>
-                    <li><a class="treeview-item" href="customer.html"><i class="icon fa fa-circle-o"></i> Customer</a>
+                    <li><a class="treeview-item " href="customer.html"><i class="icon fa fa-circle-o"></i>
+                            Customer</a>
                     </li>
                 </ul>
             </li>
-            <li><a class="app-menu__item" href="roles.html"><i class="app-menu__icon fa fa-male" aria-hidden="true"></i><span
-                class="app-menu__label">Roles</span></a></li>
+            <li><a class="app-menu__item" href="roles.html"><i class="app-menu__icon fa fa-male"
+                        aria-hidden="true"></i><span class="app-menu__label">Roles</span></a></li>
             <li><a class="app-menu__item" href="payments.html"><i class="app-menu__icon fa fa-money"></i><span
                         class="app-menu__label">Payments</span></a></li>
             <li><a class="app-menu__item" href="forms.html"><i class="app-menu__icon fa fa-file-text-o"
@@ -90,12 +89,12 @@
     <main class="app-content">
         <div class="app-title">
             <div>
-                <h1><i class="fa fa-users" aria-hidden="true"></i>&nbsp;Staffs</h1>
+                <h1><i class="fa fa-users" aria-hidden="true"></i>&nbsp;Staff</h1>
             </div>
         </div>
         <div class="tile">
             <div class="tile-body">
-                <button class="btn btn-sm btn-primary mb-4" data-toggle="modal" data-target="#add_staff_modal">+ Add
+                <button class="btn btn-sm btn-primary mb-4" data-toggle="modal" data-target="#add_modal">+ Add
                     Staff</button>
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered" id="sampleTable">
@@ -103,8 +102,9 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Email</th>
-                                <th>Phone Number</th>
-                                <th style="width: 135px;">Action</th>
+                                <th>Mobile</th>
+                                <th>Role</th>
+                                <th style="width: 75px;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -115,65 +115,63 @@
             </div>
         </div>
     </main>
-    <!-- add staff modal -->
-    <div class="modal fade" id="add_staff_modal" role="dialog">
+    <!-- add staff rate modal -->
+    <div class="modal fade" id="add_modal" role="dialog">
         <div class="modal-dialog  modal-dialog-centered ">
 
             <!-- Modal content-->
 
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Add New Staff<br />
+                    <h4 class="modal-title">Add Staff<br />
                         <p style="text-align:left; font-size:13px;font-weight:500;">
                         <p>
                     </h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" id="uploadPreAssessmentId">
+                    <form class="form-horizontal" id="add_modal_form">
                         <div class="form-group row">
-                            <label class="control-label col-md-3">Full Name</label>
+                            <label class="control-label col-md-3">Name</label>
                             <div class="col-md-8">
-                                <input class="form-control" type="text" placeholder="-" id="add_market_name">
+                                <input class="form-control" type="text" placeholder="-" id="add_name">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Email</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="email" placeholder="-" id="add_email">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="control-label col-md-3">Phone Number</label>
                             <div class="col-md-8">
-                                <input class="form-control" maxlength="10" id="login_phone" type="text" placeholder="-"
-                                    autofocus oninput="this.value=this.value.replace(/[^0-9]/g,'');">
+                                <input class="form-control" type="text" maxlength="10"
+                                    oninput="this.value=this.value.replace(/[^0-9]/g,'');" placeholder="-"
+                                    id="add_phone">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="control-label col-md-3">Select Role</label>
+                            <label class="control-label col-md-3">Role</label>
                             <div class="col-md-8">
                                 <select class="form-control" id="exampleSelect1">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="control-label col-md-3">Email</label>
-                            <div class="col-md-8">
-                                <input class="form-control" type="email" placeholder="-" id="add_market_name">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="control-label col-md-3">Password</label>
                             <div class="col-md-8">
-                                <input class="form-control" type="text" placeholder="-" id="add_market_name">
+                                <input class="form-control" type="text" placeholder="-" id="add_password">
                             </div>
                         </div>
                         <div class="modal-footer " style="justify-content: center;margin-top:20px;">
-                            <button class="btn btn-success" type="button" onclick="addMarket()">Save</button>
+                            <button class="btn btn-success" type="button" onclick="submitModal()">Submit</button>
                         </div>
                     </form>
                 </div>
             </div>
+
         </div>
     </div>
     <!-- edit game rate modal -->
@@ -195,14 +193,14 @@
                         <div class="form-group row">
                             <label class="control-label col-md-3">Name</label>
                             <div class="col-md-8">
-                                <input class="form-control" type="text" placeholder="-" id="edit_user_name">
+                                <input class="form-control" type="text" placeholder="-" id="edit_name">
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label class="control-label col-md-3">Email</label>
                             <div class="col-md-8">
-                                <input class="form-control" type="email" placeholder="-" id="edit_user_email">
+                                <input class="form-control" type="email" placeholder="-" id="edit_email">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -210,7 +208,18 @@
                             <div class="col-md-8">
                                 <input class="form-control" type="text" maxlength="10"
                                     oninput="this.value=this.value.replace(/[^0-9]/g,'');" placeholder="-"
-                                    id="edit_user_phone">
+                                    id="edit_phone">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Role</label>
+                            <div class="col-md-8" id="edit_dropdown">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Password</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" placeholder="-" id="edit_password">
                             </div>
                         </div>
                         <div class="modal-footer " style="justify-content: center;margin-top:20px;">
@@ -237,198 +246,250 @@
     <script type="text/javascript">
         authenticateAdmin();
         let userList = [];
-        // window.onload = function () {
-        //     getUserList()
-        // }
-        // function getUserList() {
-        //     startLoader()
-        //     axiosInstance.get('fetch_staff').then((response) => {
-        //         endLoader()
-        //         console.log(response)
-        //         if (response.status === 200) {
-        //             let dataSet = response.data?.msg
-        //             userList = dataSet
-        //             $(document).ready(function () {
-        //                 $('#sampleTable').DataTable().destroy();
-        //                 $('#sampleTable').DataTable({
-        //                     data: dataSet,
-        //                     columns: [
-        //                         {
-        //                             data: 'admin_fullname',
-        //                         },
-        //                         {
-        //                             data: 'admin_email_id',
-        //                         },
-        //                         {
-        //                             data: 'admin_phonenumber',
-        //                         },
-        //                         {
-        //                             data: 'admin_user_id',
-        //                             render: function (data) {
-        //                                 return `<div class="d-flex justify-content-around" >
-        //                                     <button class="btn-sm btn-info" onclick="setEditForm(${data})" data-toggle="modal" data-target="#edit_game_rate_modal" ><i
-        //                                   class="fa fa-pencil cp" aria-hidden="true"></i>&nbsp;Edit</button><button
-        //                                  class="btn-sm btn-danger" onclick="deleteGameRate(${data})" ><i class="fa fa-trash cp"
-        //                                    aria-hidden="true"></i>&nbsp;Delete</button>
-        //                                     </div>`;
-        //                             },
-        //                         },
-        //                     ],
-        //                 });
-        //             });
-        //         } else {
-        //             if (response?.data?.is_logged_out) {
-        //                 localStorage.setItem("isLoggedIn", "false");
-        //                 location.href = "index.html";
-        //             } else {
-        //                 $.notify({
-        //                     title: "",
-        //                     message: response.data?.msg,
-        //                     icon: 'fa fa-times'
-        //                 }, {
-        //                     type: "danger",
-        //                 });
-        //             }
-        //         }
-        //     }, (error) => {
-        //         console.log('error', error);
-        //         endLoader()
-        //         $.notify({
-        //             title: "",
-        //             message: `Something went wrong! Please try again.`,
-        //             icon: 'fa fa-times'
-        //         }, {
-        //             type: "danger"
-        //         });
-        //     })
-        // }
-        // function setEditForm(g_id) {
-        //     let gameNow = userList?.filter(m => m?.admin_user_id === `${g_id}`)
-        //     if (gameNow?.length > 0) {
-        //         document.getElementById('edit_user_name').value = gameNow[0]?.admin_fullname
-        //         document.getElementById('edit_user_phone').value = gameNow[0]?.admin_phonenumber
-        //         document.getElementById('edit_user_email').value = gameNow[0]?.admin_email_id
-        //         document.getElementById('edit_save_btn').setAttribute("onClick", `updateGameRate(${g_id})`);
-        //     }
-        // }
-        // function updateGameRate(g_id) {
-        //     startLoader()
-        //     let edit_user_name = document.getElementById('edit_user_name').value
-        //     let edit_user_phone = document.getElementById('edit_user_phone').value
-        //     let edit_user_email = document.getElementById('edit_user_email').value
-        //     if (edit_user_name === "" || edit_user_phone === "") {
-        //         endLoader()
-        //         $.notify({
-        //             title: "",
-        //             message: `Please enter all details.`,
-        //             icon: 'fa fa-times'
-        //         }, {
-        //             type: "danger"
-        //         });
-        //         return
-        //     }
-        //     let dataToPost = {
-        //         full_name: edit_user_name,
-        //         phone_number: edit_user_phone,
-        //         email: edit_user_email,
-        //     };
-
-        //     $('#edit_game_rate_modal').modal('hide');
-        //     axiosInstance.post('edit_admin_user', {
-        //         ...dataToPost
-        //     }).then((response) => {
-        //         endLoader()
-        //         if (response.status === 200) {
-        //             $.notify({
-        //                 title: "",
-        //                 message: response.data?.msg,
-        //                 icon: 'fa fa-check'
-        //             }, {
-        //                 type: "success",
-        //             });
-        //             getUserList();
-        //         } else {
-        //             if (response?.data?.is_logged_out) {
-        //                 localStorage.setItem("isLoggedIn", "false");
-        //                 location.href = "index.html";
-        //             } else {
-        //                 $.notify({
-        //                     title: "",
-        //                     message: response.data?.msg,
-        //                     icon: 'fa fa-times'
-        //                 }, {
-        //                     type: "danger",
-        //                 });
-        //             }
-        //         }
-        //     }, (error) => {
-        //         console.log('error', error);
-        //         endLoader()
-        //         $.notify({
-        //             title: "",
-        //             message: `Something went wrong! Please try again.`,
-        //             icon: 'fa fa-times'
-        //         }, {
-        //             type: "danger"
-        //         });
-        //     })
-        // }
-        // function deleteGameRate(g_id) {
-        //     swal({
-        //         title: "Are you sure?",
-        //         text: "You will not be able to recover this rate!",
-        //         type: "warning",
-        //         showCancelButton: true,
-        //         confirmButtonText: "Yes, delete it!",
-        //         cancelButtonText: "No, cancel plx!",
-        //         closeOnConfirm: true,
-        //         closeOnCancel: false
-        //     }, function (isConfirm) {
-        //         if (isConfirm) {
-        //             startLoader()
-        //             axiosInstance.post('delete_admin_user', {
-        //                 "user_id": g_id
-        //             }).then((response) => {
-        //                 endLoader()
-        //                 if (response.status === 200) {
-        //                     $.notify({
-        //                         title: "",
-        //                         message: response.data?.msg,
-        //                         icon: 'fa fa-check'
-        //                     }, {
-        //                         type: "success",
-        //                     });
-        //                     getUserList();
-        //                 } else {
-        //                     if (response?.data?.is_logged_out) {
-        //                         localStorage.setItem("isLoggedIn", "false");
-        //                         location.href = "index.html";
-        //                     } else {
-        //                         $.notify({
-        //                             title: "",
-        //                             message: response.data?.msg,
-        //                             icon: 'fa fa-times'
-        //                         }, {
-        //                             type: "danger",
-        //                         });
-        //                     }
-        //                 }
-        //             }, (error) => {
-        //                 console.log('error', error);
-        //                 endLoader()
-        //                 $.notify({
-        //                     title: "",
-        //                     message: `Something went wrong! Please try again.`,
-        //                     icon: 'fa fa-times'
-        //                 }, {
-        //                     type: "danger"
-        //                 });
-        //             })
-        //         } else {
-        //             swal("Cancelled", "Your game rate is safe.", "error");
-        //         }
-        //     });
-        // }
+        let rolesList = [];
+        window.onload = function () {
+            getUserList()
+        }
+        function getUserList() {
+            startLoader()
+            axiosInstance.get('fetch_staff').then((response) => {
+                endLoader()
+                console.log(response)
+                if (response.status === 200) {
+                    let dataSet = response.data?.staff?.staff_details
+                    userList = dataSet
+                    rolesList = response?.data?.staff?.role_details
+                    let exampleSelect1 = document.getElementById('exampleSelect1')
+                    exampleSelect1.innerHTML = ''
+                    exampleSelect1.innerHTML = '<option value="">-- Select --</option>';
+                    for (let i = 0; i < rolesList.length; i++) {
+                        const element = rolesList[i];
+                        exampleSelect1.innerHTML = exampleSelect1.innerHTML +
+                            `
+                        <option value='${element?.role_id}'>${element?.role_name}</option>
+                        `
+                    }
+                    let edit_dropdown = document.getElementById('edit_dropdown')
+                    edit_dropdown.innerHTML = ''
+                    edit_dropdown.innerHTML = `
+                    <select class="form-control"  id="example_edit_dropdown">
+                        <option value="">-- Select --</option>
+                        ${rolesList?.map((el) => (`<option value='${el?.role_id}'>${el?.role_name}</option>`))}
+                     </select >
+                    `
+                    $(document).ready(function () {
+                        $('#sampleTable').DataTable().destroy();
+                        $('#sampleTable').DataTable({
+                            data: dataSet,
+                            columns: [
+                                {
+                                    data: 'admin_fullname',
+                                },
+                                {
+                                    data: 'admin_email',
+                                },
+                                {
+                                    data: 'admin_phonenumber',
+                                },
+                                {
+                                    data: 'role_name',
+                                },
+                                {
+                                    data: 'admin_user_id',
+                                    render: function (data) {
+                                        return `<div class="d-flex justify-content-around" >
+                                                  <button class="btn-sm btn-info" onclick="setEditForm(${data})" data-toggle="modal" data-target="#edit_game_rate_modal" ><i
+                                                  class="fa fa-pencil cp" aria-hidden="true"></i>&nbsp;Edit</button>
+                                                 </div > `;
+                                    },
+                                },
+                            ],
+                        });
+                    });
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isAdminLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
+        function submitModal() {
+            startLoader()
+            let name = document.getElementById('add_name')
+            let email = document.getElementById('add_email')
+            let phone = document.getElementById('add_phone')
+            let role = document.getElementById('exampleSelect1')
+            let password = document.getElementById('add_password')
+            if (name.value == "" || email.value == "" || phone.value == "" || role.value == "") {
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Please enter all details.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+                return
+            }
+            if (!validateEmail(email.value)) {
+                $.notify({
+                    title: "",
+                    message: `Please enter a valid email.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            if (phone.value?.length != 10) {
+                $.notify({
+                    title: "",
+                    message: `Please enter a valid entity mobile number.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger",
+                });
+                endLoader();
+                return
+            }
+            $('#add_modal').modal('hide');
+            axiosInstance.post('add_staff', {
+                "admin_email": email.value,
+                "role_id": role.value,
+                "admin_password": password.value,
+                "admin_fullname": name.value,
+                "admin_phonenumber": phone.value
+            }).then((response) => {
+                $('#add_modal_form')[0].reset();
+                endLoader()
+                if (response.status === 200) {
+                    $.notify({
+                        title: "",
+                        message: response.data?.msg,
+                        icon: 'fa fa-check'
+                    }, {
+                        type: "success",
+                    });
+                    getUserList();
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isAdminLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
+        function setEditForm(g_id) {
+            let gameNow = userList?.filter(m => `${m.admin_user_id}` == `${g_id}`)
+            if (gameNow?.length > 0) {
+                document.getElementById('edit_name').value = gameNow[0]?.admin_fullname
+                document.getElementById('edit_email').value = gameNow[0]?.admin_email
+                document.getElementById('edit_phone').value = gameNow[0]?.admin_phonenumber
+                document.getElementById('example_edit_dropdown').value = gameNow[0]?.role_id
+                document.getElementById('edit_save_btn').setAttribute("onClick", `updateGameRate(${g_id})`);
+            }
+        }
+        function updateGameRate(g_id) {
+            startLoader()
+            let edit_user_name = document.getElementById('edit_name').value
+            let edit_user_phone = document.getElementById('edit_phone').value
+            let edit_user_email = document.getElementById('edit_email').value
+            let role = document.getElementById('example_edit_dropdown').value
+            let edit_password = document.getElementById('edit_password').value
+            if (edit_user_name == "" || edit_user_phone == "" || edit_user_email == "" || role == "") {
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Please enter all details.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+                return
+            }
+            $('#edit_game_rate_modal').modal('hide');
+            axiosInstance.post('edit_staff', {
+                "admin_user_id": g_id,
+                "admin_email": edit_user_email,
+                "role_id": parseInt(role),
+                "admin_password": edit_password,
+                "admin_fullname": edit_user_name,
+                "admin_phonenumber": edit_user_phone
+            }).then((response) => {
+                endLoader()
+                if (response.status === 200) {
+                    $.notify({
+                        title: "",
+                        message: response.data?.msg,
+                        icon: 'fa fa-check'
+                    }, {
+                        type: "success",
+                    });
+                    getUserList();
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isAdminLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
     </script>
 </body>
 
