@@ -43,6 +43,17 @@ function authenticate() {
     location.href = "index.html";
   }
 }
+function authenticateAdmin() {
+  let isLoggedIn = localStorage.getItem("isAdminLoggedIn");
+  if (isLoggedIn === "false" || isLoggedIn === null) {
+    location.href = "index.html";
+  }
+  let cookieData = getCookie("admin_jwt");
+  if (!cookieData?.admin_email) {
+    localStorage.setItem("isAdminLoggedIn", "false");
+    location.href = "index.html";
+  }
+}
 // baseURL: `/gst/backend/`,
 const axiosInstance = axios.create({
   baseURL: `/gst/backend/`,
