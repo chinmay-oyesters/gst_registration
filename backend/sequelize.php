@@ -53,6 +53,7 @@ $database_tables = array(
     "
     CREATE TABLE IF NOT EXISTS `admin_user_table` (
         `admin_user_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
+        `role_id` INT(11),
         `admin_fullname` VARCHAR(255) NOT NULL,
         `admin_password` VARCHAR(255) NOT NULL,
         `admin_phonenumber` VARCHAR(255) NOT NULL,
@@ -61,7 +62,10 @@ $database_tables = array(
         `otp` INTEGER(10),
         `otp_created_at` VARCHAR(255),
         `created_at` DATETIME,
-        `updated_at` DATETIME 
+        `updated_at` DATETIME,
+        FOREIGN KEY (role_id) 
+          REFERENCES roles_table(role_id) 
+          ON DELETE CASCADE
     )",
     "
     CREATE TABLE IF NOT EXISTS `payments_table` (
@@ -71,8 +75,8 @@ $database_tables = array(
         `created_at` DATETIME,
         `updated_at` DATETIME,
         FOREIGN KEY (user_id) 
-    		REFERENCES user_table(user_id) 
-    		ON DELETE CASCADE
+          REFERENCES user_table(user_id) 
+          ON DELETE CASCADE
     )",
     "
     CREATE TABLE IF NOT EXISTS `form_field_table` (
