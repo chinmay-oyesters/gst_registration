@@ -127,7 +127,7 @@
                         </div>
                     </div>
                     <div class="col-12 d-flex justify-content-center mt-4">
-                        <button class="btn btn-success">Submit</button>
+                        <button class="btn btn-success" onclick="saveProfile()">Submit</button>
                     </div>
                 </div>
             </div>
@@ -138,11 +138,14 @@
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/globalFunction.js"></script>
+    <script type="text/javascript" src="../js/plugins/bootstrap-notify.min.js"></script>
+
     <script>
         authenticateAdmin()
         let name = document.getElementById('name')
         let email = document.getElementById('email')
         let mobile = document.getElementById('mobile')
+        let profile_image = document.getElementById('profile_img_id')
         window.onload = function () {
             startLoader()
             axiosInstance.get('admin_fetch_profile').then((response) => {
@@ -153,6 +156,9 @@
                     name.value = dataSet?.admin_fullname
                     email.value = dataSet?.admin_email
                     mobile.value = dataSet?.admin_phonenumber
+                    if (dataSet?.admin_profileimage) {
+                        profile_image.src = `data:image/png;base64,${dataSet?.admin_profileimage}`
+                    }
                 } else {
                     if (response?.data?.is_logged_out) {
                         localStorage.setItem("isAdminLoggedIn", "false");
@@ -215,36 +221,67 @@
                 endLoader();
                 return
             }
+
             axiosInstance.post('admin_save_profile', {
-                "admin_email": email,
-                "admin_password": "",
-                "admin_fullname": name,
-                "admin_phonenumber": mobile
+                "admin_email": email.value,
+                "admin_fullname": name.value,
+                "admin_phonenumber": mobile.value
             }).then((response) => {
-                endLoader()
-                if (response.status === 200) {
-                    $.notify({
-                        title: "",
-                        message: response.data?.msg,
-                        icon: 'fa fa-check'
-                    }, {
-                        type: "success",
-                    });
+                let profile_image_input_field = document.getElementById('profile_image_input_field')
+                if (profile_image_input_field.value) {
+                    var formData = new FormData();
+                    formData.append('choosefile', profile_image_input_field.files[0])
+                    axiosInstance.post('admin_image_upload', formData).then((respp) => {
+                        endLoader();
+                        if (respp.status === 200) {
+                            $.notify({
+                                title: "",
+                                message: response.data?.msg,
+                                icon: 'fa fa-check'
+                            }, {
+                                type: "success",
+                            });
+                        } else {
+                            if (respp?.data?.is_logged_out) {
+                                localStorage.setItem("isAdminLoggedIn", "false");
+                                location.href = "index.html";
+                            } else {
+                                $.notify({
+                                    title: "",
+                                    message: response.data?.msg,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
+                            }
+                        }
+                    })
                 } else {
-                    if (response?.data?.is_logged_out) {
-                        localStorage.setItem("isAdminLoggedIn", "false");
-                        location.href = "index.html";
-                    } else {
+                    endLoader()
+                    if (response.status === 200) {
                         $.notify({
                             title: "",
                             message: response.data?.msg,
-                            icon: 'fa fa-times'
+                            icon: 'fa fa-check'
                         }, {
-                            type: "danger",
+                            type: "success",
                         });
+                    } else {
+                        if (response?.data?.is_logged_out) {
+                            localStorage.setItem("isAdminLoggedIn", "false");
+                            location.href = "index.html";
+                        } else {
+                            $.notify({
+                                title: "",
+                                message: response.data?.msg,
+                                icon: 'fa fa-times'
+                            }, {
+                                type: "danger",
+                            });
+                        }
                     }
                 }
-                console.log(response)
+
             }, (error) => {
                 console.log('error', error);
                 endLoader()
