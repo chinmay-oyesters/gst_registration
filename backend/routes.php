@@ -62,9 +62,9 @@ $router->endpoint('edit_role', 'admin/roles/edit_role', ['POST'], FALSE, ['role_
 // all endpoints specified for form related operations
 
 // creation of form
-$router->endpoint('create_form', 'form/create_form', ['POST'], FALSE, ['form_name', 'form_fields']);
+$router->endpoint('add_form', 'form/add_form', ['POST'], FALSE, ['form_name', 'form_fields']);
 // creation of form fields
-$router->endpoint('create_field', 'form/create_field', ['POST'], FALSE, []);
+$router->endpoint('add_field', 'form/add_field', ['POST'], FALSE, []);
 // fetch form
 $router->endpoint('fetch_form', 'form/fetch_form', ['POST'], FALSE, ['form_id']);
 // save form
@@ -72,8 +72,11 @@ $router->endpoint('save_form', 'form/save_form', ['POST'], FALSE, ['form_values'
 // fetch dependencies
 $router->endpoint('fetch_dependencies', 'form/fetch_dependencies', ['POST'], FALSE, ['fetch_field']);
 
-//  Dashboard related routes
+//  Admin Form related routes
 
-$router->endpoint('dashboard_fetch_forms', 'admin/dashboard/dashboard_fetch_forms', ['GET'], FALSE, []);
-$router->endpoint('dashboard_fetch_fields', 'admin/dashboard/dashboard_fetch_fields', ['GET'], FALSE, []);
-$router->endpoint('dashboard_delete_form', 'admin/dashboard/dashboard_delete_form', ['POST'], FALSE, ['form_id']);
+$router->endpoint('fetch_admin_forms', 'admin/admin_forms/fetch_admin_forms', ['GET'], FALSE, []);
+$router->endpoint('fetch_admin_form_fields', 'admin/admin_forms/fetch_admin_form_fields', ['GET'], FALSE, []);
+$router->endpoint('delete_admin_form', 'admin/admin_forms/delete_admin_form', ['POST'], FALSE, ['form_id']);
+$router->endpoint('fetch_users', 'admin/admin_forms/fetch_users', ['POST'], FALSE, ['form_id']);
+$router->endpoint('fetch_fields', 'admin/admin_forms/fetch_fields', ['GET'], FALSE, []);
+$router->endpoint('fetch_response', 'admin/admin_forms/fetch_response', ['POST'], FALSE, ['form_id', 'user_id']);

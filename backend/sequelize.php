@@ -94,22 +94,23 @@ $database_tables = array(
     ",
     "
     CREATE TABLE IF NOT EXISTS `form_response_table` (
-        `form_response_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
-        `form_response_form_id` INT(255) NOT NULL,
-        `form_response_form_field_id` INT(255) NOT NULL,
-        `form_response_user_id` INT(255) NOT NULL,
+        `response_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
+        `form_id` INT(255) NOT NULL,
+        `field_id` INT(255) NOT NULL,
+        `user_id` INT(255) NOT NULL,
         `form_response_answer` VARCHAR(255) DEFAULT NULL,
+        `field_frontend_id` INT(255),
         `created_at` DATETIME,
         `updated_at` DATETIME,
-        FOREIGN KEY (form_response_form_id)
-    		REFERENCES form_table(form_id)
-    		ON DELETE CASCADE,
-        FOREIGN KEY (form_response_form_field_id)
-    		REFERENCES form_field_table(form_field_id)
-    		ON DELETE CASCADE,
-        FOREIGN KEY (form_response_user_id)
-    		REFERENCES user_table(user_id) 
-    		ON DELETE CASCADE
+        FOREIGN KEY (form_id)
+          REFERENCES form_table(form_id)
+          ON DELETE CASCADE,
+        FOREIGN KEY (field_id)
+          REFERENCES form_field_table(form_field_id)
+          ON DELETE CASCADE,
+        FOREIGN KEY (user_id)
+          REFERENCES user_table(user_id) 
+          ON DELETE CASCADE
     )
     ",
     "
