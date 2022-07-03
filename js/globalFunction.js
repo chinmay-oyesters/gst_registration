@@ -140,3 +140,14 @@ function arrayMove(arr, fromIndex, toIndex) {
   arr.splice(fromIndex, 1);
   arr.splice(toIndex, 0, element);
 }
+
+function getUrlVars() {
+  var vars = {};
+  var parts = window.location.href.replace(
+    /[?&]+([^=&]+)=([^&]*)/gi,
+    function (m, key, value) {
+      vars[key] = value;
+    }
+  );
+  return vars;
+}
