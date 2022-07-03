@@ -97,7 +97,24 @@
         </div>
         <div class="tile">
             <div class="tile-body">
+                <button class="btn btn-sm btn-primary mb-4" data-toggle="modal" data-target="#add_modal">+ Add
+                    Field</button>
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered" id="sampleTable">
+                        <thead>
+                            <tr>
+                                <th>Field Name</th>
+                                <th>Field Type</th>
+                                <th>Field Tag</th>
+                                <th>Validation</th>
+                                <th>Required</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>
@@ -116,6 +133,73 @@
     <script type="text/javascript" src="../js/plugins/sweetalert.min.js"></script>
     <script type="text/javascript">
         authenticateAdmin();
+        let list = [];
+        window.onload = function () {
+            getList()
+        }
+        function getList() {
+            startLoader()
+            axiosInstance.get('fetch_fields').then((response) => {
+                endLoader()
+                console.log(response)
+                if (response.status === 200) {
+                    let dataSet = response.data?.fields
+                    userList = dataSet
+                    $(document).ready(function () {
+                        $('#sampleTable').DataTable().destroy();
+                        $('#sampleTable').DataTable({
+                            data: dataSet,
+                            columns: [
+                                {
+                                    data: 'field_name',
+                                },
+                                {
+                                    data: 'field_type',
+                                },
+                                {
+                                    data: 'field_tag',
+                                },
+                                {
+                                    data: 'validation',
+                                },
+                                {
+                                    data: 'required',
+                                    render: function (data) {
+                                        if (data == '1') {
+                                            return 'true'
+                                        }
+                                        return `false`;
+                                    },
+                                },
+                            ],
+                        });
+                    });
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isAdminLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
     </script>
 </body>
 
