@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fields - GST Admin</title>
+    <title>New Field - GST Admin</title>
     <!-- Main CSS-->
     <link rel="stylesheet" type="text/css" href="../css/main.css">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
@@ -75,7 +75,7 @@
                         class="app-menu__label">Payments</span></a></li>
             <li><a class="app-menu__item" href="forms.html"><i class="app-menu__icon fa fa-file-text-o"
                         aria-hidden="true"></i><span class="app-menu__label">Forms</span></a></li>
-            <li><a class="app-menu__item active" href="fields.html"><i class="app-menu__icon fa fa-align-center"
+            <li><a class="app-menu__item" href="fields.html"><i class="app-menu__icon fa fa-align-center"
                         aria-hidden="true"></i><span class="app-menu__label">Fields</span></a></li>
             <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
                         class="app-menu__icon fa fa-cog"></i><span class="app-menu__label">Settings</span><i
@@ -92,29 +92,41 @@
     <main class="app-content">
         <div class="app-title">
             <div>
-                <h1><i class="fa fa-align-center" aria-hidden="true"></i>&nbsp;Fields</h1>
+                <h1><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp;New Form</h1>
             </div>
         </div>
         <div class="tile">
             <div class="tile-body">
-                <button class="btn btn-sm btn-primary mb-4" onclick="location.href='new-field.html'">+ Add
-                    Field</button>
-                <div class="table-responsive">
-                    <table class="table table-hover table-bordered" id="sampleTable">
-                        <thead>
-                            <tr>
-                                <th>Field Name</th>
-                                <th>Field Type</th>
-                                <th>Field Tag</th>
-                                <th>Validation</th>
-                                <th>Required</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
-                </div>
+                <form action="" id="new_form_id">
+                    <div class="form-group row mt-4">
+                        <label class="control-label col-md-3">Field Title</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" placeholder="-" id="title">
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="control-label col-md-3">Field Type</label>
+                        <div class="col-md-8">
+                            <select class="form-control" id="fields_dropdown">
+                                <option value="">-- Select Field --</option>
+                                <option value="Text">Text</option>
+                                <option value="Dropdown">Dropdown</option>
+                                <option value="Radio-Button">Radio-Button</option>
+                                <option value="Toggle">Toggle</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="control-label col-md-3">Field Tag</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" placeholder="-" id="tag">
+                        </div>
+                    </div>
+                    
+                    <div class="mt-5 mb-5 d-flex justify-content-end">
+                        <button type="button" class="btn btn-success" onclick="submitForm()">Sumbit</button>
+                    </div>
+                </form>
             </div>
         </div>
     </main>
@@ -133,72 +145,9 @@
     <script type="text/javascript" src="../js/plugins/sweetalert.min.js"></script>
     <script type="text/javascript">
         authenticateAdmin();
-        let list = [];
+        
         window.onload = function () {
-            getList()
-        }
-        function getList() {
-            startLoader()
-            axiosInstance.get('fetch_fields').then((response) => {
-                endLoader()
-                console.log(response)
-                if (response.status === 200) {
-                    let dataSet = response.data?.fields
-                    userList = dataSet
-                    $(document).ready(function () {
-                        $('#sampleTable').DataTable().destroy();
-                        $('#sampleTable').DataTable({
-                            data: dataSet,
-                            columns: [
-                                {
-                                    data: 'field_name',
-                                },
-                                {
-                                    data: 'field_type',
-                                },
-                                {
-                                    data: 'field_tag',
-                                },
-                                {
-                                    data: 'validation',
-                                },
-                                {
-                                    data: 'required',
-                                    render: function (data) {
-                                        if (data == '1') {
-                                            return 'true'
-                                        }
-                                        return `false`;
-                                    },
-                                },
-                            ],
-                        });
-                    });
-                } else {
-                    if (response?.data?.is_logged_out) {
-                        localStorage.setItem("isAdminLoggedIn", "false");
-                        location.href = "index.html";
-                    } else {
-                        $.notify({
-                            title: "",
-                            message: response.data?.msg,
-                            icon: 'fa fa-times'
-                        }, {
-                            type: "danger",
-                        });
-                    }
-                }
-            }, (error) => {
-                console.log('error', error);
-                endLoader()
-                $.notify({
-                    title: "",
-                    message: `Something went wrong! Please try again.`,
-                    icon: 'fa fa-times'
-                }, {
-                    type: "danger"
-                });
-            })
+            // getList()
         }
     </script>
 </body>
