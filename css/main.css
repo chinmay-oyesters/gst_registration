@@ -43,8 +43,8 @@
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
   /* custom */
-  --default-bg-1: #0C1A32;
-  --default-bg-2: #1B2A45;
+  --default-bg-1: #0c1a32;
+  --default-bg-2: #1b2a45;
   --default-bg-3: #193866;
   --default-text-1: #0e687a;
   --default-text-2: white;
@@ -13256,7 +13256,10 @@ body.stop-scrolling {
   position: relative;
   vertical-align: middle;
 }
-
+.select2-container * {
+  color: white !important;
+  background: var(--default-bg-2) !important;
+}
 .select2-container .select2-selection--single {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;

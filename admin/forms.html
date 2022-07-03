@@ -118,7 +118,7 @@
         }
         function getList() {
             startLoader()
-            axiosInstance.get('dashboard_fetch_forms').then((response) => {
+            axiosInstance.get('fetch_admin_forms').then((response) => {
                 endLoader()
                 let forms_container = document.getElementById('forms_container')
                 forms_container.innerHTML = `
