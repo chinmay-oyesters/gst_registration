@@ -107,12 +107,13 @@
                     <div class="form-group row mt-4">
                         <label class="control-label col-md-3">Field Type</label>
                         <div class="col-md-8">
-                            <select class="form-control" id="fields_dropdown">
+                            <select class="form-control">
                                 <option value="">-- Select Field --</option>
                                 <option value="Text">Text</option>
                                 <option value="Dropdown">Dropdown</option>
                                 <option value="Radio-Button">Radio-Button</option>
                                 <option value="Toggle">Toggle</option>
+                                <option value="Date">Date</option>
                             </select>
                         </div>
                     </div>
@@ -122,7 +123,58 @@
                             <input class="form-control" type="text" placeholder="-" id="tag">
                         </div>
                     </div>
-                    
+                    <div class="form-group row mt-4">
+                        <label class="control-label col-md-3">Validation Type</label>
+                        <div class="col-md-8">
+                            <select class="form-control">
+                                <option value="">-- Select Validation --</option>
+                                <option value="Email">Email</option>
+                                <option value="Mobile-Number">mobile number</option>
+                                <option value="PAN">PAN</option>
+                                <option value="Alpha-Numeric">Alpha-Numeric</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="control-label col-md-3">Is Required</label>
+                        <div class="col-md-8">
+                            <label style="width: 80px;margin-left: 20px;" class="form-check-label" for="optionsRadios1">
+                                <input class="form-check-input" id="optionsRadios1" type="radio" name="optionsRadios"
+                                    value="true">True
+                            </label>
+                            <label class="form-check-label" for="optionsRadios2">
+                                <input class="form-check-input" id="optionsRadios2" type="radio" name="optionsRadios"
+                                    value="false">False
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="control-label col-md-3">Select Associate Field</label>
+                        <div class="col-md-8  d-flex">
+                            <select class="form-control" id="fields_dropdown">
+                            </select>
+                            <button onclick="addFieldToTable()" class="btn btn-success pl-5 pr-5 ml-4"
+                                type="button">Add</button>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="mt-4 mb-3">Selected Associate Fields</p>
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Field Name</th>
+                                    <th>Field Type</th>
+                                    <th>Require</th>
+                                    <th align="center" style="width: 100px;text-align: center;">Sort</th>
+                                    <th align="center" style="width: 100px;text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fields_table">
+
+                            </tbody>
+                        </table>
+                    </div>
                     <div class="mt-5 mb-5 d-flex justify-content-end">
                         <button type="button" class="btn btn-success" onclick="submitForm()">Sumbit</button>
                     </div>
@@ -143,11 +195,105 @@
     <!-- alert  -->
     <script type="text/javascript" src="../js/plugins/bootstrap-notify.min.js"></script>
     <script type="text/javascript" src="../js/plugins/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script type="text/javascript">
         authenticateAdmin();
-        
+
+        $(document).ready(function () {
+            $('#fields_dropdown').select2();
+        });
+        let fieldsList = [];
+        let selectdFields = [];
+        let fields_dropdown = document.getElementById('fields_dropdown')
+        let fields_table = document.getElementById('fields_table')
         window.onload = function () {
-            // getList()
+            getList()
+        }
+        function getList() {
+            startLoader()
+            axiosInstance.get('fetch_admin_form_fields').then((response) => {
+                endLoader()
+                if (response.status === 200) {
+                    let dataSet = response?.data?.fields
+                    fieldsList = dataSet
+                    updateFields()
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isAdminLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
+        function updateFields() {
+            let dataSet = fieldsList
+            fields_dropdown.innerHTML = ''
+            fields_dropdown.innerHTML = `<option value=""> -- Select Field -- </option>`
+            for (let i = 0; i < dataSet.length; i++) {
+                const element = dataSet[i];
+                if (!selectdFields?.includes(element?.field_id)) {
+                    fields_dropdown.innerHTML = fields_dropdown.innerHTML +
+                        `<option value='${element?.field_id}' >${element?.field_name} - ${element?.field_type}${element?.required == '1' ? `<span style="color:red;" >&nbsp;*<span>` : ""}</option>`
+                }
+            }
+            fields_table.innerHTML = ''
+            for (let j = 0; j < selectdFields.length; j++) {
+                let element = fieldsList?.filter(fs => fs?.field_id == selectdFields[j])
+                if (element?.length > 0) {
+                    fields_table.innerHTML = fields_table.innerHTML +
+                        `<tr><td>${j + 1}</td><td>${element[0]?.field_name}</td><td>${element[0]?.field_type}</td><td>${element[0]?.required == '1' ? 'true' : 'false'}</td><td align="center"><i class="fa fa-long-arrow-up cp" onclick="sortTable('up','${j}');" aria-hidden="true"></i>&nbsp;&nbsp;<i onclick="sortTable('down','${j}');"  class="fa fa-long-arrow-down cp" aria-hidden="true"></i></td><td align="center" ><i class="fa fa-trash text-danger cp" onclick="removeField('${j}')" aria-hidden="true"></i></td></tr>`
+                }
+            }
+            if (selectdFields?.length == 0) {
+                fields_table.innerHTML = '<tr><td align="center" colspan="6" class="p-5">No field selected</td></tr>'
+            }
+        }
+        function addFieldToTable() {
+            let fields_dropdown = document.getElementById('fields_dropdown')
+            if (fields_dropdown.value) {
+                selectdFields?.push(fields_dropdown.value)
+                updateFields()
+                fields_dropdown.value = ''
+            }
+        }
+        function removeField(idx) {
+            let nowSelectedFields = selectdFields;
+            nowSelectedFields.splice(idx, 1);
+            selectdFields = [...nowSelectedFields]
+            updateFields()
+        }
+        function sortTable(mode, idx) {
+            let nowSelectedFields = selectdFields;
+            let oldIndex = parseInt(idx);
+            if (mode == 'up') {
+                if (oldIndex != 0) {
+                    arrayMove(nowSelectedFields, oldIndex, oldIndex - 1)
+                }
+            } else if (mode == 'down') {
+                if (oldIndex !== nowSelectedFields?.length - 1) {
+                    arrayMove(nowSelectedFields, oldIndex, oldIndex + 1)
+                }
+            }
+            selectdFields = nowSelectedFields
+            updateFields()
         }
     </script>
 </body>
