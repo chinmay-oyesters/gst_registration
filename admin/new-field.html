@@ -107,11 +107,12 @@
                     <div class="form-group row mt-4">
                         <label class="control-label col-md-3">Field Type</label>
                         <div class="col-md-8">
-                            <select class="form-control">
+                            <select class="form-control" onchange="updateFieldType(event.target.value)">
                                 <option value="">-- Select Field --</option>
                                 <option value="Text">Text</option>
                                 <option value="Dropdown">Dropdown</option>
-                                <option value="Radio-Button">Radio-Button</option>
+                                <option value="Single-Select">Radio Button</option>
+                                <option value="Single-Select">Multi-Select Radio Button</option>
                                 <option value="Toggle">Toggle</option>
                                 <option value="Date">Date</option>
                             </select>
@@ -123,17 +124,7 @@
                             <input class="form-control" type="text" placeholder="-" id="tag">
                         </div>
                     </div>
-                    <div class="form-group row mt-4">
-                        <label class="control-label col-md-3">Validation Type</label>
-                        <div class="col-md-8">
-                            <select class="form-control">
-                                <option value="">-- Select Validation --</option>
-                                <option value="Email">Email</option>
-                                <option value="Mobile-Number">mobile number</option>
-                                <option value="PAN">PAN</option>
-                                <option value="Alpha-Numeric">Alpha-Numeric</option>
-                            </select>
-                        </div>
+                    <div id="validation_type_container">
                     </div>
                     <div class="form-group row mt-4">
                         <label class="control-label col-md-3">Is Required</label>
@@ -147,6 +138,30 @@
                                     value="false">False
                             </label>
                         </div>
+                    </div>
+                    <div class="mb-5">
+                        <div class="form-group row mt-4">
+                            <label class="control-label col-md-3">Field Values</label>
+                            <div class="col-md-8  d-flex justify-content-end">
+                                <button class="btn btn-success pl-5 pr-5 ml-4" type="button" data-toggle="modal"
+                                    data-target="#add_modal" onclick="openModal()">Add Value</button>
+                            </div>
+                        </div>
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;">#</th>
+                                    <th>Value</th>
+                                    <th>Associated To</th>
+                                    <th>Multiplied To</th>
+                                    <th align="center" style="width: 100px;text-align: center;">Sort</th>
+                                    <th align="center" style="width: 100px;text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="values_table">
+
+                            </tbody>
+                        </table>
                     </div>
                     <div class="form-group row mt-4">
                         <label class="control-label col-md-3">Select Associate Field</label>
@@ -182,6 +197,70 @@
             </div>
         </div>
     </main>
+    <!-- add value modal -->
+    <div class="modal fade" id="add_modal" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered ">
+
+            <!-- Modal content-->
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Value<br />
+                        <p style="text-align:left; font-size:13px;font-weight:500;">
+                        <p>
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="add_modal_form">
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Value</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" placeholder="-" id="add_value">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Associated To</label>
+                            <div class="col-md-8">
+                                <select class="form-control" style="width: 100%;" id="associated_fields_dropdown">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Multiplied To</label>
+                            <div class="col-md-8">
+                                <select class="form-control" style="width: 100%;" id="multiplied_fields_dropdown">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-sm btn-success">Add Associate</button>
+                        </div>
+                        <div>
+                            <p class="mt-4 mb-3">Associate Fields</p>
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Associated TO</th>
+                                        <th>Multiplied TO</th>
+                                        <th align="center" style="width: 100px;text-align: center;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="assocoated_to_table">
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer " style="justify-content: center;margin-top:20px;">
+                            <button class="btn btn-success" type="button" onclick="submitModal()">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
     <!-- Essential javascripts for application to work-->
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/popper.min.js"></script>
@@ -198,9 +277,20 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script type="text/javascript">
         authenticateAdmin();
+        // value fields
+        let valueList = [];
+        let valueAssociateList = [];
+        let valueMultiplyedList = [];
+        let values_table = document.getElementById('values_table')
+        let associated_fields_dropdown = document.getElementById('associated_fields_dropdown')
+        let multiplied_fields_dropdown = document.getElementById('multiplied_fields_dropdown')
 
+
+        //  associate fields
         $(document).ready(function () {
             $('#fields_dropdown').select2();
+            $('#associated_fields_dropdown').select2();
+            $('#multiplied_fields_dropdown').select2();
         });
         let fieldsList = [];
         let selectdFields = [];
@@ -208,6 +298,7 @@
         let fields_table = document.getElementById('fields_table')
         window.onload = function () {
             getList()
+            updateValueTable()
         }
         function getList() {
             startLoader()
@@ -242,6 +333,28 @@
                     type: "danger"
                 });
             })
+        }
+        function openModal() {
+            let dataSet = fieldsList
+            associated_fields_dropdown.innerHTML = ''
+            associated_fields_dropdown.innerHTML = `<option value="none">none</option>`
+            for (let i = 0; i < dataSet.length; i++) {
+                const element = dataSet[i];
+                if (!valueAssociateList?.includes(`${element?.field_id}`)) {
+                    associated_fields_dropdown.innerHTML = associated_fields_dropdown.innerHTML +
+                        `<option value='${element?.field_id}' >${element?.field_name} - ${element?.field_type}${element?.required == '1' ? `<span style="color:red;" >&nbsp;*<span>` : ""}</option>`
+                }
+            }
+            multiplied_fields_dropdown.innerHTML = '';
+            multiplied_fields_dropdown.innerHTML = `<option value="none">none</option>`
+            for (let i = 0; i < dataSet.length; i++) {
+                const element = dataSet[i];
+                multiplied_fields_dropdown.innerHTML = multiplied_fields_dropdown.innerHTML +
+                    `<option value='${element?.field_id}' >${element?.field_name} - ${element?.field_type}${element?.required == '1' ? `<span style="color:red;" >&nbsp;*<span>` : ""}</option>`
+            }
+        }
+        function updateValueTable() {
+            values_table.innerHTML = '<tr><td align="center" colspan="6" class="p-5">No field selected</td></tr>'
         }
         function updateFields() {
             let dataSet = fieldsList
@@ -294,6 +407,27 @@
             }
             selectdFields = nowSelectedFields
             updateFields()
+        }
+        function updateFieldType(value) {
+            console.log(value)
+            if (value == "Text") {
+                document.getElementById('validation_type_container').innerHTML =
+                    `                        <div class="form-group row mt-4">
+                            <label class="control-label col-md-3">Validation Type</label>
+                            <div class="col-md-8">
+                                <select class="form-control">
+                                    <option value="">-- Select Validation --</option>
+                                    <option value="Email">Email</option>
+                                    <option value="Number">Number</option>
+                                    <option value="Mobile-Number">mobile number</option>
+                                    <option value="PAN">PAN</option>
+                                    <option value="Alpha-Numeric">Alpha-Numeric</option>
+                                </select>
+                            </div>
+                        </div>`
+            } else {
+                document.getElementById('validation_type_container').innerHTML = ''
+            }
         }
     </script>
 </body>
