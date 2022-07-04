@@ -614,7 +614,7 @@
             }
         }
         function submitForm() {
-            // startLoader()
+            startLoader()
             let field_title = document.getElementById('field_title')
             let field_type = document.getElementById('field_type')
             let field_tag = document.getElementById('field_tag')
@@ -670,7 +670,44 @@
             } else {
                 dataSet['field_validation'] = null
             }
-            console.log(dataSet)
+            axiosInstance.post('add_field', dataSet).then((response) => {
+                endLoader()
+                if (response.status === 200) {
+                    $.notify({
+                        title: "",
+                        message: response.data?.msg,
+                        icon: 'fa fa-check'
+                    }, {
+                        type: "success",
+                    });
+                    setTimeout(() => {
+                        location.href = 'fields.html'
+                    }, 200);
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isAdminLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
         }
     </script>
 </body>
