@@ -44,6 +44,7 @@ if(auth($token)){
 
             array_push($subscribed_user,
                 [
+                    "user_id" => $form_detail['user_id'],
                     "user_fullname" => $user_details['user_fullname'],
                     "user_email" => $user_details['user_email'],
                     "user_phonenumber" => $user_details['user_phonenumber'],
