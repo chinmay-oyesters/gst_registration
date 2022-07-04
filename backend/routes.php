@@ -25,7 +25,7 @@ $router->endpoint('home', 'user/home', ['GET'], FALSE, []);
 $router->endpoint('save_response', 'user/save_response', ['POST'], FALSE, []);
 
 // fetching user forms
-$router->endpoint('fetch_user_forms', 'user/fetch_user_forms', ['GET'], FALSE, []);
+$router->endpoint('fetch_user_forms', 'user/fetch_user_forms', ['POST'], FALSE, []);
 
 // fetch user dependencies
 $router->endpoint('fetch_user_dependencies', 'user/fetch_user_dependencies', ['POST'], FALSE, ['fetch_field']);
