@@ -14,7 +14,7 @@ $token = $_COOKIE["admin_jwt"];
 if(auth($token)){
     //find the market to delete
     $user_id = $_POST['user_id'];
-    //fetch details from market
+
     $sql = "DELETE FROM user_table
     WHERE user_id = :user_id";
     $query = $con -> prepare($sql);
