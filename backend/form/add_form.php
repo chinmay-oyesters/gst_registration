@@ -18,7 +18,7 @@ if(auth($token)){
 
     // retrieve required variables
     $form_name = $_POST['form_name'];
-    $form_fields = $_POST['form_fields'];
+    $form_fields = json_encode($_POST['form_fields']);
     $datetime = date("Y-m-d H:i:s");
 
     // looking for the max form id in database
