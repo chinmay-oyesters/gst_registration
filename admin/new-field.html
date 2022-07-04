@@ -101,18 +101,18 @@
                     <div class="form-group row mt-4">
                         <label class="control-label col-md-3">Field Title</label>
                         <div class="col-md-8">
-                            <input class="form-control" type="text" placeholder="-" id="title">
+                            <input class="form-control" type="text" placeholder="-" id="field_title">
                         </div>
                     </div>
                     <div class="form-group row mt-4">
                         <label class="control-label col-md-3">Field Type</label>
                         <div class="col-md-8">
-                            <select class="form-control" onchange="updateFieldType(event.target.value)">
+                            <select class="form-control" id="field_type" onchange="updateFieldType(event.target.value)">
                                 <option value="">-- Select Field --</option>
                                 <option value="Text">Text</option>
                                 <option value="Dropdown">Dropdown</option>
                                 <option value="Single-Select">Radio Button</option>
-                                <option value="Single-Select">Multi-Select Radio Button</option>
+                                <option value="Multi-Select">Multi-Select Radio Button</option>
                                 <option value="Toggle">Toggle</option>
                                 <option value="Date">Date</option>
                             </select>
@@ -121,7 +121,7 @@
                     <div class="form-group row mt-4">
                         <label class="control-label col-md-3">Field Tag</label>
                         <div class="col-md-8">
-                            <input class="form-control" type="text" placeholder="-" id="tag">
+                            <input class="form-control" type="text" placeholder="-" id="field_tag">
                         </div>
                     </div>
                     <div id="validation_type_container">
@@ -139,28 +139,8 @@
                             </label>
                         </div>
                     </div>
-                    <div class="mb-5">
-                        <div class="form-group row mt-4">
-                            <label class="control-label col-md-3">Field Values</label>
-                            <div class="col-md-8  d-flex justify-content-end">
-                                <button class="btn btn-success pl-5 pr-5 ml-4" type="button" data-toggle="modal"
-                                    data-target="#add_modal" onclick="openModal()">Add Value</button>
-                            </div>
-                        </div>
-                        <table class="table table-hover table-bordered">
-                            <thead>
-                                <tr>
-                                    <th style="width: 40px;">#</th>
-                                    <th>Value</th>
-                                    <th>Associated To</th>
-                                    <th>Multiplied To</th>
-                                    <th align="center" style="width: 100px;text-align: center;">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="values_table">
+                    <div class="mb-5" id="value_container">
 
-                            </tbody>
-                        </table>
                     </div>
                     <div class="form-group row mt-4">
                         <label class="control-label col-md-3">Select Associate Field</label>
@@ -300,7 +280,6 @@
         window.onload = function () {
             getList()
             updateAssociatedToTableInModal()
-            updateValueTable()
         }
         function getList() {
             startLoader()
@@ -337,6 +316,21 @@
             })
         }
         function openModal() {
+            if (document.getElementById('field_type').value == 'Toggle') {
+                if (valueList?.length == 2) {
+                    setTimeout(() => {
+                        $('#add_modal').modal('hide');
+                    }, 1000);
+                    $.notify({
+                        title: "",
+                        message: `Two value already selected`,
+                        icon: 'fa fa-times'
+                    }, {
+                        type: "danger"
+                    });
+                    return
+                }
+            }
             let dataSet = fieldsList
             associated_fields_dropdown.innerHTML = ''
             associated_fields_dropdown.innerHTML = `<option value="none">none</option>`
@@ -572,12 +566,15 @@
         }
         function updateFieldType(value) {
             console.log(value)
+            valueList = []
+            valueAssociateList = [];
+            valueMultiplyedList = [];
             if (value == "Text") {
                 document.getElementById('validation_type_container').innerHTML =
                     `                        <div class="form-group row mt-4">
                             <label class="control-label col-md-3">Validation Type</label>
                             <div class="col-md-8">
-                                <select class="form-control">
+                                <select class="form-control" id="field_validation">
                                     <option value="">-- Select Validation --</option>
                                     <option value="Email">Email</option>
                                     <option value="Number">Number</option>
@@ -587,9 +584,93 @@
                                 </select>
                             </div>
                         </div>`
+            } else if (value == 'Dropdown' || value == 'Single-Select' || value == 'Multi-Select' || value == 'Toggle') {
+                document.getElementById('value_container').innerHTML = `
+                <div class="form-group row mt-4">
+                            <label class="control-label col-md-3">Field Values</label>
+                            <div class="col-md-8  d-flex justify-content-end">
+                                <button class="btn btn-success pl-5 pr-5 ml-4" type="button" data-toggle="modal"
+                                    data-target="#add_modal" onclick="openModal()">Add Value</button>
+                            </div>
+                        </div>
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;">#</th>
+                                    <th>Value</th>
+                                    <th>Associated To</th>
+                                    <th>Multiplied To</th>
+                                    <th align="center" style="width: 100px;text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="values_table">
+                                <tr><td align="center" colspan="6" class="p-5">No field selected</td></tr>
+                            </tbody>
+                        </table>`
+                values_table = document.getElementById('values_table')
             } else {
                 document.getElementById('validation_type_container').innerHTML = ''
+                document.getElementById('value_container').innerHTML = ''
             }
+        }
+        function submitForm() {
+            // startLoader()
+            let field_title = document.getElementById('field_title')
+            let field_type = document.getElementById('field_type')
+            let field_tag = document.getElementById('field_tag')
+            let optionsRadios1 = document.getElementById('optionsRadios1')
+            let optionsRadios2 = document.getElementById('optionsRadios2')
+            if (field_title?.value == "" || field_type?.value == "" || (optionsRadios1?.checked == false && optionsRadios2?.checked == false)) {
+                $.notify({
+                    title: "",
+                    message: `Please enter all fields.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+                endLoader()
+                return
+            }
+            if (field_type?.value == 'Toggle') {
+                if (valueList?.length != 2) {
+                    $.notify({
+                        title: "",
+                        message: `Please enter 2 value.`,
+                        icon: 'fa fa-times'
+                    }, {
+                        type: "danger"
+                    });
+                    endLoader()
+                    return
+                }
+            }
+            let dataSet = {
+                "field_title": field_title?.value,
+                "field_tag1": field_tag?.value,
+                "field_type": field_type?.value,
+                "field_associated_to": selectdFields,
+                "field_required": optionsRadios1?.checked
+            }
+            if (field_type?.value == 'Text') {
+                let field_validation = document.getElementById('field_validation')
+                if (field_validation?.value == "") {
+                    $.notify({
+                        title: "",
+                        message: `Please select validation type.`,
+                        icon: 'fa fa-times'
+                    }, {
+                        type: "danger"
+                    });
+                    endLoader()
+                    return
+                }
+                dataSet['field_validation'] = field_validation.value
+            } else if (field_type?.value == 'Dropdown' || field_type?.value == 'Single-Select' || field_type?.value == 'Multi-Select' || field_type?.value == 'Toggle') {
+                dataSet['field_values'] = valueList
+            } else {
+                dataSet['field_validation'] = null
+            }
+            console.log(dataSet)
         }
     </script>
 </body>
