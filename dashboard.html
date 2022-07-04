@@ -90,7 +90,7 @@
             cards_container.innerHTML = cards_container.innerHTML +
               `
               <div class="col-md-6 col-lg-4 ">
-              <div class="p-4  m-2 cp user_dashboard_card" style="background: ${getColorCode(i+1)};"  onclick="location.href='form.html?type=${element?.form_name}'">
+              <div class="p-4  m-2 cp user_dashboard_card" style="background: ${getColorCode(i + 1)};"  onclick="${element?.form_status != 'Pay to Avail the Service' ? `location.href='form.html?id=13&type=${element?.form_name}'` : ``}">
                <img src="data:image/png;base64, ${element?.form_image}" alt="" style="height:50px;width:50px;border-radius:50%;border:1px solid white;">
                <h4>${element?.form_name}</h4>
                <p>${element?.form_status}</p>
