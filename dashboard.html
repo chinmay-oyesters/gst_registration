@@ -92,7 +92,7 @@
               <div class="col-md-6 col-lg-4 ">
               <div class="p-4  m-2 cp user_dashboard_card" style="background: ${getColorCode(i + 1)};"  onclick="${element?.form_status != 'Pay to Avail the Service' ? `location.href='form.html?id=13&type=${element?.form_name}'` : ``}">
                <img src="data:image/png;base64, ${element?.form_image}" alt="" style="height:50px;width:50px;border-radius:50%;border:1px solid white;">
-               <h4>${element?.form_name}</h4>
+               <h4>${element?.purchase_form_name}</h4>
                <p>${element?.form_status}</p>
                ${element?.form_status != 'Pay to Avail the Service' ?
                 `<div class="progress_bar_container mt-5">
