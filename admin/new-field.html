@@ -154,7 +154,6 @@
                                     <th>Value</th>
                                     <th>Associated To</th>
                                     <th>Multiplied To</th>
-                                    <th align="center" style="width: 100px;text-align: center;">Sort</th>
                                     <th align="center" style="width: 100px;text-align: center;">Action</th>
                                 </tr>
                             </thead>
@@ -234,7 +233,8 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button class="btn btn-sm btn-success">Add Associate</button>
+                            <button class="btn btn-sm btn-success" type="button" onclick="addAssociatedFildTo()">Add
+                                Associate</button>
                         </div>
                         <div>
                             <p class="mt-4 mb-3">Associate Fields</p>
@@ -242,8 +242,8 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Associated TO</th>
-                                        <th>Multiplied TO</th>
+                                        <th>Associated To</th>
+                                        <th>Multiplied To</th>
                                         <th align="center" style="width: 100px;text-align: center;">Action</th>
                                     </tr>
                                 </thead>
@@ -284,6 +284,7 @@
         let values_table = document.getElementById('values_table')
         let associated_fields_dropdown = document.getElementById('associated_fields_dropdown')
         let multiplied_fields_dropdown = document.getElementById('multiplied_fields_dropdown')
+        let assocoated_to_table = document.getElementById('assocoated_to_table')
 
 
         //  associate fields
@@ -298,6 +299,7 @@
         let fields_table = document.getElementById('fields_table')
         window.onload = function () {
             getList()
+            updateAssociatedToTableInModal()
             updateValueTable()
         }
         function getList() {
@@ -352,9 +354,169 @@
                 multiplied_fields_dropdown.innerHTML = multiplied_fields_dropdown.innerHTML +
                     `<option value='${element?.field_id}' >${element?.field_name} - ${element?.field_type}${element?.required == '1' ? `<span style="color:red;" >&nbsp;*<span>` : ""}</option>`
             }
+            assocoated_to_table.innerHTML = '';
+            assocoated_to_table.innerHTML = '<tr><td align="center" colspan="6" class="p-5">No field selected</td></tr>'
+        }
+        function addAssociatedFildTo() {
+            let associatedToNow = associated_fields_dropdown.value
+            let multipliedToNow = multiplied_fields_dropdown.value
+            if (associatedToNow == 'none') {
+                $.notify({
+                    title: "",
+                    message: `Please select associated to.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+                return
+            }
+            let nowValueAssociateList = [...valueAssociateList]
+            nowValueAssociateList?.push(associatedToNow)
+            let nowValueMultiplyedList = [...valueMultiplyedList]
+            if (multipliedToNow == 'none') {
+                nowValueMultiplyedList?.push('')
+            } else {
+
+                nowValueMultiplyedList?.push(multipliedToNow)
+            }
+
+            valueAssociateList = nowValueAssociateList
+            valueMultiplyedList = nowValueMultiplyedList
+
+
+            associated_fields_dropdown.value = ''
+            multiplied_fields_dropdown.value = ''
+            updateAssociatedToTableInModal()
+        }
+        function updateAssociatedToTableInModal() {
+            assocoated_to_table.innerHTML = ''
+            if (valueAssociateList?.length == valueMultiplyedList?.length) {
+                for (let i = 0; i < valueAssociateList.length; i++) {
+                    let asObje = fieldsList?.filter(fl => fl?.field_id == valueAssociateList[i])
+                    let mulVal = '';
+                    if (valueMultiplyedList[i] != '') {
+                        let mulObje = fieldsList?.filter(fl => fl?.field_id == valueMultiplyedList[i])
+                        if (mulObje?.length > 0) {
+                            mulVal = mulObje[0].field_name
+                        }
+                    }
+                    if (asObje?.length > 0)
+                        assocoated_to_table.innerHTML = assocoated_to_table.innerHTML +
+                            `<tr>
+                        <td>${i + 1}</td>
+                        <td>${asObje[0]?.field_name}</td>
+                        <td>${mulVal}</td>
+                        <td align="center" ><i class="fa fa-trash text-danger cp" onclick="removeFieldFromAssociatedTo('${i}')" aria-hidden="true"></i></td>
+                     </tr>
+                    `
+
+                }
+                if (valueAssociateList?.length == 0) {
+                    assocoated_to_table.innerHTML = '<tr><td align="center" colspan="6" class="p-5">No field selected</td></tr>'
+                }
+            } else {
+                valueAssociateList = [];
+                valueMultiplyedList = [];
+            }
+        }
+        function removeFieldFromAssociatedTo(idx) {
+            let nowValueAssociateList = valueAssociateList;
+            nowValueAssociateList.splice(idx, 1);
+            valueAssociateList = [...nowValueAssociateList]
+            let nowValueMultiplyedList = valueMultiplyedList;
+            nowValueMultiplyedList.splice(idx, 1);
+            valueMultiplyedList = [...nowValueMultiplyedList]
+            updateAssociatedToTableInModal()
+        }
+        function submitModal() {
+            let add_value = document.getElementById('add_value').value
+            if (add_value == '') {
+                $.notify({
+                    title: "",
+                    message: `Please enter value.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+                return
+            }
+            let finalArray = [add_value]
+            if (valueAssociateList?.length == valueMultiplyedList?.length) {
+                for (let i = 0; i < valueAssociateList.length; i++) {
+                    let strNow = valueAssociateList[i]
+                    if (valueMultiplyedList[i] != '') {
+                        strNow = `${strNow}x${valueMultiplyedList[i]}`
+                    }
+                    finalArray?.push(strNow)
+                }
+            } else {
+                valueAssociateList = []
+                valueMultiplyedList = []
+            }
+            let nowValList = [...valueList]
+            nowValList?.push(finalArray)
+            valueList = nowValList
+            $('#add_modal_form')[0].reset();
+            $('#add_modal').modal('hide');
+            valueAssociateList = []
+            valueMultiplyedList = []
+            console.log(valueList)
+            updateValueTable()
         }
         function updateValueTable() {
-            values_table.innerHTML = '<tr><td align="center" colspan="6" class="p-5">No field selected</td></tr>'
+            values_table.innerHTML = ''
+            if (valueList?.length != 0) {
+                for (let i = 0; i < valueList.length; i++) {
+                    const element = valueList[i];
+                    const elementTpp = [];
+                    for (let j = 0; j < valueList[i].length; j++) {
+                        if (j !== 0 && j !== 1) elementTpp?.push(valueList[i][j])
+                    }
+                    console.log(elementTpp)
+                    values_table.innerHTML = values_table.innerHTML +
+                        `<tr>
+                    <td rowspan='${element?.length - 1}'>${i + 1}</td>
+                    <td rowspan='${element?.length - 1}' >${element[0]}</td>
+                    ${element[1]?.includes('x') ?
+                            `<td>${splitValue('-x', element[1])}</td><td>${splitValue('x-', element[1])}</td> ` : `<td>${element[1][0]}</td><td></td>`
+                        }
+                    <td align="center" rowspan='${element?.length - 1}' ><i class="fa fa-trash text-danger cp" onclick="removeFieldFromValueTable('${i}')" aria-hidden="true"></i></td>
+                    </tr>
+                    ${elementTpp?.map((el) => (`
+                      <tr>
+                    <td>${splitValue('-x', el)}</td><td>${splitValue('x-', el)}</td>
+                    </tr>
+                    `)).join('')} 
+                    `
+                }
+            } else {
+                values_table.innerHTML = '<tr><td align="center" colspan="6" class="p-5">No field selected</td></tr>'
+            }
+        }
+        function splitValue(mode, value) {
+            console.log(mode, value)
+            let idnow = ''
+            if (value?.includes('x')) {
+                if (mode == '-x') {
+                    idnow = value.split("x")[0];
+                } else {
+                    idnow = value.split("x")[1];
+                }
+                let fildNow = fieldsList?.filter(fl => fl?.field_id == idnow)
+                if (fildNow?.length != 0) {
+                    return fildNow[0]?.field_name
+                } else return ''
+            } else {
+                if (mode == '-x') return value
+                else return '-'
+            }
+
+        }
+        function removeFieldFromValueTable(idx) {
+            let nowSelecteValues = valueList;
+            nowSelecteValues.splice(idx, 1);
+            valueList = [...nowSelecteValues]
+            updateValueTable()
         }
         function updateFields() {
             let dataSet = fieldsList
