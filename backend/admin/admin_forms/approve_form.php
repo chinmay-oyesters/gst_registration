@@ -18,33 +18,32 @@ if(auth($token)){
 
     // retrieve required variables
     $form_id = $_POST['form_id'];
-    $form_name = $_POST['form_name'];
-    $form_fields = json_encode($_POST['form_fields']);
+    $user_id = $_POST['user_id'];
     $datetime = date("Y-m-d H:i:s");
+    $form_status = "Approved";
 
     // query to edit the form field in the table
-    $sql = "UPDATE form_table SET  
-    form_name =  :form_name,
-    form_fields = :form_fields,
+    $sql = "UPDATE user_subscription_details SET  
+    form_status =  :form_status,
     updated_at = :updated_at
-    WHERE form_id = :form_id";
+    WHERE form_id = :form_id 
+    AND user_id = :user_id";
     $query = $con -> prepare($sql);
 
     // binding the parameters to the sql query in order to insert new data
     $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
-    $query->bindParam(':form_name', $form_name, PDO::PARAM_STR);
-    $query->bindParam(':form_fields', $form_fields, PDO::PARAM_STR);
+    $query->bindParam(':user_id', $user_id, PDO::PARAM_STR);
+    $query->bindParam(':form_status', $form_status, PDO::PARAM_STR);
     $query->bindparam(":updated_at", $datetime, PDO::PARAM_STR);
-
 
     // success
     if($query->execute()){
         $status = 200;
         $response = [
-            "msg" => "Form edited successfully",
+            "msg" => "Approved",
             "form" => [
                 "form_id" => $form_id,
-                "form_name" => $form_name
+                "form_status" => $form_status
             ]
         ];
     }
@@ -52,7 +51,7 @@ if(auth($token)){
     else{
         $status = 203;
         $response = [
-            "msg" => "Internal Server Error - Form could not be edited"
+            "msg" => "Internal Server Error - Form not approved"
         ];
     }
 
