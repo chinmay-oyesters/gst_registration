@@ -66,7 +66,7 @@
         <div class="tile p-5">
             <h3 class="tile-title">GST Form</h3>
             <div class="tile-body">
-                <form id="gst_form">
+                <form id="form_container">
 
                 </form>
             </div>
@@ -85,62 +85,52 @@
     <script src="js/globalFunction.js"></script>
     <script type="text/javascript" src="js/plugins/bootstrap-notify.min.js"></script>
     <script type="text/javascript">
-        let fetchedFields = [
-            {
-                "field_id": "1",
-                "field_title": "Trade Name",
-                "field_type": "Text",
-                "field_required": false,
-                "field_associated_to": null
-            },
-            {
-                "field_id": "6",
-                "field_title": "Constitution of Business",
-                "field_type": "Dropdown",
-                "field_required": true,
-                "field_associated_to": null,
-                "field_values": [["Foreign Company"], ["Foreign Limited Liability Partnership"], ["Government Department"], ["Hindu Undivided Family"], ["Limited Liability Partnership"], ["Local Authority"], ["Others", "20"]]
-            },
-            {
-                "field_id": "2",
-                "field_title": "District",
-                "field_type": "Dropdown",
-                "field_required": true,
-                "field_associated_to": null,
-                "field_values": [["Ahmednagar"], ["Akola"], ["Amravati"], ["Aurangabad"], ["Beed"], ["Bhandara"], ["Buldhana"], ["Chandrapur"], ["Dhule"], ["Gadchiroli"], ["Gondia"], ["Hingoli"]]
-            },
-            {
-                "field_id": "3",
-                "field_title": "Are you applying for registration as a casual taxable person?",
-                "field_type": "Toggle",
-                "field_required": false,
-                "field_associated_to": null,
-                "field_values": [["No"], ["Yes", "21", "22", "23"]]
-            },
-            {
-                "field_id": "4",
-                "field_title": "Reason to obtain registration",
-                "field_type": "Dropdown",
-                "field_required": true,
-                "field_associated_to": null,
-                "field_values": [["Crossing the Threshold"], ["Inter-State supply"], ["Liability to pay as recipient of goods or services"], ["Transfer / Succession of business"], ["Death of the Proprietor"], ["De-merger"], ["Change in constitution of business"], ["Merger /Amalgamation"]]
-            },
-            {
-                "field_id": "5",
-                "field_title": "Date of commencement of Business",
-                "field_type": "Text",
-                "field_required": true,
-                "field_associated_to": null
-            },
-            {
-                "field_id": "6",
-                "field_title": "Date on which liability to register arises",
-                "field_type": "Text",
-                "field_required": true,
-                "field_associated_to": null
-            }
-        ]
+        let fetchedFields = []
         let fieldsAssociate = [];
+        window.onload = function () {
+            if (getUrlVars()["id"]) {
+                form_id = getUrlVars()["id"]
+                getList(form_id);
+            } else {
+                location.href = 'dashboard.html'
+            }
+        }
+        function getList(ids) {
+            startLoader()
+            axiosInstance.post('fetch_form', {
+                "form_id": parseInt(ids)
+            }).then((response) => {
+                endLoader()
+                console.log(response)
+                if (response.status === 200) {
+                    let dataSet = response.data?.fields
+                    fetchedFields = dataSet
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
         function setFields(container_id_n, nowFields) {
             let container_id = document.getElementById(container_id_n)
             container_id.innerHTML = ''
@@ -207,7 +197,7 @@
                 }
             }
         }
-        setFields('gst_form', fetchedFields)
+        setFields('form_container', fetchedFields)
         function updateFieldValueAssociateDropDown(id, field_id_type, get_fieldValue) {
             console.log(get_fieldValue)
             let arrOfData = null
@@ -365,7 +355,7 @@
             if (!validateSecond) {
                 return
             }
-            $('#gst_form')[0].reset();
+            $('#form_container')[0].reset();
             $.notify({
                 title: "",
                 message: `Form submitted successfully`,
