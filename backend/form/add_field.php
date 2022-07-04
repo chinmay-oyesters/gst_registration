@@ -20,8 +20,8 @@ if(auth($token)){
     $field_tag1 = $_POST['field_tag1'];
     $field_title = $_POST['field_title'];
     $field_type = $_POST['field_type'];
-    $field_associated_to = $_POST['field_associated_to'];
-    $field_values = $_POST['field_values'];
+    $field_associated_to = json_encode($_POST['field_associated_to']);
+    $field_values = json_encode($_POST['field_values']);
     $field_validation = $_POST['field_validation'];
     $field_required = $_POST['field_required'];
     $datetime = date("Y-m-d H:i:s");
