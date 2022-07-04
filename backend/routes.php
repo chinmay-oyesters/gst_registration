@@ -89,3 +89,4 @@ $router->endpoint('delete_admin_form', 'admin/admin_forms/delete_admin_form', ['
 $router->endpoint('fetch_users', 'admin/admin_forms/fetch_users', ['POST'], FALSE, ['form_id']);
 $router->endpoint('fetch_fields', 'admin/admin_forms/fetch_fields', ['GET'], FALSE, []);
 $router->endpoint('fetch_response', 'admin/admin_forms/fetch_response', ['POST'], FALSE, ['form_id', 'user_id']);
+$router->endpoint('edit_admin_form', 'admin/admin_forms/edit_admin_form', ['POST'], FALSE, ['form_id']);
