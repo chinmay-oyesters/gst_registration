@@ -26,37 +26,42 @@ if(auth($token)){
 
     $payload = JWT::decode($token, new Key($SECRET_KEY, 'HS512'));
 
-    // retrieve required variables
-    $user_id = $payload->user_id;
-    $field_id = $_POST['field_id'];
-    $form_id = $_POST['form_id'];
-    $field_frontend_id = $_POST['field_frontend_id'];
-    $form_response_answer = $_POST['form_response_answer'];
-    $datetime = date("Y-m-d H:i:s");
+    $response_list = $_POST['response_list'];
 
-    $sql = "INSERT INTO form_response_table (user_id, form_id, field_id, field_frontend_id, form_response_answer, created_at, updated_at) VALUES
-    (:user_id, :form_id, :field_id, :field_frontend_id, :form_response_answer, :created_at, :updated_at)";
-    $query = $con -> prepare($sql);
-    $query->bindParam(':user_id', $user_id, PDO::PARAM_STR);
-    $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
-    $query->bindParam(':field_id', $field_id, PDO::PARAM_STR);
-    $query->bindParam(':field_frontend_id', $field_frontend_id, PDO::PARAM_STR);
-    $query->bindParam(':form_response_answer', $form_response_answer, PDO::PARAM_STR);
-    $query->bindparam(":created_at", $datetime, PDO::PARAM_STR);
-    $query->bindparam(":updated_at", $datetime, PDO::PARAM_STR);
-    
+    foreach($response_list as $response){
+        // retrieve required variables
+        $user_id = $payload->user_id;
+        $field_id = $response['field_id'];
+        $form_id = $response['form_id'];
+        $field_frontend_id = $response['field_frontend_id'];
+        $form_response_answer = $response['form_response_answer'];
+        $datetime = date("Y-m-d H:i:s");
 
-    if($query->execute()){
-        $status = 200;
-        $response = [
-            "msg" => "Responses saved successsfully"
-        ]; 
-    }else{
+        $sql = "INSERT INTO form_response_table (user_id, form_id, field_id, field_frontend_id, form_response_answer, created_at, updated_at) VALUES
+        (:user_id, :form_id, :field_id, :field_frontend_id, :form_response_answer, :created_at, :updated_at)";
+        $query = $con -> prepare($sql);
+        $query->bindParam(':user_id', $user_id, PDO::PARAM_STR);
+        $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
+        $query->bindParam(':field_id', $field_id, PDO::PARAM_STR);
+        $query->bindParam(':field_frontend_id', $field_frontend_id, PDO::PARAM_STR);
+        $query->bindParam(':form_response_answer', $form_response_answer, PDO::PARAM_STR);
+        $query->bindparam(":created_at", $datetime, PDO::PARAM_STR);
+        $query->bindparam(":updated_at", $datetime, PDO::PARAM_STR);
         
-        $status = 203;
-        $response = [
-            "msg" => "Responses could not be saved"
-        ];
+
+        if($query->execute()){
+            $status = 200;
+            $response = [
+                "msg" => "Responses saved successsfully"
+            ]; 
+        }else{
+            
+            $status = 203;
+            $response = [
+                "msg" => "Responses could not be saved"
+            ];
+        }
     }
 
 }
+

@@ -34,7 +34,10 @@ if(auth($token)){
             form_field_id,
             form_field_title,
             form_field_type,
-            form_field_required
+            form_field_required,
+            form_field_associated_to,
+            form_field_values,
+            form_field_validation
             FROM form_field_table WHERE form_field_id = :field_id";
         $query = $con -> prepare($sql);
 
@@ -55,7 +58,10 @@ if(auth($token)){
                 "field_id" => $field->form_field_id,
                 "field_title" => $field->form_field_title,
                 "field_type" => $field->form_field_type,
-                "field_required" => $field->form_field_required
+                "field_required" => $field->form_field_required,
+                "form_field_associated_to" => $field->form_field_associated_to,
+                "form_field_values" => $field->form_field_values,
+                "form_field_validation" => $field->form_field_validation
             ]);
         }
         
