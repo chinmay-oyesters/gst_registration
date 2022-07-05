@@ -99,8 +99,8 @@
                 </form>
             </div>
             <div class="tile-footer">
-                <button onclick="submitForm()" class="btn btn-primary" type="button"><i
-                        class="fa fa-fw fa-lg fa-check-circle"></i>Save</button>
+                <!-- <button onclick="submitForm()" class="btn btn-primary" type="button"><i
+                        class="fa fa-fw fa-lg fa-check-circle"></i>Save</button> -->
             </div>
         </div>
     </main>
@@ -129,7 +129,7 @@
                 if (getUrlVars()["ref"]) {
                     form_id = getUrlVars()["id"]
                     user_ref = getUrlVars()["ref"]
-                    form_name = getUrlVars()['type']
+                    form_name = decodeURI(getUrlVars()["type"])
                     document.getElementById('form_title').innerHTML = `${form_name} Form`
                     getList(form_id, user_ref);
                 } else {
