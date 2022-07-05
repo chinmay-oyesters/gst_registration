@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer - GST Admin</title>
+    <title>Form Response - GST Admin</title>
     <!-- Main CSS-->
     <link rel="stylesheet" type="text/css" href="../css/main.css">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
@@ -73,7 +73,7 @@
                         aria-hidden="true"></i><span class="app-menu__label">Roles</span></a></li>
             <li><a class="app-menu__item" href="payments.html"><i class="app-menu__icon fa fa-money"></i><span
                         class="app-menu__label">Payments</span></a></li>
-            <li><a class="app-menu__item active" href="forms.html"><i class="app-menu__icon fa fa-file-text-o"
+            <li><a class="app-menu__item" href="forms.html"><i class="app-menu__icon fa fa-file-text-o"
                         aria-hidden="true"></i><span class="app-menu__label">Forms</span></a></li>
             <li><a class="app-menu__item" href="fields.html"><i class="app-menu__icon fa fa-align-center"
                         aria-hidden="true"></i><span class="app-menu__label">Fields</span></a></li>
@@ -90,13 +90,18 @@
         </ul>
     </aside>
     <main class="app-content">
-        <div class="app-title">
-            <div>
-                <h1><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp;Forms</h1>
-            </div>
-        </div>
-        <div class="row" id="forms_container">
 
+        <div class="tile p-5">
+            <h3 class="tile-title" id="form_title"></h3>
+            <div class="tile-body">
+                <form id="form_container">
+
+                </form>
+            </div>
+            <div class="tile-footer">
+                <button onclick="submitForm()" class="btn btn-primary" type="button"><i
+                        class="fa fa-fw fa-lg fa-check-circle"></i>Save</button>
+            </div>
         </div>
     </main>
     <!-- Essential javascripts for application to work-->
@@ -113,40 +118,85 @@
     <script type="text/javascript">$('#sampleTable').DataTable();</script>
     <script type="text/javascript">
         authenticateAdmin();
+        let fetchedFields = []
+        let fieldsAssociate = [];
+        let responseList = [];
+        let form_id = null
+        let form_name = null
+        let user_ref = null
         window.onload = function () {
-            getList()
-        }
-        function getList() {
-            startLoader()
-            axiosInstance.get('fetch_admin_forms').then((response) => {
-                endLoader()
-                let forms_container = document.getElementById('forms_container')
-                forms_container.innerHTML = `
-                <div class="col-md-6 col-lg-4 ">
-                <div class="p-4 m-2 cp add_new_form_box" onclick="location.href='new-form.html'">
-                    <h4>+</h4>
-                    <h6>Add New Form</h6>
-                </div>
-            </div>
-                `
-                if (response.status === 200) {
-                    let dataSet = response?.data?.dashboard_data
-                    for (let i = 0; i < dataSet.length; i++) {
-                        const element = dataSet[i];
-                        forms_container.innerHTML = forms_container.innerHTML +
-                            `
-                    <div class="col-md-6 col-lg-4 ">
-                <div class="p-4 card_primary m-2 cp user_dashboard_card" style="background: ${getColorCode(i + 1)};" onclick="redirectToFormsTable('${element?.total_forms}','${element?.form_id}','${element?.form_name}')">
-                    <img src='data:image/png;base64,${element?.form_image}' alt="" style="height:50px;width:50px;border-radius:50%;border:1px solid white;">
-                    <h4>${element?.form_name}</h4>
-                    <h6>Total Forms: ${element?.total_forms}</h6>
-                    <h6>Total Completed: ${element?.total_completed}</h6>
-                    <span onclick='event.stopPropagation();deleteForm("${element?.form_id}");' ><i  class="fa fa-trash" aria-hidden="true"></i></span>
-                </div>
-            </div>
-                    `
-                    }
+            if (getUrlVars()["id"]) {
+                if (getUrlVars()["ref"]) {
+                    form_id = getUrlVars()["id"]
+                    user_ref = getUrlVars()["ref"]
+                    form_name = getUrlVars()['type']
+                    document.getElementById('form_title').innerHTML = `${form_name} Form`
+                    getList(form_id, user_ref);
                 } else {
+                    location.href = 'dashboard.html'
+                }
+            } else {
+                location.href = 'dashboard.html'
+            }
+        }
+        function getList(ids, usrid) {
+            startLoader()
+            axiosInstance.post('fetch_form', {
+                "form_id": parseInt(ids)
+            }).then((response) => {
+                console.log(response)
+                if (response.status === 200) {
+                    let dataSet = response.data?.fields
+                    fetchedFields = dataSet
+                    setFields('form_container', dataSet)
+                    axiosInstance.post('fetch_response', {
+                        "form_id": ids,
+                        "user_id": usrid
+                    }).then((response2) => {
+                        endLoader()
+                        console.log(response2)
+                        if (response2.status === 200) {
+                            responseList = response2.data?.response
+                            console.log(responseList)
+                            responseList?.forEach(res => {
+                                let nowInput = document.getElementById(`${res?.field_frontend_id}`)
+                                let nowFieldType = res.field_frontend_id?.split('_')[0]
+                                if (nowInput) {
+                                    if (nowFieldType == 'Toggle') {
+                                        if (res?.answer == "true"){
+                                            nowInput.checked = true
+                                        }
+                                    } else nowInput.value = res.answer
+                                }
+                            })
+                            displayAssociatedFieldsValue()
+                        } else {
+                            if (response2?.data?.is_logged_out) {
+                                localStorage.setItem("isAdminLoggedIn", "false");
+                                location.href = "index.html";
+                            } else {
+                                $.notify({
+                                    title: "",
+                                    message: response2.data?.msg,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
+                            }
+                        }
+                    }, (error) => {
+                        console.log('error', error);
+                        endLoader()
+                        $.notify({
+                            title: "",
+                            message: `Something went wrong! Please try again.`,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger"
+                        });
+                    })
+                } else {
+                    endLoader()
                     if (response?.data?.is_logged_out) {
                         localStorage.setItem("isAdminLoggedIn", "false");
                         location.href = "index.html";
@@ -172,72 +222,56 @@
                 });
             })
         }
-        function deleteForm(m_id) {
-            swal({
-                title: "Are you sure?",
-                text: "You will not be able to recover this!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "No, cancel plx!",
-                closeOnConfirm: true,
-                closeOnCancel: false
-            }, function (isConfirm) {
-                if (isConfirm) {
-                    startLoader()
-                    axiosInstance.post('delete_admin_form', {
-                        "form_id": parseInt(m_id)
-                    }).then((response) => {
-                        endLoader()
-                        if (response.status === 200) {
-                            $.notify({
-                                title: "",
-                                message: response.data?.msg,
-                                icon: 'fa fa-check'
-                            }, {
-                                type: "success",
-                            });
-                            getList();
-                        } else {
-                            if (response?.data?.is_logged_out) {
-                                localStorage.setItem("isAdminLoggedIn", "false");
-                                location.href = "index.html";
-                            } else {
-                                $.notify({
-                                    title: "",
-                                    message: response.data?.msg,
-                                    icon: 'fa fa-times'
-                                }, {
-                                    type: "danger",
-                                });
-                            }
-                        }
-                    }, (error) => {
-                        console.log('error', error);
-                        endLoader()
-                        $.notify({
-                            title: "",
-                            message: `Something went wrong! Please try again.`,
-                            icon: 'fa fa-times'
-                        }, {
-                            type: "danger"
-                        });
-                    })
-                } else {
-                    swal("Cancelled", "Your data is safe.", "error");
-                }
-            });
-        }
-        function redirectToFormsTable(total, id, name) {
-            if (total == '0') {
-                $.notify({
-                    title: "",
-                    message: 'No record available',
-                    icon: 'fa fa-times'
-                }, {
-                    type: "danger",
+        function updateFieldValueAssociateDropDown(id, field_id_type, get_fieldValue) {
+            let arrOfData = null
+            let arrOfNum = []
+            switch (field_id_type) {
+                case 'Toggle':
+                    let selectedToggle = document.getElementById(`${field_id_type}_${id}`)
+                    if (selectedToggle.checked) {
+                        arrOfData = get_fieldValue.split(',')
+                    }
+                    break;
+                case 'Dropdown':
+                    let selectDropDown = document.getElementById(`${field_id_type}_${id}`);
+                    arrOfData = selectDropDown.value.split(',');
+                    break;
+                default:
+                    break;
+            }
+            if (arrOfData?.length > 1) {
+                let theRemovedElement = arrOfData.shift();
+                arrOfNum = arrOfData.map(str => {
+                    return Number(str);
                 });
-            } else location.href = `forms-table.html?id=${id}&type=${name}`
+            }
+            if (arrOfNum?.length > 0) {
+                startLoader()
+                axiosInstance.post('fetch_user_dependencies', {
+                    "fetch_field": arrOfNum
+                }).then((response) => {
+                    console.log(response)
+                    let newGG = response?.data?.fields
+                    newGG.forEach((object, indx) => {
+                        object.field_parent_id = `${id}_${indx}`;
+                    });
+                    let currentFieldAssociate = fieldsAssociate?.filter(fa => fa?.field_parent_id != id)
+                    fieldsAssociate = [...currentFieldAssociate, ...newGG]
+                    setFields(`field_value_associate_${id}`, newGG);
+                    endLoader()
+                }, (error) => {
+                    console.log('error', error);
+                    endLoader()
+                })
+            } else {
+                let currentFieldAssociate = fieldsAssociate?.filter(fa => fa?.field_parent_id.split("_")[0] != id)
+                fieldsAssociate = [...currentFieldAssociate]
+                document.getElementById(`field_value_associate_${id}`).innerHTML = ''
+            }
+        }
+        function displayAssociatedFieldsValue()
+        {
+            console.log(fetchedFields)
         }
     </script>
 </body>
