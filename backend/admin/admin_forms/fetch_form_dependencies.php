@@ -17,16 +17,16 @@ if(auth($token)){
     // retrieve required variables
     $fetch_field = $_POST['fetch_field'];
 
-    // // looking for the user in database
-    // $sql = "SELECT form_fields AS form_fields FROM form_table WHERE form_id = :form_id";
-    // $query = $con -> prepare($sql);
+    // looking for the user in database
+    $sql = "SELECT form_fields AS form_fields FROM form_table WHERE form_id = :form_id";
+    $query = $con -> prepare($sql);
 
-    // // binding the parameters to the sql query
-    // $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
-    // $query->execute();
+    // binding the parameters to the sql query
+    $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
+    $query->execute();
 
-    // $fields = array();
-    // $ids_not_found = array();
+    $fields = array();
+    $ids_not_found = array();
 
     foreach ($fetch_field as $fetch_field_id) {
         // query to retrieve form field in the table
