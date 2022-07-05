@@ -92,5 +92,5 @@ $router->endpoint('fetch_response', 'admin/admin_forms/fetch_response', ['POST']
 $router->endpoint('edit_admin_form', 'admin/admin_forms/edit_admin_form', ['POST'], FALSE, ['form_id']);
 $router->endpoint('approve_form', 'admin/admin_forms/approve_form', ['POST'], FALSE, ['form_id', 'user_id']);
 $router->endpoint('delete_form', 'admin/admin_forms/delete_form', ['POST'], FALSE, ['form_id', 'user_id']);
-$router->endpoint('fetch_full_form', 'admin/admin_forms/fetch_full_form', ['POST'], FALSE, ['form_id', 'user_id']);
+$router->endpoint('fetch_full_form', 'admin/admin_forms/fetch_full_form', ['POST'], FALSE, ['form_id']);
 $router->endpoint('fetch_form_dependencies', 'admin/admin_forms/fetch_form_dependencies', ['POST'], FALSE, ['form_id', 'user_id']);
