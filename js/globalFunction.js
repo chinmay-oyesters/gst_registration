@@ -312,6 +312,27 @@ function validateAllFields(validateFieldList) {
             return false;
           }
           break;
+        case "Multi-Select":
+          let nowMultiValue = $(
+            `#${element?.field_type}_${element?.field_id}${
+              element?.field_parent_id || ""
+            }`
+          ).val();
+
+          if (nowMultiValue?.length == 0) {
+            $.notify(
+              {
+                title: "",
+                message: `Please select ${element?.field_title.toLocaleLowerCase()}`,
+                icon: "fa fa-times",
+              },
+              {
+                type: "danger",
+              }
+            );
+            return false;
+          }
+          break;
         case "Date":
           let dateValue = document.getElementById(
             `${element?.field_type}_${element?.field_id}${
@@ -366,43 +387,6 @@ function setFields(container_id_n, nowFields) {
           }'>
                   </div>
                   `;
-        break;
-      case "Single-Select":
-        container_id.innerHTML =
-          container_id.innerHTML +
-          `<div class="form-group" >
-                   <label class="control-label">${
-                     element?.field_title
-                   }</label>${
-            element?.field_required
-              ? '<span class="text-danger" style="font-size:23px;" >*</span>'
-              : ""
-          }
-                   ${element?.field_values
-                     ?.map(
-                       (fieldValue, index) =>
-                         `<div class="form-check">
-                      <label class="form-check-label">
-                         <input class="form-check-input" type="radio"  id='${
-                           element?.field_type
-                         }_${element?.field_id}${
-                           element?.field_parent_id || ""
-                         }_${index}' name='${element?.field_type}_${
-                           element?.field_id
-                         }${
-                           element?.field_parent_id || ""
-                         }' onchange="updateFieldValueAssociateDropDown(${
-                           element?.field_id
-                         }${element?.field_parent_id || ""}_${index},'Single-Select','Single-Select')" value='${fieldValue}'>${fieldValue[0]}
-                      </label>
-                  </div>`
-                     )
-                     .join("")}
-                     <div id="field_value_associate_${element?.field_id}${
-            element?.field_parent_id || ""
-          }" ></div>
-              </div>
-              `;
         break;
       case "Toggle":
         container_id.innerHTML =
@@ -468,6 +452,34 @@ function setFields(container_id_n, nowFields) {
           }" ></div>
               `;
         break;
+      case "Multi-Select":
+        container_id.innerHTML =
+          container_id.innerHTML +
+          `
+              <div class="form-group">
+                   <label for='${element?.field_type}_${element?.field_id}${
+            element?.field_parent_id || ""
+          }'>${element?.field_title}</label>${
+            element?.field_required
+              ? '<span class="text-danger" style="font-size:23px;" >*</span>'
+              : ""
+          }
+                  <select class="form-control js-example-basic-multiple" name="states[]" multiple="multiple" id='${
+                    element?.field_type
+                  }_${element?.field_id}${element?.field_parent_id || ""}'>
+                      ${element?.field_values
+                        ?.map(
+                          (fieldValue) =>
+                            `<option value='${fieldValue}'>${fieldValue[0]}</option>`
+                        )
+                        .join("")}
+                  </select>
+              </div>
+              <div id="field_value_associate_${element?.field_id}${
+            element?.field_parent_id || ""
+          }" ></div>
+              `;
+        break;
       case "Date":
         container_id.innerHTML =
           container_id.innerHTML +
@@ -488,4 +500,10 @@ function setFields(container_id_n, nowFields) {
         break;
     }
   }
+  updateSelect2();
+}
+function updateSelect2() {
+  $(document).ready(function () {
+    $(".js-example-basic-multiple").select2();
+  });
 }
