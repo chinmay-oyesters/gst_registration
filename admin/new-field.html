@@ -92,7 +92,7 @@
     <main class="app-content">
         <div class="app-title">
             <div>
-                <h1><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp;New Form</h1>
+                <h1><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp;New Field</h1>
             </div>
         </div>
         <div class="tile">
@@ -575,7 +575,7 @@
                             <label class="control-label col-md-3">Validation Type</label>
                             <div class="col-md-8">
                                 <select class="form-control" id="field_validation">
-                                    <option value="">-- Select Validation --</option>
+                                    <option value="">none</option>
                                     <option value="Email">Email</option>
                                     <option value="Number">Number</option>
                                     <option value="Mobile-Number">mobile number</option>
@@ -584,6 +584,7 @@
                                 </select>
                             </div>
                         </div>`
+                document.getElementById('value_container').innerHTML = ''
             } else if (value == 'Dropdown' || value == 'Single-Select' || value == 'Multi-Select' || value == 'Toggle') {
                 document.getElementById('value_container').innerHTML = `
                 <div class="form-group row mt-4">
@@ -607,6 +608,7 @@
                                 <tr><td align="center" colspan="6" class="p-5">No field selected</td></tr>
                             </tbody>
                         </table>`
+                document.getElementById('validation_type_container').innerHTML = ''
                 values_table = document.getElementById('values_table')
             } else {
                 document.getElementById('validation_type_container').innerHTML = ''
@@ -653,17 +655,6 @@
             }
             if (field_type?.value == 'Text') {
                 let field_validation = document.getElementById('field_validation')
-                if (field_validation?.value == "") {
-                    $.notify({
-                        title: "",
-                        message: `Please select validation type.`,
-                        icon: 'fa fa-times'
-                    }, {
-                        type: "danger"
-                    });
-                    endLoader()
-                    return
-                }
                 dataSet['field_validation'] = field_validation.value
             } else if (field_type?.value == 'Dropdown' || field_type?.value == 'Single-Select' || field_type?.value == 'Multi-Select' || field_type?.value == 'Toggle') {
                 dataSet['field_values'] = valueList

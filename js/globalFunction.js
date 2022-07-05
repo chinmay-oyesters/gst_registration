@@ -84,7 +84,8 @@ function validatePAN(panVal) {
 }
 function isAlphaNumeric(str) {
   var code, i, len;
-
+  var isNumeric = false;
+  var isChars = false;
   for (i = 0, len = str.length; i < len; i++) {
     code = str.charCodeAt(i);
     if (
@@ -94,9 +95,17 @@ function isAlphaNumeric(str) {
     ) {
       // lower alpha (a-z)
       return false;
+    } else {
+      if (code > 47 && code < 58) {
+        isNumeric = true;
+      }
+      if ((code > 64 && code < 91) || (code > 96 && code < 123)) {
+        isChars = true;
+      }
     }
   }
-  return true;
+  if (isNumeric && isChars) return true;
+  else return false;
 }
 function getColorCode(index) {
   let colorArray = ["#6993FF", "#FFAA07", "#8D56FC", "#F64E60"];
@@ -311,68 +320,129 @@ function validateAllFields(validateFieldList) {
   return true;
 }
 function setFields(container_id_n, nowFields) {
-  let container_id = document.getElementById(container_id_n)
-  container_id.innerHTML = ''
+  let container_id = document.getElementById(container_id_n);
+  container_id.innerHTML = "";
   for (let i = 0; i < nowFields.length; i++) {
-      const element = nowFields[i];
-      switch (element?.field_type) {
-          case 'Text':
-              container_id.innerHTML = container_id.innerHTML +
-                  `
+    const element = nowFields[i];
+    switch (element?.field_type) {
+      case "Text":
+        container_id.innerHTML =
+          container_id.innerHTML +
+          `
                   <div class="form-group" >
-                  <label class="control-label">${element?.field_title}</label>${element?.field_required ? '<span class="text-danger" style="font-size:23px;" >*</span>' : ''}
-                  <input class="form-control" id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}' type="text" placeholder='${element?.field_title?.toLocaleLowerCase()}'   oninput='${element?.field_validation == 'Number' || element?.field_validation == 'Mobile-Number' ? this.value = this.value.replace(/[^0-9]/g, '') : ''}'>
+                  <label class="control-label">${element?.field_title}</label>${
+            element?.field_required
+              ? '<span class="text-danger" style="font-size:23px;" >*</span>'
+              : ""
+          }
+                  <input class="form-control" id='${element?.field_type}_${
+            element?.field_id
+          }${
+            element?.field_parent_id || ""
+          }' type="text" placeholder='${element?.field_title?.toLocaleLowerCase()}'   oninput='${
+            element?.field_validation == "Number" ||
+            element?.field_validation == "Mobile-Number"
+              ? 'this.value=this.value.replace(/[^0-9]/g,"");'
+              : ""
+          }'>
                   </div>
-                  `
-              break;
-          case 'Radio-Button':
-              container_id.innerHTML = container_id.innerHTML +
-                  `<div class="form-group" >
-                   <label class="control-label">${element?.field_title}</label>${element?.field_required ? '<span class="text-danger" style="font-size:23px;" >*</span>' : ''}
-                   ${element?.field_values?.map((fieldValue, index) => (
-                      `<div class="form-check">
+                  `;
+        break;
+      case "Radio-Button":
+        container_id.innerHTML =
+          container_id.innerHTML +
+          `<div class="form-group" >
+                   <label class="control-label">${
+                     element?.field_title
+                   }</label>${
+            element?.field_required
+              ? '<span class="text-danger" style="font-size:23px;" >*</span>'
+              : ""
+          }
+                   ${element?.field_values
+                     ?.map(
+                       (fieldValue, index) =>
+                         `<div class="form-check">
                       <label class="form-check-label">
-                         <input class="form-check-input" type="radio"  id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}_${index}' name='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}'>${fieldValue[0]}
+                         <input class="form-check-input" type="radio"  id='${
+                           element?.field_type
+                         }_${element?.field_id}${
+                           element?.field_parent_id || ""
+                         }_${index}' name='${element?.field_type}_${
+                           element?.field_id
+                         }${element?.field_parent_id || ""}'>${fieldValue[0]}
                       </label>
                   </div>`
-                  )).join('')}
+                     )
+                     .join("")}
               </div>
-              `
-              break;
-          case 'Toggle':
-              container_id.innerHTML = container_id.innerHTML +
-                  `
+              `;
+        break;
+      case "Toggle":
+        container_id.innerHTML =
+          container_id.innerHTML +
+          `
           <div class="form-group" >
-          <label class="control-label">${element?.field_title}</label>${element?.field_required ? '<span class="text-danger" style="font-size:23px;" >*</span>' : ''}
+          <label class="control-label">${element?.field_title}</label>${
+            element?.field_required
+              ? '<span class="text-danger" style="font-size:23px;" >*</span>'
+              : ""
+          }
               <div class="d-flex justify-content-between align-items-center" style="max-width:100px;">
                   <p> ${element?.field_values[0][0]}</p>
                <div class="toggle lg ">
               <label>
-                <input type="checkbox" onchange="updateFieldValueAssociateDropDown(${element?.field_id}${element?.field_parent_id || ''},'Toggle','${element?.field_values[1]}')"  id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}'><span class="button-indecator" ></span>
+                <input type="checkbox" onchange="updateFieldValueAssociateDropDown(${
+                  element?.field_id
+                }${element?.field_parent_id || ""},'Toggle','${
+            element?.field_values[1]
+          }')"  id='${element?.field_type}_${element?.field_id}${
+            element?.field_parent_id || ""
+          }'><span class="button-indecator" ></span>
               </label>   
              </div>
              <p> ${element?.field_values[1][0]}</p>
                   </div>
           </div>
-          <div id="field_value_associate_${element?.field_id}${element?.field_parent_id || ''}" ></div>
+          <div id="field_value_associate_${element?.field_id}${
+            element?.field_parent_id || ""
+          }" ></div>
+          `;
+        break;
+      case "Dropdown":
+        container_id.innerHTML =
+          container_id.innerHTML +
           `
-              break;
-          case 'Dropdown':
-              container_id.innerHTML = container_id.innerHTML +
-                  `
               <div class="form-group">
-                   <label for='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}'>${element?.field_title}</label>${element?.field_required ? '<span class="text-danger" style="font-size:23px;" >*</span>' : ''}
-                  <select onchange="updateFieldValueAssociateDropDown(${element?.field_id}${element?.field_parent_id || ''},'Dropdown','dropdown')" class="form-control" id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}'>
+                   <label for='${element?.field_type}_${element?.field_id}${
+            element?.field_parent_id || ""
+          }'>${element?.field_title}</label>${
+            element?.field_required
+              ? '<span class="text-danger" style="font-size:23px;" >*</span>'
+              : ""
+          }
+                  <select onchange="updateFieldValueAssociateDropDown(${
+                    element?.field_id
+                  }${
+            element?.field_parent_id || ""
+          },'Dropdown','dropdown')" class="form-control" id='${
+            element?.field_type
+          }_${element?.field_id}${element?.field_parent_id || ""}'>
                       <option value="" >-Select One - </option>
-                      ${element?.field_values?.map(fieldValue => (
-                      `<option value='${fieldValue}'>${fieldValue[0]}</option>`
-                  )).join('')}
+                      ${element?.field_values
+                        ?.map(
+                          (fieldValue) =>
+                            `<option value='${fieldValue}'>${fieldValue[0]}</option>`
+                        )
+                        .join("")}
                   </select>
               </div>
-              <div id="field_value_associate_${element?.field_id}${element?.field_parent_id || ''}" ></div>
-              `
-          default:
-              break;
-      }
+              <div id="field_value_associate_${element?.field_id}${
+            element?.field_parent_id || ""
+          }" ></div>
+              `;
+      default:
+        break;
+    }
   }
 }

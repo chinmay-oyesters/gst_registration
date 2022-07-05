@@ -71,7 +71,7 @@
                 </form>
             </div>
             <div class="tile-footer">
-                <button onclick="submitForm()" class="btn btn-primary" type="button"><i
+                <button onclick="submitForm()" class="btn btn-success" type="button"><i
                         class="fa fa-fw fa-lg fa-check-circle"></i>Submit</button>
             </div>
         </div>
@@ -85,6 +85,7 @@
     <script src="js/globalFunction.js"></script>
     <script type="text/javascript" src="js/plugins/bootstrap-notify.min.js"></script>
     <script type="text/javascript">
+        authenticate()
         let fetchedFields = []
         let fieldsAssociate = [];
         let form_id = null
@@ -93,7 +94,7 @@
             if (getUrlVars()["id"]) {
                 if (getUrlVars()["type"] !== 'undefined' && getUrlVars()["type"] !== null) {
                     form_id = getUrlVars()["id"]
-                    form_name = getUrlVars()["type"]
+                    form_name = decodeURI(getUrlVars()["type"])
                     document.getElementById('form_title').innerHTML = `${form_name} Form`
                     getList(form_id);
                 } else {
@@ -105,7 +106,7 @@
         }
         function getList(ids) {
             startLoader()
-            axiosInstance.post('fetch_form', {
+            axiosInstance.post('fetch_user_forms', {
                 "form_id": parseInt(ids)
             }).then((response) => {
                 endLoader()
