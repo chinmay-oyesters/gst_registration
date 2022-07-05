@@ -377,9 +377,23 @@
             valueAssociateList = nowValueAssociateList
             valueMultiplyedList = nowValueMultiplyedList
 
-
-            associated_fields_dropdown.value = ''
-            multiplied_fields_dropdown.value = ''
+            let dataSet = fieldsList
+            associated_fields_dropdown.innerHTML = ''
+            associated_fields_dropdown.innerHTML = `<option value="none">none</option>`
+            for (let i = 0; i < dataSet.length; i++) {
+                const element = dataSet[i];
+                if (!valueAssociateList?.includes(`${element?.field_id}`)) {
+                    associated_fields_dropdown.innerHTML = associated_fields_dropdown.innerHTML +
+                        `<option value='${element?.field_id}' >${element?.field_name} - ${element?.field_type}${element?.required == '1' ? `<span style="color:red;" >&nbsp;*<span>` : ""}</option>`
+                }
+            }
+            multiplied_fields_dropdown.innerHTML = '';
+            multiplied_fields_dropdown.innerHTML = `<option value="none">none</option>`
+            for (let i = 0; i < dataSet.length; i++) {
+                const element = dataSet[i];
+                multiplied_fields_dropdown.innerHTML = multiplied_fields_dropdown.innerHTML +
+                    `<option value='${element?.field_id}' >${element?.field_name} - ${element?.field_type}${element?.required == '1' ? `<span style="color:red;" >&nbsp;*<span>` : ""}</option>`
+            }
             updateAssociatedToTableInModal()
         }
         function updateAssociatedToTableInModal() {

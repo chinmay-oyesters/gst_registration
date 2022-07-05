@@ -56,7 +56,7 @@ function authenticateAdmin() {
 }
 // baseURL: `/gst/backend/`,
 const axiosInstance = axios.create({
-  baseURL: `/gst/backend/`,
+  baseURL: `/backend/`,
   credentials: "include",
   withCredentials: true,
 });
@@ -265,7 +265,7 @@ function validateAllFields(validateFieldList) {
               break;
           }
           break;
-        case "Radio-Button":
+        case "Single-Select":
           let radioButtons = document.querySelectorAll(
             `input[name='${element?.field_type}_${element?.field_id}${
               element?.field_parent_id || ""
@@ -367,7 +367,7 @@ function setFields(container_id_n, nowFields) {
                   </div>
                   `;
         break;
-      case "Radio-Button":
+      case "Single-Select":
         container_id.innerHTML =
           container_id.innerHTML +
           `<div class="form-group" >
@@ -389,11 +389,18 @@ function setFields(container_id_n, nowFields) {
                            element?.field_parent_id || ""
                          }_${index}' name='${element?.field_type}_${
                            element?.field_id
-                         }${element?.field_parent_id || ""}'>${fieldValue[0]}
+                         }${
+                           element?.field_parent_id || ""
+                         }' onchange="updateFieldValueAssociateDropDown(${
+                           element?.field_id
+                         }${element?.field_parent_id || ""}_${index},'Single-Select','Single-Select')" value='${fieldValue}'>${fieldValue[0]}
                       </label>
                   </div>`
                      )
                      .join("")}
+                     <div id="field_value_associate_${element?.field_id}${
+            element?.field_parent_id || ""
+          }" ></div>
               </div>
               `;
         break;
