@@ -63,10 +63,33 @@ if($query->rowCount() === 0){
         // sending jwt token to frontend with cookies
         setcookie("admin_jwt", $jwt, time()+ (86400 * 30), "/","", 0); //86400*7 expiry time to 30 days
 
-        $status = 200;
-        $response = [
-            "msg" => "User authenticated successfully"
-        ];
+        $sql = "SELECT aut.admin_user_id, aut.admin_fullname, rt.role_name, rt.role_permissions, aut.admin_profileimage
+        FROM admin_user_table as aut 
+        LEFT JOIN roles_table as rt 
+        ON rt.role_id = aut.role_id
+        WHERE admin_email=:admin_email";
+        $query = $con -> prepare($sql);
+        $query->bindParam(':admin_email', $admin_email, PDO::PARAM_STR);
+
+        if($query->execute()){
+            $admin_details = $query->fetchAll(PDO::FETCH_ASSOC)[0];
+            $status = 200;
+            $response = [
+                "msg" => "User authenticated successfully",
+                "admin_details" => [
+                    "admin_user_id" => $admin_details['admin_user_id'],
+                    "admin_fullname" => $admin_details['admin_fullname'],
+                    "role_name" => $admin_details['role_name'],
+                    "role_permissions" => json_decode($admin_details['role_permissions']),
+                    "admin_profileimage" => $admin_details['admin_profileimage']
+                ]
+            ];
+        }else{
+            $status = 203;
+            $response = [
+                "msg" => "Admin profile can't be fetched"
+            ];
+        }
 
     }else{
         $status = 203;

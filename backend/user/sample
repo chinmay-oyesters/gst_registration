@@ -1,32 +1,43 @@
-    // retrieve required variables
-    $user_id = $payload->user_id;
-    $field_id = $_POST['field_id'];
-    $form_id = $_POST['form_id'];
-    $field_frontend_id = $_POST['field_frontend_id'];
-    $form_response_answer = $_POST['form_response_answer'];
-    $datetime = date("Y-m-d H:i:s");
+            $sql = "SELECT form_fields FROM form_table WHERE form_id=:form_id";
+            $query = $con -> prepare($sql);
+            $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
 
-    $sql = "INSERT INTO form_response_table (user_id, form_id, field_id, field_frontend_id, form_response_answer, created_at, updated_at) VALUES
-    (:user_id, :form_id, :field_id, :field_frontend_id, :form_response_answer, :created_at, :updated_at)";
-    $query = $con -> prepare($sql);
-    $query->bindParam(':user_id', $user_id, PDO::PARAM_STR);
-    $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
-    $query->bindParam(':field_id', $field_id, PDO::PARAM_STR);
-    $query->bindParam(':field_frontend_id', $field_frontend_id, PDO::PARAM_STR);
-    $query->bindParam(':form_response_answer', $form_response_answer, PDO::PARAM_STR);
-    $query->bindparam(":created_at", $datetime, PDO::PARAM_STR);
-    $query->bindparam(":updated_at", $datetime, PDO::PARAM_STR);
-    
+            //updating form status and status in user subscription details table
+            if($query->execute()){
+                $form_status = "";
+                $form_fields = $query->fetchAll(PDO::FETCH_ASSOC)[0]['form_fields'];
+                $form_fields_count = count(json_decode($form_fields));
+                $common_fields = array_intersect(json_decode($form_fields), json_decode($field_id));
+                $common_fields_count = count($common_fields);
+                $form_progress = intval(($common_fields_count/$form_fields_count)*100);
+                if($form_progress<100){
+                    $form_status = "In Progress";
+                }else{
+                    $form_status = "Completed";
+                }
 
-    if($query->execute()){
-        $status = 200;
-        $response = [
-            "msg" => "Responses saved successsfully"
-        ]; 
-    }else{
+                $sql = "UPDATE user_subscription_details SET 
+                form_status = :form_status,
+                form_progress = :form_progress,
+                updated_at = :updated_at
+                WHERE user_id=:user_id AND form_id=:form_id";
+                $query = $con -> prepare($sql);
+                $query->bindParam(':user_id', $user_id, PDO::PARAM_STR);
+                $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
+                $query->bindParam(':form_status', $form_status, PDO::PARAM_STR);
+                $query->bindParam(':form_progress', $form_progress, PDO::PARAM_STR);
+                $query->bindparam(":updated_at", $datetime, PDO::PARAM_STR);
+                if($query->execute()){
+                    $status = 200;
+                    $response = [
+                        "msg" => "User response saved successfully"
+                    ];
+                }else{
+                    $status = 203;
+                    $response = [
+                        "msg" => "Form status and progress could not be saved"
+                    ];
+                }
+            }
+
         
-        $status = 203;
-        $response = [
-            "msg" => "Responses could not be saved"
-        ];
-    }

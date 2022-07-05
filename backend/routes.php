@@ -24,6 +24,9 @@ $router->endpoint('home', 'user/home', ['GET'], FALSE, []);
 // Save responses route to save response of user
 $router->endpoint('save_response', 'user/save_response', ['POST'], FALSE, []);
 
+// fetch user response
+$router->endpoint('fetch_user_response', 'user/fetch_user_response', ['POST'], FALSE, ['form_id']);
+
 // fetching user forms
 $router->endpoint('fetch_user_forms', 'user/fetch_user_forms', ['POST'], FALSE, []);
 
@@ -94,3 +97,4 @@ $router->endpoint('approve_form', 'admin/admin_forms/approve_form', ['POST'], FA
 $router->endpoint('delete_form', 'admin/admin_forms/delete_form', ['POST'], FALSE, ['form_id', 'user_id']);
 $router->endpoint('fetch_full_form', 'admin/admin_forms/fetch_full_form', ['POST'], FALSE, ['form_id']);
 $router->endpoint('fetch_form_dependencies', 'admin/admin_forms/fetch_form_dependencies', ['POST'], FALSE, ['fetch_field']);
+$router->endpoint('preview_form', 'admin/admin_forms/preview_form', ['POST'], FALSE, ['form_fields']);

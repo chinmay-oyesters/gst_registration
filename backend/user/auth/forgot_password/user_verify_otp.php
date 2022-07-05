@@ -53,21 +53,10 @@ if($query->execute()){
                 ];
             }
         }else{
-            $otp = NULL;
-            $sql = "UPDATE user_table SET 
-            otp = :otp,
-            updated_at = :updated_at
-            WHERE user_email = :user_email";  
-            $query = $con->prepare($sql);
-            $query->bindParam(':otp', $otp, PDO::PARAM_STR);
-            $query->bindParam(':updated_at', $datetime, PDO::PARAM_STR);
-            $query->bindParam(':user_email', $user_email, PDO::PARAM_STR);
-            if($query->execute()){
-                $status = 203;
-                $response = [
-                    "msg" => "OTP not valid"
-                ];
-            }
+            $status = 203;
+            $response = [
+                "msg" => "OTP not valid"
+            ];
         }    
     }
 }else{

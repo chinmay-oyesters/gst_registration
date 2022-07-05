@@ -66,7 +66,12 @@ if($query->rowCount() === 0){
 
         $status = 200;
         $response = [
-            "msg" => "User authenticated successfully"
+            "msg" => "User authenticated successfully",
+            "user_profile" => [
+                "user_id" => $user->user_id,
+                "user_name" => $user->user_fullname,
+                "user_image" => $user->profile_image
+            ]
         ];
 
     }else{
