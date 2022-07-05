@@ -29,22 +29,22 @@ if(auth($token)){
     // retrieve required variables
     $form_id = $_POST['form_id'];
 
-    $sql = "SELECT * FROM user_subscription_details WHERE user_id = :user_id AND form_id = :form_id";
-    $query = $con -> prepare($sql);
+    // $sql = "SELECT * FROM user_subscription_details WHERE user_id = :user_id AND form_id = :form_id";
+    // $query = $con -> prepare($sql);
 
-    $query->bindParam(':user_id', $payload->user_id, PDO::PARAM_STR);
-    $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
-    $query->execute();
+    // $query->bindParam(':user_id', $payload->user_id, PDO::PARAM_STR);
+    // $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
+    // $query->execute();
 
-    if($query->rowCount() === 0){
-        $status = 203;
-        $response = [
-            "msg" => "You haven't subscribed to any forms",
-            "is_redirect" => true
-        ];
-    }else{
+    // if($query->rowCount() === 0){
+    //     $status = 203;
+    //     $response = [
+    //         "msg" => "You haven't subscribed to any forms",
+    //         "is_redirect" => true
+    //     ];
+    // }else{
 
-        // looking for the user in database
+    //     // looking for the user in database
         $sql = "SELECT form_fields AS form_fields FROM form_table WHERE form_id = :form_id";
         $query = $con -> prepare($sql);
 
@@ -242,5 +242,5 @@ if(auth($token)){
             ];
         }
 
-    }
+    //}
 }
