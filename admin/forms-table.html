@@ -109,7 +109,7 @@
                                 <th>Entity Name</th>
                                 <th>Status</th>
                                 <th>Progress</th>
-                                <th style="width: 300px;" >Action</th>
+                                <th style="width: 300px;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -137,9 +137,11 @@
         authenticateAdmin();
         let list = [];
         let form_id = '';
+        let form_name = '';
         window.onload = function () {
             if (getUrlVars()["id"]) {
                 form_id = getUrlVars()["id"]
+                form_name = getUrlVars()['type']
                 getList(form_id)
             } else {
                 location.href = 'forms.html'
@@ -193,6 +195,13 @@
                                 },
                             ],
                         });
+                        setTimeout(() => {
+                            var table = $('#sampleTable').DataTable();
+                            $('#sampleTable tbody').on('click', 'tr', function () {
+                                let nowD = table.row(this).data()
+                                location.href = `form-response.html?id=${form_id}&ref=${nowD?.user_id}&type=${form_name}`
+                            });
+                        }, 200);
                     });
                 } else {
                     if (response?.data?.is_logged_out) {

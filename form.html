@@ -208,7 +208,7 @@
                         "form_id": form_id,
                         "field_id": element?.field_id,
                         "field_frontend_id": `${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`,
-                        "form_response_answer": element?.field_type == "Toggle" ? nowValue == 'on' ? true : false : nowValue
+                        "form_response_answer": `${nowValue}`
                     })
                 }
             })
@@ -221,7 +221,7 @@
                         "form_id": form_id,
                         "field_id": element?.field_id,
                         "field_frontend_id": `${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`,
-                        "form_response_answer": element?.field_type == "Toggle" ? nowValue == 'on' ? true : false : nowValue
+                        "form_response_answer": `${nowValue}`
                     })
                 }
             })
