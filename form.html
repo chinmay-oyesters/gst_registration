@@ -140,72 +140,7 @@
                 });
             })
         }
-        function setFields(container_id_n, nowFields) {
-            let container_id = document.getElementById(container_id_n)
-            container_id.innerHTML = ''
-            for (let i = 0; i < nowFields.length; i++) {
-                const element = nowFields[i];
-                switch (element?.field_type) {
-                    case 'Text':
-                        container_id.innerHTML = container_id.innerHTML +
-                            `
-                            <div class="form-group" >
-                            <label class="control-label">${element?.field_title}</label>${element?.field_required ? '<span class="text-danger" style="font-size:23px;" >*</span>' : ''}
-                            <input class="form-control" id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}' type="text" placeholder='${element?.field_title?.toLocaleLowerCase()}'   oninput='${element?.field_validation == 'Number' || element?.field_validation == 'Mobile-Number' ? this.value = this.value.replace(/[^0-9]/g, '') : ''}'>
-                            </div>
-                            `
-                        break;
-                    case 'Radio-Button':
-                        container_id.innerHTML = container_id.innerHTML +
-                            `<div class="form-group" >
-                             <label class="control-label">${element?.field_title}</label>${element?.field_required ? '<span class="text-danger" style="font-size:23px;" >*</span>' : ''}
-                             ${element?.field_values?.map((fieldValue, index) => (
-                                `<div class="form-check">
-                                <label class="form-check-label">
-                                   <input class="form-check-input" type="radio"  id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}_${index}' name='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}'>${fieldValue[0]}
-                                </label>
-                            </div>`
-                            )).join('')}
-                        </div>
-                        `
-                        break;
-                    case 'Toggle':
-                        container_id.innerHTML = container_id.innerHTML +
-                            `
-                    <div class="form-group" >
-                    <label class="control-label">${element?.field_title}</label>${element?.field_required ? '<span class="text-danger" style="font-size:23px;" >*</span>' : ''}
-                        <div class="d-flex justify-content-between align-items-center" style="max-width:100px;">
-                            <p> ${element?.field_values[0][0]}</p>
-                         <div class="toggle lg ">
-                        <label>
-                          <input type="checkbox" onchange="updateFieldValueAssociateDropDown(${element?.field_id}${element?.field_parent_id || ''},'Toggle','${element?.field_values[1]}')"  id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}'><span class="button-indecator" ></span>
-                        </label>   
-                       </div>
-                       <p> ${element?.field_values[1][0]}</p>
-                            </div>
-                    </div>
-                    <div id="field_value_associate_${element?.field_id}${element?.field_parent_id || ''}" ></div>
-                    `
-                        break;
-                    case 'Dropdown':
-                        container_id.innerHTML = container_id.innerHTML +
-                            `
-                        <div class="form-group">
-                             <label for='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}'>${element?.field_title}</label>${element?.field_required ? '<span class="text-danger" style="font-size:23px;" >*</span>' : ''}
-                            <select onchange="updateFieldValueAssociateDropDown(${element?.field_id}${element?.field_parent_id || ''},'Dropdown','dropdown')" class="form-control" id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}'>
-                                <option value="" >-Select One - </option>
-                                ${element?.field_values?.map(fieldValue => (
-                                `<option value='${fieldValue}'>${fieldValue[0]}</option>`
-                            )).join('')}
-                            </select>
-                        </div>
-                        <div id="field_value_associate_${element?.field_id}${element?.field_parent_id || ''}" ></div>
-                        `
-                    default:
-                        break;
-                }
-            }
-        }
+
         function updateFieldValueAssociateDropDown(id, field_id_type, get_fieldValue) {
             let arrOfData = null
             let arrOfNum = []
@@ -253,117 +188,6 @@
                 document.getElementById(`field_value_associate_${id}`).innerHTML = ''
             }
         }
-
-        function validateAllFields(validateFieldList) {
-            for (let i = 0; i < validateFieldList.length; i++) {
-                const element = validateFieldList[i];
-                if (element?.field_required) {
-                    switch (element?.field_type) {
-                        case 'Text':
-                            let nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).value
-                            if (nowValue == "" || nowValue == null || nowValue == undefined) {
-                                $.notify({
-                                    title: "",
-                                    message: `Please enter ${element?.field_title.toLocaleLowerCase()}`,
-                                    icon: 'fa fa-times'
-                                }, {
-                                    type: "danger",
-                                });
-                                return false;
-                            }
-                            switch (element?.field_validation) {
-                                case 'Email':
-                                    if (!validateEmail(nowValue)) {
-                                        $.notify({
-                                            title: "",
-                                            message: `Please enter a valid ${element?.field_title.toLocaleLowerCase()}`,
-                                            icon: 'fa fa-times'
-                                        }, {
-                                            type: "danger",
-                                        });
-                                        return false;
-                                    }
-                                    break;
-                                case "Mobile-Number":
-                                    if (nowValue?.length != 10) {
-                                        $.notify({
-                                            title: "",
-                                            message: `Please enter a valid ${element?.field_title.toLocaleLowerCase()}`,
-                                            icon: 'fa fa-times'
-                                        }, {
-                                            type: "danger",
-                                        });
-                                        return false;
-                                    }
-                                    break;
-                                case "PAN":
-                                    if (!validatePAN(nowValue)) {
-                                        $.notify({
-                                            title: "",
-                                            message: `Please enter a valid ${element?.field_title.toLocaleLowerCase()}`,
-                                            icon: 'fa fa-times'
-                                        }, {
-                                            type: "danger",
-                                        });
-                                        return false;
-                                    }
-                                    break;
-                                case "Alpha-Numeric":
-                                    if (!isAlphaNumeric(nowValue)) {
-                                        $.notify({
-                                            title: "",
-                                            message: `Please enter a alpha-numeric value`,
-                                            icon: 'fa fa-times'
-                                        }, {
-                                            type: "danger",
-                                        });
-                                        return false;
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        case 'Radio-Button':
-                            let radioButtons = document.querySelectorAll(`input[name='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}']`);
-                            let selectedSize = null
-                            for (let radioButton of radioButtons) {
-                                if (radioButton.checked) {
-                                    selectedSize = radioButton.value;
-                                    break;
-                                }
-                            }
-                            if (selectedSize == null) {
-                                $.notify({
-                                    title: "",
-                                    message: `Please select ${element?.field_title.toLocaleLowerCase()}`,
-                                    icon: 'fa fa-times'
-                                }, {
-                                    type: "danger",
-                                });
-                                return false;
-                            }
-                            break;
-                        case 'Dropdown':
-                            let nowDropDown = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).value
-                            if (nowDropDown == "") {
-                                $.notify({
-                                    title: "",
-                                    message: `Please select ${element?.field_title.toLocaleLowerCase()}`,
-                                    icon: 'fa fa-times'
-                                }, {
-                                    type: "danger",
-                                });
-                                return false;
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-            return true
-        }
         function submitForm() {
             let validateFirst = validateAllFields(fetchedFields)
             if (!validateFirst) {
@@ -407,7 +231,6 @@
             axiosInstance.post('save_response', {
                 "response_list": dataList
             }).then((response) => {
-                $('#form_container')[0].reset();
                 endLoader()
                 if (response.status === 200) {
                     $.notify({
