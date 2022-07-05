@@ -82,7 +82,19 @@ function validatePAN(panVal) {
     return false;
   }
 }
+function isAlphaNumeric(str) {
+  var code, i, len;
 
+  for (i = 0, len = str.length; i < len; i++) {
+    code = str.charCodeAt(i);
+    if (!(code > 47 && code < 58) && // numeric (0-9)
+        !(code > 64 && code < 91) && // upper alpha (A-Z)
+        !(code > 96 && code < 123)) { // lower alpha (a-z)
+      return false;
+    }
+  }
+  return true;
+};
 function getColorCode(index) {
   let colorArray = ["#6993FF", "#FFAA07", "#8D56FC", "#F64E60"];
   let indexReturn = index % 4;

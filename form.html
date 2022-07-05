@@ -151,7 +151,7 @@
                             `
                             <div class="form-group" >
                             <label class="control-label">${element?.field_title}</label>${element?.field_required ? '<span class="text-danger" style="font-size:23px;" >*</span>' : ''}
-                            <input class="form-control" id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}' type="text" placeholder='${element?.field_title?.toLocaleLowerCase()}'>
+                            <input class="form-control" id='${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}' type="text" placeholder='${element?.field_title?.toLocaleLowerCase()}'   oninput='${element?.field_validation == 'Number' || element?.field_validation == 'Mobile-Number' ? this.value = this.value.replace(/[^0-9]/g, '') : ''}'>
                             </div>
                             `
                         break;
@@ -235,45 +235,9 @@
                     "fetch_field": arrOfNum
                 }).then((response) => {
                     console.log(response)
-                    let newGG = []
-                    if (id == 6) {
-                        newGG = [
-                            {
-                                "field_id": "20",
-                                "field_title": "Others (Please specify)",
-                                "field_type": "Text",
-                                "field_required": true,
-                                "field_associated_to": null
-                            }
-                        ]
-                    }
-                    if (id == 3) {
-                        newGG = [
-                            {
-                                "field_id": "21",
-                                "field_title": "Period for which registration is required",
-                                "field_type": "Text",
-                                "field_required": true,
-                                "field_associated_to": null
-                            },
-                            {
-                                "field_id": "22",
-                                "field_title": "Integrated Tax Turnover",
-                                "field_type": "Text",
-                                "field_required": true,
-                                "field_associated_to": null
-                            },
-                            {
-                                "field_id": "23",
-                                "field_title": "Integrated Tax Net Liability",
-                                "field_type": "Text",
-                                "field_required": true,
-                                "field_associated_to": null
-                            }
-                        ]
-                    }
-                    newGG.forEach(object => {
-                        object.field_parent_id = id;
+                    let newGG = response?.data?.fields
+                    newGG.forEach((object, indx) => {
+                        object.field_parent_id = `${id}_${indx}`;
                     });
                     let currentFieldAssociate = fieldsAssociate?.filter(fa => fa?.field_parent_id != id)
                     fieldsAssociate = [...currentFieldAssociate, ...newGG]
@@ -284,7 +248,7 @@
                     endLoader()
                 })
             } else {
-                let currentFieldAssociate = fieldsAssociate?.filter(fa => fa?.field_parent_id != id)
+                let currentFieldAssociate = fieldsAssociate?.filter(fa => fa?.field_parent_id.split("_")[0] != id)
                 fieldsAssociate = [...currentFieldAssociate]
                 document.getElementById(`field_value_associate_${id}`).innerHTML = ''
             }
@@ -296,7 +260,6 @@
                 if (element?.field_required) {
                     switch (element?.field_type) {
                         case 'Text':
-                            console.log(element)
                             let nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).value
                             if (nowValue == "" || nowValue == null || nowValue == undefined) {
                                 $.notify({
@@ -307,6 +270,58 @@
                                     type: "danger",
                                 });
                                 return false;
+                            }
+                            switch (element?.field_validation) {
+                                case 'Email':
+                                    if (!validateEmail(nowValue)) {
+                                        $.notify({
+                                            title: "",
+                                            message: `Please enter a valid ${element?.field_title.toLocaleLowerCase()}`,
+                                            icon: 'fa fa-times'
+                                        }, {
+                                            type: "danger",
+                                        });
+                                        return false;
+                                    }
+                                    break;
+                                case "Mobile-Number":
+                                    if (nowValue?.length != 10) {
+                                        $.notify({
+                                            title: "",
+                                            message: `Please enter a valid ${element?.field_title.toLocaleLowerCase()}`,
+                                            icon: 'fa fa-times'
+                                        }, {
+                                            type: "danger",
+                                        });
+                                        return false;
+                                    }
+                                    break;
+                                case "PAN":
+                                    if (!validatePAN(nowValue)) {
+                                        $.notify({
+                                            title: "",
+                                            message: `Please enter a valid ${element?.field_title.toLocaleLowerCase()}`,
+                                            icon: 'fa fa-times'
+                                        }, {
+                                            type: "danger",
+                                        });
+                                        return false;
+                                    }
+                                    break;
+                                case "Alpha-Numeric":
+                                    if (!isAlphaNumeric(nowValue)) {
+                                        $.notify({
+                                            title: "",
+                                            message: `Please enter a alpha-numeric value`,
+                                            icon: 'fa fa-times'
+                                        }, {
+                                            type: "danger",
+                                        });
+                                        return false;
+                                    }
+                                    break;
+                                default:
+                                    break;
                             }
                             break;
                         case 'Radio-Button':
@@ -359,14 +374,74 @@
             if (!validateSecond) {
                 return
             }
-            $('#form_container')[0].reset();
-            $.notify({
-                title: "",
-                message: `Form submitted successfully`,
-                icon: 'fa fa-times'
-            }, {
-                type: "success",
-            });
+            let dataList = []
+            fetchedFields?.forEach(element => {
+                if (element?.field_type == "Text" || element?.field_type == "Dropdown" || element?.field_type == "Toggle") {
+                    let nowValue = null
+                    if (element?.field_type == "Toggle") nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).checked
+                    else nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).value
+                    dataList?.push({
+                        "form_id": form_id,
+                        "field_id": element?.field_id,
+                        "field_frontend_id": `${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`,
+                        "form_response_answer": element?.field_type == "Toggle" ? nowValue == 'on' ? true : false : nowValue
+                    })
+                }
+            })
+            fieldsAssociate?.forEach(element => {
+                if (element?.field_type == "Text" || element?.field_type == "Dropdown" || element?.field_type == "Toggle") {
+                    let nowValue = null
+                    if (element?.field_type == "Toggle") nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).checked
+                    else nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).value
+                    dataList?.push({
+                        "form_id": form_id,
+                        "field_id": element?.field_id,
+                        "field_frontend_id": `${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`,
+                        "form_response_answer": element?.field_type == "Toggle" ? nowValue == 'on' ? true : false : nowValue
+                    })
+                }
+            })
+            console.log(dataList)
+
+            startLoader()
+            axiosInstance.post('save_response', {
+                "response_list": dataList
+            }).then((response) => {
+                $('#form_container')[0].reset();
+                endLoader()
+                if (response.status === 200) {
+                    $.notify({
+                        title: "",
+                        message: response.data?.msg,
+                        icon: 'fa fa-check'
+                    }, {
+                        type: "success",
+                    });
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
         }
     </script>
 </body>
