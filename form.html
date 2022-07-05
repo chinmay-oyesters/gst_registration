@@ -175,7 +175,7 @@
                     newGG.forEach((object, indx) => {
                         object.field_parent_id = `${id}_${indx}`;
                     });
-                    let currentFieldAssociate = fieldsAssociate?.filter(fa => fa?.field_parent_id != id)
+                    let currentFieldAssociate = fieldsAssociate?.filter(fa => fa?.field_parent_id.split("_")[0] != id)
                     fieldsAssociate = [...currentFieldAssociate, ...newGG]
                     setFields(`field_value_associate_${id}`, newGG);
                     endLoader()

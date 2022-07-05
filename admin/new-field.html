@@ -458,6 +458,7 @@
             updateValueTable()
         }
         function updateValueTable() {
+            console.log(valueList)
             values_table.innerHTML = ''
             if (valueList?.length != 0) {
                 for (let i = 0; i < valueList.length; i++) {
@@ -470,22 +471,21 @@
                     console.log(elementTpp)
                     values_table.innerHTML = values_table.innerHTML +
                         `<tr>
-                    <td rowspan='${element?.length}'>${i + 1}</td>
-                    <td rowspan='${element?.length}' >${element[0]}</td>
-                    ${element[1] ? `
-                        ${element[1]?.includes('x') ?
-                                `<td>${splitValue('-x', element[1])}</td><td>${splitValue('x-', element[1])}</td> ` : `<td>${element[1][0]}</td><td></td>`
-                            }
-                        ` : '<td>-</td><td>-</td>'
+                    <td rowspan='${element?.length == 1 ? 1 : element?.length - 1}'>${i + 1}</td>
+                    <td rowspan='${element?.length == 1 ? 1 : element?.length - 1}' >${element[0]}</td>
+                    ${element?.length > 1 ?
+                            `<td>${splitValue('-x', element[1])}</td><td>${splitValue('x-', element[1])}</td>` : '<td>-</td><td>-</td>'
                         }
-                    <td align="center" rowspan='${element?.length}' ><i class="fa fa-trash text-danger cp" onclick="removeFieldFromValueTable('${i}')" aria-hidden="true"></i></td>
+                    <td align="center" rowspan='${element?.length == 1 ? 1 : element?.length - 1}' ><i class="fa fa-trash text-danger cp" onclick="removeFieldFromValueTable('${i}')" aria-hidden="true"></i></td>
                     </tr>
-                    ${elementTpp?.map((el) => (`
+                    `
+                    values_table.innerHTML = values_table.innerHTML +
+                        `${elementTpp?.map((el) => (`
                       <tr>
                     <td>${splitValue('-x', el)}</td><td>${splitValue('x-', el)}</td>
                     </tr>
-                    `)).join('')} 
-                    `
+                    `)).join('')}`
+
                 }
             } else {
                 values_table.innerHTML = '<tr><td align="center" colspan="6" class="p-5">No field selected</td></tr>'
@@ -505,7 +505,12 @@
                     return fildNow[0]?.field_name
                 } else return ''
             } else {
-                if (mode == '-x') return value
+                if (mode == '-x') {
+                    let fildNow = fieldsList?.filter(fl => fl?.field_id == value)
+                    if (fildNow?.length != 0) {
+                        return fildNow[0]?.field_name
+                    }
+                }
                 else return '-'
             }
 
