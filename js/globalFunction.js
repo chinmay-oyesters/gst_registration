@@ -312,6 +312,27 @@ function validateAllFields(validateFieldList) {
             return false;
           }
           break;
+        case "Multi-Select":
+          let nowMultiValue = $(
+            `#${element?.field_type}_${element?.field_id}${
+              element?.field_parent_id || ""
+            }`
+          ).val();
+
+          if (nowMultiValue?.length == 0) {
+            $.notify(
+              {
+                title: "",
+                message: `Please select ${element?.field_title.toLocaleLowerCase()}`,
+                icon: "fa fa-times",
+              },
+              {
+                type: "danger",
+              }
+            );
+            return false;
+          }
+          break;
         case "Date":
           let dateValue = document.getElementById(
             `${element?.field_type}_${element?.field_id}${
@@ -443,14 +464,9 @@ function setFields(container_id_n, nowFields) {
               ? '<span class="text-danger" style="font-size:23px;" >*</span>'
               : ""
           }
-                  <select onchange="updateFieldValueAssociateDropDown(${
-                    element?.field_id
-                  }${
-            element?.field_parent_id || ""
-          },'Dropdown','dropdown')" class="form-control" id='${
-            element?.field_type
-          }_${element?.field_id}${element?.field_parent_id || ""}'>
-                      <option value="" >-Select One - </option>
+                  <select class="form-control js-example-basic-multiple" name="states[]" multiple="multiple" id='${
+                    element?.field_type
+                  }_${element?.field_id}${element?.field_parent_id || ""}'>
                       ${element?.field_values
                         ?.map(
                           (fieldValue) =>
@@ -484,4 +500,10 @@ function setFields(container_id_n, nowFields) {
         break;
     }
   }
+  updateSelect2();
+}
+function updateSelect2() {
+  $(document).ready(function () {
+    $(".js-example-basic-multiple").select2();
+  });
 }

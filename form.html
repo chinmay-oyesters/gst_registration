@@ -83,6 +83,7 @@
     <script src="js/plugins/pace.min.js"></script>
     <script type="text/javascript" src="js/plugins/chart.js"></script>
     <script src="js/globalFunction.js"></script>
+    <script type="text/javascript" src="js/plugins/select2.min.js"></script>
     <script type="text/javascript" src="js/plugins/bootstrap-notify.min.js"></script>
     <script type="text/javascript">
         authenticate()
@@ -212,6 +213,15 @@
                         "form_response_answer": `${nowValue}`
                     })
                 }
+                if (element?.field_type == "Multi-Select") {
+                    let nowValue = $(`#${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).val()
+                    dataList?.push({
+                        "form_id": form_id,
+                        "field_id": element?.field_id,
+                        "field_frontend_id": `${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`,
+                        "form_response_answer": `${nowValue}`
+                    })
+                }
             })
             fieldsAssociate?.forEach(element => {
                 if (element?.field_type == "Text" || element?.field_type == "Date" || element?.field_type == "Dropdown" || element?.field_type == "Toggle") {
@@ -225,9 +235,18 @@
                         "form_response_answer": `${nowValue}`
                     })
                 }
+                if (element?.field_type == "Multi-Select") {
+                    let nowValue = $(`#${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).val()
+                    dataList?.push({
+                        "form_id": form_id,
+                        "field_id": element?.field_id,
+                        "field_frontend_id": `${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`,
+                        "form_response_answer": `${nowValue}`
+                    })
+                }
             })
             console.log(dataList)
-
+            return
             startLoader()
             axiosInstance.post('save_response', {
                 "response_list": dataList
