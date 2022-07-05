@@ -115,6 +115,7 @@
     <script type="text/javascript" src="../js/plugins/dataTables.bootstrap.min.js"></script>
     <script type="text/javascript" src="../js/plugins/bootstrap-notify.min.js"></script>
     <script type="text/javascript" src="../js/plugins/sweetalert.min.js"></script>
+    <script type="text/javascript" src="../js/plugins/select2.min.js"></script>
     <script type="text/javascript">$('#sampleTable').DataTable();</script>
     <script type="text/javascript">
         authenticateAdmin();
@@ -166,6 +167,12 @@
                                         if (res?.answer == "true") {
                                             nowInput.checked = true
                                         }
+                                    } if (nowFieldType == 'Multi-Select') {
+                                        console.log(nowFieldType)
+                                        const arrVaaa = res?.answer.split(',');
+                                        console.log(arrVaaa)
+                                        $(`#${res?.field_frontend_id}`).val(arrVaaa).change()
+
                                     } else nowInput.value = res.answer
                                 }
                             })
@@ -273,7 +280,6 @@
             }
         }
         function displayAssociatedFieldsValue() {
-            console.log(fetchedFields)
             for (let i = 0; i < fetchedFields.length; i++) {
                 const element = fetchedFields[i];
                 let nowValue = null
@@ -288,7 +294,6 @@
 
                     updateFieldValueAssociateDropDown(`${element?.field_id}${element?.field_parent_id || ''}`, 'Dropdown', `dropdown`)
                 }
-                console.log(nowValue)
             }
         }
         function updateValueInAssociateFields() {
