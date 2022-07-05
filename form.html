@@ -201,7 +201,7 @@
             }
             let dataList = []
             fetchedFields?.forEach(element => {
-                if (element?.field_type == "Text" || element?.field_type == "Dropdown" || element?.field_type == "Toggle") {
+                if (element?.field_type == "Text" || element?.field_type == "Dropdown" || element?.field_type == "Date" || element?.field_type == "Toggle") {
                     let nowValue = null
                     if (element?.field_type == "Toggle") nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).checked
                     else nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).value
@@ -214,7 +214,7 @@
                 }
             })
             fieldsAssociate?.forEach(element => {
-                if (element?.field_type == "Text" || element?.field_type == "Dropdown" || element?.field_type == "Toggle") {
+                if (element?.field_type == "Text" || element?.field_type == "Date" || element?.field_type == "Dropdown" || element?.field_type == "Toggle") {
                     let nowValue = null
                     if (element?.field_type == "Toggle") nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).checked
                     else nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).value

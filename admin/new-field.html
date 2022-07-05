@@ -466,15 +466,19 @@
                     for (let j = 0; j < valueList[i].length; j++) {
                         if (j !== 0 && j !== 1) elementTpp?.push(valueList[i][j])
                     }
+                    console.log(element)
                     console.log(elementTpp)
                     values_table.innerHTML = values_table.innerHTML +
                         `<tr>
-                    <td rowspan='${element?.length - 1}'>${i + 1}</td>
-                    <td rowspan='${element?.length - 1}' >${element[0]}</td>
-                    ${element[1]?.includes('x') ?
-                            `<td>${splitValue('-x', element[1])}</td><td>${splitValue('x-', element[1])}</td> ` : `<td>${element[1][0]}</td><td></td>`
+                    <td rowspan='${element?.length}'>${i + 1}</td>
+                    <td rowspan='${element?.length}' >${element[0]}</td>
+                    ${element[1] ? `
+                        ${element[1]?.includes('x') ?
+                                `<td>${splitValue('-x', element[1])}</td><td>${splitValue('x-', element[1])}</td> ` : `<td>${element[1][0]}</td><td></td>`
+                            }
+                        ` : '<td>-</td><td>-</td>'
                         }
-                    <td align="center" rowspan='${element?.length - 1}' ><i class="fa fa-trash text-danger cp" onclick="removeFieldFromValueTable('${i}')" aria-hidden="true"></i></td>
+                    <td align="center" rowspan='${element?.length}' ><i class="fa fa-trash text-danger cp" onclick="removeFieldFromValueTable('${i}')" aria-hidden="true"></i></td>
                     </tr>
                     ${elementTpp?.map((el) => (`
                       <tr>
