@@ -152,14 +152,6 @@
                         arrOfData = get_fieldValue.split(',')
                     }
                     break;
-                case 'Single-Select':
-                    console.log(`${field_id_type}_${id}`)
-                    let selectedRadio = document.getElementById(`${field_id_type}_${id}`)
-                    if (selectedRadio.checked) {
-                        selectedRadioValue = document.getElementById(`${field_id_type}_${id}`).value
-                        arrOfData = selectedRadioValue.value.split(',');
-                    }
-                    break;
                 case 'Dropdown':
                     let selectDropDown = document.getElementById(`${field_id_type}_${id}`);
                     arrOfData = selectDropDown.value.split(',');

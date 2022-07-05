@@ -56,7 +56,7 @@ function authenticateAdmin() {
 }
 // baseURL: `/gst/backend/`,
 const axiosInstance = axios.create({
-  baseURL: `/backend/`,
+  baseURL: `/gst/backend/`,
   credentials: "include",
   withCredentials: true,
 });
@@ -367,43 +367,6 @@ function setFields(container_id_n, nowFields) {
                   </div>
                   `;
         break;
-      case "Single-Select":
-        container_id.innerHTML =
-          container_id.innerHTML +
-          `<div class="form-group" >
-                   <label class="control-label">${
-                     element?.field_title
-                   }</label>${
-            element?.field_required
-              ? '<span class="text-danger" style="font-size:23px;" >*</span>'
-              : ""
-          }
-                   ${element?.field_values
-                     ?.map(
-                       (fieldValue, index) =>
-                         `<div class="form-check">
-                      <label class="form-check-label">
-                         <input class="form-check-input" type="radio"  id='${
-                           element?.field_type
-                         }_${element?.field_id}${
-                           element?.field_parent_id || ""
-                         }_${index}' name='${element?.field_type}_${
-                           element?.field_id
-                         }${
-                           element?.field_parent_id || ""
-                         }' onchange="updateFieldValueAssociateDropDown(${
-                           element?.field_id
-                         }${element?.field_parent_id || ""}_${index},'Single-Select','Single-Select')" value='${fieldValue}'>${fieldValue[0]}
-                      </label>
-                  </div>`
-                     )
-                     .join("")}
-                     <div id="field_value_associate_${element?.field_id}${
-            element?.field_parent_id || ""
-          }" ></div>
-              </div>
-              `;
-        break;
       case "Toggle":
         container_id.innerHTML =
           container_id.innerHTML +
@@ -436,6 +399,39 @@ function setFields(container_id_n, nowFields) {
           `;
         break;
       case "Dropdown":
+        container_id.innerHTML =
+          container_id.innerHTML +
+          `
+              <div class="form-group">
+                   <label for='${element?.field_type}_${element?.field_id}${
+            element?.field_parent_id || ""
+          }'>${element?.field_title}</label>${
+            element?.field_required
+              ? '<span class="text-danger" style="font-size:23px;" >*</span>'
+              : ""
+          }
+                  <select onchange="updateFieldValueAssociateDropDown(${
+                    element?.field_id
+                  }${
+            element?.field_parent_id || ""
+          },'Dropdown','dropdown')" class="form-control" id='${
+            element?.field_type
+          }_${element?.field_id}${element?.field_parent_id || ""}'>
+                      <option value="" >-Select One - </option>
+                      ${element?.field_values
+                        ?.map(
+                          (fieldValue) =>
+                            `<option value='${fieldValue}'>${fieldValue[0]}</option>`
+                        )
+                        .join("")}
+                  </select>
+              </div>
+              <div id="field_value_associate_${element?.field_id}${
+            element?.field_parent_id || ""
+          }" ></div>
+              `;
+        break;
+      case "Multi-Select":
         container_id.innerHTML =
           container_id.innerHTML +
           `
