@@ -65,6 +65,8 @@ if(auth($token)){
             // check if field_values exist
             if( $field->form_field_values != NULL){
                 $temp_form_field_values = json_decode(str_replace("'", "\"", $field->form_field_values));
+            } else {
+                $temp_form_field_values = NULL;
             }
 
             array_push($fields, [
