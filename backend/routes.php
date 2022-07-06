@@ -59,17 +59,19 @@ $router->endpoint('admin_fetch_payments', 'admin/admin_payments/admin_fetch_paym
 // users/customers
 $router->endpoint('fetch_customers', 'admin/users/customers/fetch_customers', ['GET'], FALSE, []);
 $router->endpoint('edit_customers', 'admin/users/customers/edit_customers', ['POST'], FALSE, []);
-$router->endpoint('delete_customers', 'admin/users/customers/delete_customers', ['POST'], FALSE, []);
+$router->endpoint('delete_customers', 'admin/users/customers/delete_customers', ['POST'], FALSE, ['user_id']);
 
 // add new staff
 $router->endpoint('fetch_staff', 'admin/users/staff/fetch_staff', ['GET'], FALSE, []);
 $router->endpoint('add_staff', 'admin/users/staff/add_staff', ['POST'], FALSE, ['admin_fullname', 'admin_phonenumber', 'role_id', 'admin_email', 'admin_password']);
 $router->endpoint('edit_staff', 'admin/users/staff/edit_staff', ['POST'], FALSE, ['admin_user_id', 'admin_fullname', 'admin_phonenumber', 'role_id', 'admin_email']);
+$router->endpoint('delete_staff', 'admin/users/staff/delete_staff', ['POST'], FALSE, ['staff_id']);
 
 // role
 $router->endpoint('fetch_roles', 'admin/roles/fetch_roles', ['GET'], FALSE, []);
 $router->endpoint('add_role', 'admin/roles/add_role', ['POST'], FALSE, ['role_name', 'role_description', 'role_permissions']);
 $router->endpoint('edit_role', 'admin/roles/edit_role', ['POST'], FALSE, ['role_name', 'role_description', 'role_permissions']);
+$router->endpoint('delete_role', 'admin/roles/delete_role', ['POST'], FALSE, ['role_id']);
 
 // all endpoints specified for form related operations
 
