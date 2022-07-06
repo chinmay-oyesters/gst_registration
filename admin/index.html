@@ -32,7 +32,7 @@
       <h1>GST Admin</h1>
     </div>
     <div class="login-box">
-      <form class="login-form" >
+      <form class="login-form">
         <h3 class="login-head"><i class="fa fa-lg fa-fw fa-user"></i>SIGN IN</h3>
         <div class="form-group">
           <label class="control-label" style="color: white;">EMAIL</label>
@@ -50,17 +50,18 @@
           </div>
         </div>
         <div class="form-group btn-container">
-          <button class="btn btn-primary btn-block" type="button" onclick="handleSignIn()"><i class="fa fa-sign-in fa-lg fa-fw"></i>SIGN IN</button>
+          <button class="btn btn-primary btn-block" type="button" onclick="handleSignIn()"><i
+              class="fa fa-sign-in fa-lg fa-fw"></i>SIGN IN</button>
         </div>
       </form>
-      <form class="forget-form" action="index.html">
+      <form class="forget-form" id="forgot_container">
         <h3 class="login-head"><i class="fa fa-lg fa-fw fa-lock"></i>Forgot Password ?</h3>
         <div class="form-group">
           <label class="control-label" style="color: white;">EMAIL</label>
-          <input class="form-control" type="text" placeholder="Email">
+          <input class="form-control" type="text" placeholder="Email" id="email">
         </div>
         <div class="form-group btn-container">
-          <button class="btn btn-primary btn-block"><i class="fa fa-unlock fa-lg fa-fw"></i>RESET</button>
+          <button class="btn btn-primary btn-block" type="button" onclick="handleSendOTP()">Send OTP</button>
         </div>
         <div class="form-group mt-3">
           <p class="semibold-text mb-0"><a href="#" style="color:#949598;" data-toggle="flip"><i
@@ -90,6 +91,7 @@
     if (isAdminLoggedIn === "true") {
       location.href = "dashboard.html";
     }
+    let admin_email = ''
     function handleSignIn() {
       startLoader()
       let email = document.getElementById('sign_in_email')
@@ -131,7 +133,135 @@
             type: "success",
           });
           localStorage.setItem('isAdminLoggedIn', 'true')
+          localStorage.setItem('admin_name', response?.data?.admin_details.admin_fullname)
+          localStorage.setItem('admin_image', response?.data?.admin_details.admin_profileimage)
+          localStorage.setItem('admin_role', response?.data?.admin_details.role_name)
+          localStorage.setItem('admin_permission', response?.data?.admin_details.role_permissions)
           location.href = "dashboard.html";
+        } else {
+          $.notify({
+            title: "",
+            message: response.data?.msg,
+            icon: 'fa fa-times'
+          }, {
+            type: "danger",
+          });
+        }
+      }, (error) => {
+        endLoader()
+        console.log('error', error);
+        $.notify({
+          title: "",
+          message: `Something went wrong! Please try again.`,
+          icon: 'fa fa-times'
+        }, {
+          type: "danger"
+        });
+      })
+    }
+
+    function handleSendOTP() {
+      startLoader()
+      let email = document.getElementById('email').value
+      admin_email = email
+      if (!validateEmail(email)) {
+        $.notify({
+          title: "",
+          message: `Please enter a valid entity email.`,
+          icon: 'fa fa-times'
+        }, {
+          type: "danger",
+        });
+        endLoader();
+        return
+      }
+      axiosInstance.post('admin_send_otp', {
+        "admin_email": email,
+      }).then((response) => {
+        endLoader()
+        if (response.status === 200) {
+          $.notify({
+            title: "",
+            message: response.data?.msg,
+            icon: 'fa fa-check'
+          }, {
+            type: "success",
+          });
+          document.getElementById('forgot_container').innerHTML =
+            `<h3 class="login-head"><i class="fa fa-lg fa-fw fa-lock"></i>Reset Password</h3>
+        <div class="form-group">
+          <label class="control-label" style="color: white;">OTP</label>
+          <input class="form-control" oninput="this.value=this.value.replace(/[^0-9]/g,'');" type="text"
+            placeholder="otp" id="otp">
+        </div>
+        <div class="form-group">
+          <label class="control-label" style="color: white;">New Password</label>
+          <input class="form-control" type="password" placeholder="new password" id="password">
+        </div>
+        <div class="form-group btn-container">
+          <button class="btn btn-primary btn-block" type="button" onclick="handleReset()" >RESET</button>
+        </div>
+        <div class="form-group mt-3">
+          <p class="semibold-text mb-0"><a href="#" style="color:#949598;" data-toggle="flip"><i
+                class="fa fa-angle-left fa-fw"></i> Back to
+              Login</a></p>
+        </div>
+                    `
+
+        } else {
+          $.notify({
+            title: "",
+            message: response.data?.msg,
+            icon: 'fa fa-times'
+          }, {
+            type: "danger",
+          });
+        }
+      }, (error) => {
+        endLoader()
+        console.log('error', error);
+        $.notify({
+          title: "",
+          message: `Something went wrong! Please try again.`,
+          icon: 'fa fa-times'
+        }, {
+          type: "danger"
+        });
+      })
+    }
+    function handleReset() {
+      startLoader()
+      let password = document.getElementById('password').value
+      let otp = document.getElementById('otp').value
+      if (password?.length < 6) {
+        $.notify({
+          title: "",
+          message: `Please enter a password of more than 6 character.`,
+          icon: 'fa fa-times'
+        }, {
+          type: "danger",
+        });
+        endLoader();
+        return
+      }
+      axiosInstance.post('admin_verify_otp', {
+        "admin_email": admin_email,
+        "new_password": password,
+        "otp": otp
+      }).then((response) => {
+        console.log(response)
+        endLoader()
+        if (response.status === 200) {
+          $.notify({
+            title: "",
+            message: response.data?.msg,
+            icon: 'fa fa-check'
+          }, {
+            type: "success",
+          });
+          setTimeout(() => {
+            location.href = "index.html"
+          }, 1000);
         } else {
           $.notify({
             title: "",
