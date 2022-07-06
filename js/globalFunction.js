@@ -56,7 +56,7 @@ function authenticateAdmin() {
 }
 // baseURL: `/gst/backend/`,
 const axiosInstance = axios.create({
-  baseURL: `/backend/`,
+  baseURL: `/gst/backend/`,
   credentials: "include",
   withCredentials: true,
 });
@@ -466,7 +466,13 @@ function setFields(container_id_n, nowFields) {
           }
                   <select class="form-control js-example-basic-multiple" name="states[]" multiple="multiple" id='${
                     element?.field_type
-                  }_${element?.field_id}${element?.field_parent_id || ""}'>
+                  }_${element?.field_id}${element?.field_parent_id || ""}' 
+                  onchange="updateFieldValueAssociateDropDown(${
+                    element?.field_id
+                  }${
+            element?.field_parent_id || ""
+          },'Multi-Select','Multi-Select')"
+                  >
                       ${element?.field_values
                         ?.map(
                           (fieldValue) =>
