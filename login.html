@@ -354,6 +354,8 @@
                         type: "success",
                     });
                     localStorage.setItem('isLoggedIn', 'true')
+                    localStorage.setItem('user_name', response?.data?.user_profile.user_name)
+                    localStorage.setItem('user_image', response?.data?.user_profile.user_image)
                     location.href = "dashboard.html";
                 } else {
                     $.notify({
