@@ -157,6 +157,23 @@
                     let selectDropDown = document.getElementById(`${field_id_type}_${id}`);
                     arrOfData = selectDropDown.value.split(',');
                     break;
+                case 'Multi-Select':
+                    let selectedMultiValue = $(`#${field_id_type}_${id}`).val()
+                    arrOfData = []
+                    for (let k = 0; k < selectedMultiValue.length; k++) {
+                        const element = selectedMultiValue[k];
+                        let arryOfEl = element.split(',')
+                        if (k == 0) {
+                            arrOfData = arryOfEl
+                        } else {
+                            if (element?.length > 1) {
+                                let nogs = arryOfEl.shift();
+                                console.log(nogs)
+                                arrOfData = [...arrOfData, ...arryOfEl]
+                            }
+                        }
+                    }
+                    break;
                 default:
                     break;
             }
