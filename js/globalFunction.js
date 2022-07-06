@@ -122,7 +122,50 @@ function getColorCode(index) {
   let indexReturn = index % 4;
   return colorArray[indexReturn];
 }
-
+function userSignOut() {
+  startLoader();
+  let cookieData = getCookie("user_jwt");
+  if (cookieData?.user_email) {
+    axiosInstance.post("user_logout").then(
+      (response) => {
+        console.log(response);
+        endLoader();
+        if (response.status === 200) {
+          localStorage.setItem("isLoggedIn", "false");
+          location.href = "index.html";
+        } else {
+          $.notify(
+            {
+              title: "",
+              message: response.data?.msg,
+              icon: "fa fa-times",
+            },
+            {
+              type: "danger",
+            }
+          );
+        }
+      },
+      (error) => {
+        endLoader();
+        console.log("error", error);
+        $.notify(
+          {
+            title: "",
+            message: `Something went wrong! Please try again.`,
+            icon: "fa fa-times",
+          },
+          {
+            type: "danger",
+          }
+        );
+      }
+    );
+  } else {
+    localStorage.setItem("isAdminLoggedIn", "false");
+    location.href = "index.html";
+  }
+}
 function adminSignOut() {
   startLoader();
   let cookieData = getCookie("admin_jwt");
@@ -132,8 +175,8 @@ function adminSignOut() {
         console.log(response);
         endLoader();
         if (response.status === 200) {
-          // localStorage.setItem("isAdminLoggedIn", "false");
-          // location.href = "index.html";
+          localStorage.setItem("isAdminLoggedIn", "false");
+          location.href = "index.html";
         } else {
           $.notify(
             {
