@@ -130,7 +130,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" id="uploadPreAssessmentId">
+                    <form class="form-horizontal" id="edit_form">
                         <div class="form-group row">
                             <label class="control-label col-md-3">Entity Name</label>
                             <div class="col-md-8">
@@ -310,7 +310,7 @@
                 });
                 return
             }
-            if (!validateEmail(entity_email.value)) {
+            if (!validateEmail(entity_email)) {
                 $.notify({
                     title: "",
                     message: `Please enter a valid entity email.`,
@@ -321,7 +321,7 @@
                 endLoader();
                 return
             }
-            if (!validateEmail(email.value)) {
+            if (!validateEmail(email)) {
                 $.notify({
                     title: "",
                     message: `Please enter a valid email.`,
@@ -332,7 +332,7 @@
                 endLoader();
                 return
             }
-            if (!validatePAN(entity_pan.value)) {
+            if (!validatePAN(entity_pan)) {
                 $.notify({
                     title: "",
                     message: `Please enter a valid PAN number.`,
@@ -343,7 +343,7 @@
                 endLoader();
                 return
             }
-            if (entity_mobile.value?.length != 10) {
+            if (entity_mobile?.length != 10) {
                 $.notify({
                     title: "",
                     message: `Please enter a valid entity mobile number.`,
@@ -354,7 +354,7 @@
                 endLoader();
                 return
             }
-            if (mobile.value?.length != 10) {
+            if (mobile?.length != 10) {
                 $.notify({
                     title: "",
                     message: `Please enter a valid mobile number.`,
@@ -365,7 +365,7 @@
                 endLoader();
                 return
             }
-            $('#edit_game_rate_modal').modal('hide');
+            $('#edit_modal').modal('hide');
             axiosInstance.post('edit_customers', {
                 "user_id": g_id,
                 "person_name": name,
@@ -385,7 +385,7 @@
                     }, {
                         type: "success",
                     });
-                    $('#edit_modal')[0].reset();
+                    $('#edit_form')[0].reset();
                     getUserList();
                 } else {
                     if (response?.data?.is_logged_out) {
