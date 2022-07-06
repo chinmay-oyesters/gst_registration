@@ -105,7 +105,7 @@
                                 <th>Role Name</th>
                                 <th>Description</th>
                                 <th>Permission</th>
-                                <th style="width: 75px;">Action</th>
+                                <th style="width: 135px;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -283,6 +283,9 @@
                                         return `<div class="d-flex justify-content-around" >
                                                   <button class="btn-sm btn-info" onclick="setEditForm(${data})" data-toggle="modal" data-target="#edit_game_rate_modal" ><i
                                                   class="fa fa-pencil cp" aria-hidden="true"></i>&nbsp;Edit</button>
+                                                  <button
+                                         class="btn-sm btn-danger" onclick="deleteRow(${data})" ><i class="fa fa-trash cp"
+                                           aria-hidden="true"></i>&nbsp;Delete</button>
                                                  </div > `;
                                     },
                                 },
@@ -490,6 +493,62 @@
                     type: "danger"
                 });
             })
+        }
+        function deleteRow(m_id) {
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: true,
+                closeOnCancel: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    startLoader()
+                    axiosInstance.post('delete_role', {
+                        "role_id": m_id
+                    }).then((response) => {
+                        endLoader()
+                        if (response.status === 200) {
+                            $.notify({
+                                title: "",
+                                message: response.data?.msg,
+                                icon: 'fa fa-check'
+                            }, {
+                                type: "success",
+                            });
+                            getUserList();
+                        } else {
+                            if (response?.data?.is_logged_out) {
+                                localStorage.setItem("isAdminLoggedIn", "false");
+                                location.href = "index.html";
+                            } else {
+                                $.notify({
+                                    title: "",
+                                    message: response.data?.msg,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
+                            }
+                        }
+                    }, (error) => {
+                        console.log('error', error);
+                        endLoader()
+                        $.notify({
+                            title: "",
+                            message: `Something went wrong! Please try again.`,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger"
+                        });
+                    })
+                } else {
+                    swal("Cancelled", "Your data is safe.", "error");
+                }
+            });
         }
     </script>
 </body>

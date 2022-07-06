@@ -509,7 +509,7 @@
                 if (isConfirm) {
                     startLoader()
                     axiosInstance.post('delete_staff', {
-                        "user_id": m_id
+                        "staff_id": m_id
                     }).then((response) => {
                         endLoader()
                         if (response.status === 200) {
