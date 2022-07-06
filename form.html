@@ -36,7 +36,8 @@
                 <ul class="dropdown-menu settings-menu dropdown-menu-right">
                     <li><a class="dropdown-item" href="page-user.html"><i class="fa fa-cog fa-lg"></i> Settings</a></li>
                     <li><a class="dropdown-item" href="profile.html"><i class="fa fa-user fa-lg"></i> Profile</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="userSignOut()"><i class="fa fa-sign-out fa-lg"></i> Logout</a>
+                    <li><a class="dropdown-item" href="#" onclick="userSignOut()"><i class="fa fa-sign-out fa-lg"></i>
+                            Logout</a>
                     </li>
                 </ul>
             </li>
@@ -108,13 +109,57 @@
             axiosInstance.post('fetch_user_forms', {
                 "form_id": parseInt(ids)
             }).then((response) => {
-                endLoader()
                 console.log(response)
                 if (response.status === 200) {
                     let dataSet = response.data?.fields
                     fetchedFields = dataSet
                     setFields('form_container', dataSet)
+                    axiosInstance.post('fetch_user_response', {
+                        "form_id": ids,
+                    }).then((response2) => {
+                        endLoader()
+                        console.log(response2)
+                        if (response2.status === 200) {
+                            responseList = response2.data?.response
+                            console.log(responseList)
+                            responseList?.forEach(res => {
+                                let nowInput = document.getElementById(`${res?.field_frontend_id}`)
+                                let nowFieldType = res.field_frontend_id?.split('_')[0]
+                                if (nowInput) {
+                                    if (nowFieldType == 'Toggle') {
+                                        if (res?.answer == "true") {
+                                            nowInput.checked = true
+                                        }
+                                    } if (nowFieldType == 'Multi-Select') {
+                                        console.log(nowFieldType)
+                                        const arrVaaa = res?.answer.split(',');
+                                        console.log(arrVaaa)
+                                        $(`#${res?.field_frontend_id}`).val(arrVaaa).change()
+
+                                    } else nowInput.value = res.answer
+                                }
+                            })
+                            displayAssociatedFieldsValue()
+                        } else {
+                            if (response2?.data?.is_logged_out) {
+                                localStorage.setItem("isLoggedIn", "false");
+                                location.href = "index.html";
+                            }
+                        }
+                    }, (error) => {
+                        console.log('error', error);
+                        endLoader()
+                        $.notify({
+                            title: "",
+                            message: `Something went wrong! Please try again.`,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger"
+                        });
+                    })
                 } else {
+                    endLoader()
+
                     if (response?.data?.is_logged_out) {
                         localStorage.setItem("isLoggedIn", "false");
                         location.href = "index.html";
@@ -140,7 +185,23 @@
                 });
             })
         }
+        function displayAssociatedFieldsValue() {
+            for (let i = 0; i < fetchedFields.length; i++) {
+                const element = fetchedFields[i];
+                let nowValue = null
+                if (element?.field_type == "Toggle") {
+                    nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).checked
+                    if (nowValue == true) {
+                        updateFieldValueAssociateDropDown(`${element?.field_id}${element?.field_parent_id || ''}`, 'Toggle', `${element?.field_values[1]}`)
+                    }
+                }
+                else if (element?.field_type == "Dropdown") {
+                    nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).value
 
+                    updateFieldValueAssociateDropDown(`${element?.field_id}${element?.field_parent_id || ''}`, 'Dropdown', `dropdown`)
+                }
+            }
+        }
         function updateFieldValueAssociateDropDown(id, field_id_type, get_fieldValue) {
             let arrOfData = null
             let arrOfNum = []
