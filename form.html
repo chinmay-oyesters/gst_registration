@@ -132,10 +132,18 @@
                                             nowInput.checked = true
                                         }
                                     } if (nowFieldType == 'Multi-Select') {
-                                        console.log(nowFieldType)
                                         const arrVaaa = res?.answer.split(',');
-                                        console.log(arrVaaa)
-                                        $(`#${res?.field_frontend_id}`).val(arrVaaa).change()
+                                        let updatedArrVaa = []
+                                        let findFieldNow = dataSet?.filter(fd => fd?.field_id == res.field_id)
+                                        if (findFieldNow?.length > 0) {
+                                            nowfield_values = findFieldNow[0]
+                                            nowfield_values?.field_values?.forEach(fv => {
+                                                if (arrVaaa?.includes(fv[0])) {
+                                                    updatedArrVaa?.push(`${fv}`)
+                                                }
+                                            })
+                                        }
+                                        $(`#${res?.field_frontend_id}`).val(updatedArrVaa).change()
 
                                     } else nowInput.value = res.answer
                                 }
@@ -200,6 +208,8 @@
                     nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).value
 
                     updateFieldValueAssociateDropDown(`${element?.field_id}${element?.field_parent_id || ''}`, 'Dropdown', `dropdown`)
+                } else if (element?.field_type == "Multi-Select") {
+                    updateFieldValueAssociateDropDown(`${element?.field_id}${element?.field_parent_id || ""}, 'Multi-Select', 'Multi-Select'`)
                 }
             }
         }
@@ -295,11 +305,16 @@
                 }
                 if (element?.field_type == "Multi-Select") {
                     let nowValue = $(`#${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).val()
+                    let nowValueList = []
+                    nowValue?.forEach(nv => {
+                        let nowValLI = nv?.split(',');
+                        nowValueList?.push(nowValLI[0])
+                    })
                     dataList?.push({
                         "form_id": form_id,
                         "field_id": element?.field_id,
                         "field_frontend_id": `${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`,
-                        "form_response_answer": `${nowValue}`
+                        "form_response_answer": `${nowValueList}`
                     })
                 }
             })
@@ -317,14 +332,20 @@
                 }
                 if (element?.field_type == "Multi-Select") {
                     let nowValue = $(`#${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).val()
+                    let nowValueList = []
+                    nowValue?.forEach(nv => {
+                        let nowValLI = nv?.split(',');
+                        nowValueList?.push(nowValLI[0])
+                    })
                     dataList?.push({
                         "form_id": form_id,
                         "field_id": element?.field_id,
                         "field_frontend_id": `${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`,
-                        "form_response_answer": `${nowValue}`
+                        "form_response_answer": `${nowValueList}`
                     })
                 }
             })
+            console.log(dataList)
             startLoader()
             axiosInstance.post('save_response', {
                 "response_list": dataList
@@ -373,6 +394,21 @@
                     if (nowFieldType == 'Toggle') {
                         if (res?.answer == "true") {
                             nowInput.checked = true
+                        }
+                    } else if (nowFieldType == 'Multi-Select') {
+                        const arrVaaa = res?.answer.split(',');
+                        let updatedArrVaa = []
+                        findFieldNow = fieldsAssociate?.filter(fd => fd?.field_id == res.field_id)
+                        if (findFieldNow?.length == 0) {
+                            return
+                        } else {
+                            nowfield_values = findFieldNow[0]
+                            nowfield_values?.field_values?.forEach(fv => {
+                                if (arrVaaa?.includes(fv[0])) {
+                                    updatedArrVaa?.push(`${fv}`)
+                                }
+                            })
+                            $(`#${res?.field_frontend_id}`).val(updatedArrVaa).change()
                         }
                     } else nowInput.value = res.answer
                 }
