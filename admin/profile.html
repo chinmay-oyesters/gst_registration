@@ -240,6 +240,14 @@
                             }, {
                                 type: "success",
                             });
+                            localStorage.setItem('admin_image', respp?.data?.admin_image)
+                            document.getElementById(
+                                "admin_image"
+                            ).src = `data:image/png;base64,${respp?.data?.admin_image}`;
+                            if (response?.status == 200) {
+                                document.getElementById("admin_name").innerText = response?.data?.admin_name;
+                                localStorage.setItem('admin_name', response?.data?.admin_name)
+                            }
                         } else {
                             if (respp?.data?.is_logged_out) {
                                 localStorage.setItem("isAdminLoggedIn", "false");
