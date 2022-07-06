@@ -35,7 +35,8 @@
                     aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
                 <ul class="dropdown-menu settings-menu dropdown-menu-right">
                     <li><a class="dropdown-item" href="profile.html"><i class="fa fa-user fa-lg"></i> Profile</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="userSignOut()" ><i class="fa fa-sign-out fa-lg"></i> Logout</a>
+                    <li><a class="dropdown-item" href="#" onclick="userSignOut()"><i class="fa fa-sign-out fa-lg"></i>
+                            Logout</a>
                     </li>
                 </ul>
             </li>
@@ -162,6 +163,7 @@
         let name = document.getElementById('name')
         let email = document.getElementById('email')
         let mobile = document.getElementById('mobile')
+        let profile_image = document.getElementById('profile_img_id')
         window.onload = function () {
             startLoader()
             axiosInstance.get('user_fetch_profile').then((response) => {
@@ -176,6 +178,9 @@
                     name.value = dataSet?.user_fullname
                     email.value = dataSet?.user_email
                     mobile.value = dataSet?.user_phonenumber
+                    if (dataSet?.profile_image) {
+                        profile_image.src = `data:image/png;base64,${dataSet?.profile_image}`
+                    }
                 } else {
                     if (response?.data?.is_logged_out) {
                         localStorage.setItem("isLoggedIn", "false");
@@ -280,29 +285,69 @@
                 "entity_email": entity_email.value,
                 "entity_phonenumber": entity_mobile.value
             }).then((response) => {
-                endLoader()
-                if (response.status === 200) {
-                    $.notify({
-                        title: "",
-                        message: response.data?.msg,
-                        icon: 'fa fa-check'
-                    }, {
-                        type: "success",
-                    });
+                let profile_image_input_field = document.getElementById('profile_image_input_field')
+                if (profile_image_input_field.value) {
+                    var formData = new FormData();
+                    formData.append('choosefile', profile_image_input_field.files[0])
+                    axiosInstance.post('user_image_upload', formData).then((respp) => {
+                        endLoader();
+                        if (respp.status === 200) {
+                            $.notify({
+                                title: "",
+                                message: response.data?.msg,
+                                icon: 'fa fa-check'
+                            }, {
+                                type: "success",
+                            });
+                            localStorage.setItem('user_image', respp?.data?.profile_image)
+                            document.getElementById(
+                                "user_image"
+                            ).src = `data:image/png;base64,${respp?.data?.profile_image}`;
+                            if (response?.status == 200) {
+                                document.getElementById("user_name").innerText = response?.data?.user_name;
+                                localStorage.setItem('user_name', response?.data?.user_name)
+                            }
+                        } else {
+                            if (respp?.data?.is_logged_out) {
+                                localStorage.setItem("isLoggedIn", "false");
+                                location.href = "index.html";
+                            } else {
+                                $.notify({
+                                    title: "",
+                                    message: response.data?.msg,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
+                            }
+                        }
+                    })
                 } else {
-                    if (response?.data?.is_logged_out) {
-                        localStorage.setItem("isLoggedIn", "false");
-                        location.href = "index.html";
-                    } else {
+                    endLoader()
+                    if (response.status === 200) {
                         $.notify({
                             title: "",
                             message: response.data?.msg,
-                            icon: 'fa fa-times'
+                            icon: 'fa fa-check'
                         }, {
-                            type: "danger",
+                            type: "success",
                         });
+                    } else {
+                        if (response?.data?.is_logged_out) {
+                            localStorage.setItem("isLoggedIn", "false");
+                            location.href = "index.html";
+                        } else {
+                            $.notify({
+                                title: "",
+                                message: response.data?.msg,
+                                icon: 'fa fa-times'
+                            }, {
+                                type: "danger",
+                            });
+                        }
                     }
                 }
+
                 console.log(response)
             }, (error) => {
                 console.log('error', error);
