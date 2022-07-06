@@ -569,6 +569,22 @@ function setFields(container_id_n, nowFields) {
                 </div>
                 `;
         break;
+        case "File":
+          container_id.innerHTML =
+            container_id.innerHTML +
+            `
+                  <div class="form-group" >
+                  <label class="control-label">${element?.field_title}</label>${
+              element?.field_required
+                ? '<span class="text-danger" style="font-size:23px;" >*</span>'
+                : ""
+            }
+                  <input class="form-control" id='${element?.field_type}_${
+              element?.field_id
+            }${element?.field_parent_id || ""}' type="file"  >
+                  </div>
+                  `;
+          break;
       default:
         break;
     }
