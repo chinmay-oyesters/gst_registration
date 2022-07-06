@@ -54,14 +54,29 @@ if(auth($token)){
         // when field is found, append it into fields found array
         else{
             $field = $query->fetchAll(PDO::FETCH_OBJ)[0];
+
+            // convert field_required to a boolean value
+            if( $field->form_field_required == 1 ){
+                $temp_form_field_required = true;
+            } else{
+                $temp_form_field_required = false;
+            }
+
+            // check if field_values exist
+            if( $field->form_field_values != NULL){
+                $temp_form_field_values = json_decode(str_replace("'", "\"", $field->form_field_values));
+            } else {
+                $temp_form_field_values = NULL;
+            }
+
             array_push($fields, [
                 "field_id" => $field->form_field_id,
                 "field_title" => $field->form_field_title,
                 "field_type" => $field->form_field_type,
-                "field_required" => $field->form_field_required,
-                "form_field_associated_to" => $field->form_field_associated_to,
-                "form_field_values" => $field->form_field_values,
-                "form_field_validation" => $field->form_field_validation
+                "field_required" => $temp_form_field_required,
+                "field_associated_to" => $field->form_field_associated_to,
+                "field_values" => $temp_form_field_values,
+                "field_validation" => $field->form_field_validation
             ]);
         }
         
