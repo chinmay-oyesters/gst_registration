@@ -62,13 +62,18 @@ if(auth($token)){
                 $temp_form_field_required = false;
             }
 
+            // check if field_values exist
+            if( $field->form_field_values != NULL){
+                $temp_form_field_values = json_decode(str_replace("'", "\"", $field->form_field_values));
+            }
+
             array_push($fields, [
                 "field_id" => $field->form_field_id,
                 "field_title" => $field->form_field_title,
                 "field_type" => $field->form_field_type,
                 "field_required" => $temp_form_field_required,
                 "field_associated_to" => $field->form_field_associated_to,
-                "field_values" => $field->form_field_values,
+                "field_values" => $temp_form_field_values,
                 "field_validation" => $field->form_field_validation
             ]);
         }
