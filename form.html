@@ -88,6 +88,7 @@
         authenticate()
         let fetchedFields = []
         let fieldsAssociate = [];
+        let responseList = [];
         let form_id = null
         let fomr_name = null
         window.onload = function () {
@@ -255,6 +256,9 @@
                     let currentFieldAssociate = fieldsAssociate?.filter(fa => fa?.field_parent_id.split("_")[0] != id)
                     fieldsAssociate = [...currentFieldAssociate, ...newGG]
                     setFields(`field_value_associate_${id}`, newGG);
+                    setTimeout(() => {
+                        updateValueInAssociateFields()
+                    }, 400);
                     endLoader()
                 }, (error) => {
                     console.log('error', error);
@@ -359,6 +363,19 @@
                 }, {
                     type: "danger"
                 });
+            })
+        }
+        function updateValueInAssociateFields() {
+            responseList?.forEach(res => {
+                let nowInput = document.getElementById(`${res?.field_frontend_id}`)
+                let nowFieldType = res.field_frontend_id?.split('_')[0]
+                if (nowInput) {
+                    if (nowFieldType == 'Toggle') {
+                        if (res?.answer == "true") {
+                            nowInput.checked = true
+                        }
+                    } else nowInput.value = res.answer
+                }
             })
         }
     </script>
