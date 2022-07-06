@@ -168,10 +168,18 @@
                                             nowInput.checked = true
                                         }
                                     } if (nowFieldType == 'Multi-Select') {
-                                        console.log(nowFieldType)
                                         const arrVaaa = res?.answer.split(',');
-                                        console.log(arrVaaa)
-                                        $(`#${res?.field_frontend_id}`).val(arrVaaa).change()
+                                        let updatedArrVaa = []
+                                        let findFieldNow = dataSet?.filter(fd => fd?.field_id == res.field_id)
+                                        if (findFieldNow?.length > 0) {
+                                            nowfield_values = findFieldNow[0]
+                                            nowfield_values?.field_values?.forEach(fv => {
+                                                if (arrVaaa?.includes(fv[0])) {
+                                                    updatedArrVaa?.push(`${fv}`)
+                                                }
+                                            })
+                                        }
+                                        $(`#${res?.field_frontend_id}`).val(updatedArrVaa).change()
 
                                     } else nowInput.value = res.answer
                                 }
@@ -243,6 +251,23 @@
                     let selectDropDown = document.getElementById(`${field_id_type}_${id}`);
                     arrOfData = selectDropDown.value.split(',');
                     break;
+                case 'Multi-Select':
+                    let selectedMultiValue = $(`#${field_id_type}_${id}`).val()
+                    arrOfData = []
+                    for (let k = 0; k < selectedMultiValue.length; k++) {
+                        const element = selectedMultiValue[k];
+                        let arryOfEl = element.split(',')
+                        if (k == 0) {
+                            arrOfData = arryOfEl
+                        } else {
+                            if (element?.length > 1) {
+                                let nogs = arryOfEl.shift();
+                                console.log(nogs)
+                                arrOfData = [...arrOfData, ...arryOfEl]
+                            }
+                        }
+                    }
+                    break;
                 default:
                     break;
             }
@@ -293,6 +318,8 @@
                     nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).value
 
                     updateFieldValueAssociateDropDown(`${element?.field_id}${element?.field_parent_id || ''}`, 'Dropdown', `dropdown`)
+                } else if (element?.field_type == "Multi-Select") {
+                    updateFieldValueAssociateDropDown(`${element?.field_id}${element?.field_parent_id || ""}, 'Multi-Select', 'Multi-Select'`)
                 }
             }
         }
@@ -304,6 +331,21 @@
                     if (nowFieldType == 'Toggle') {
                         if (res?.answer == "true") {
                             nowInput.checked = true
+                        }
+                    } else if (nowFieldType == 'Multi-Select') {
+                        const arrVaaa = res?.answer.split(',');
+                        let updatedArrVaa = []
+                        findFieldNow = fieldsAssociate?.filter(fd => fd?.field_id == res.field_id)
+                        if (findFieldNow?.length == 0) {
+                            return
+                        } else {
+                            nowfield_values = findFieldNow[0]
+                            nowfield_values?.field_values?.forEach(fv => {
+                                if (arrVaaa?.includes(fv[0])) {
+                                    updatedArrVaa?.push(`${fv}`)
+                                }
+                            })
+                            $(`#${res?.field_frontend_id}`).val(updatedArrVaa).change()
                         }
                     } else nowInput.value = res.answer
                 }
