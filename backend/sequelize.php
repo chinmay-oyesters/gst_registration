@@ -90,8 +90,7 @@ $database_tables = array(
         `form_field_required` BOOLEAN DEFAULT NULL,
         `created_at` DATETIME,
         `updated_at` DATETIME 
-    )
-    ",
+    )",
     "
     CREATE TABLE IF NOT EXISTS `form_response_table` (
         `response_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
@@ -111,8 +110,7 @@ $database_tables = array(
         FOREIGN KEY (user_id)
           REFERENCES user_table(user_id) 
           ON DELETE CASCADE
-    )
-    ",
+    )",
     "
     CREATE TABLE IF NOT EXISTS `payments_table` (
         `payment_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
@@ -123,8 +121,7 @@ $database_tables = array(
         FOREIGN KEY (payment_user_id)
     		REFERENCES user_table(user_id) 
     		ON DELETE CASCADE
-    )
-    ",
+    )",
     "
     CREATE TABLE IF NOT EXISTS `roles_table` (
         `role_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
@@ -133,8 +130,20 @@ $database_tables = array(
         `role_permissions` VARCHAR(500),
         `created_at` DATETIME ,
         `updated_at` DATETIME
-    )
+    )",
     "
+    CREATE TABLE IF NOT EXISTS `integrations_table` (
+        `integration_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
+        `razorpay_key` VARCHAR(255) DEFAULT NULL,
+        `razorpay_secret` VARCHAR(255) DEFAULT NULL,
+        `send_from` VARCHAR(255) DEFAULT NULL,
+        `sender_name` VARCHAR(255) DEFAULT NULL,
+        `hostname` VARCHAR(255) DEFAULT NULL,
+        `password` VARCHAR(255) DEFAULT NULL,
+        `port` VARCHAR(255) DEFAULT NULL,
+        `created_at` DATETIME,
+        `updated_at` DATETIME 
+    )"
 );
 
 require_once("dbcon.php");

@@ -87,7 +87,6 @@ $router->endpoint('save_form', 'form/save_form', ['POST'], FALSE, ['form_values'
 $router->endpoint('fetch_dependencies', 'form/fetch_dependencies', ['POST'], FALSE, ['fetch_field']);
 
 //  Admin Form related routes
-
 $router->endpoint('fetch_admin_forms', 'admin/admin_forms/fetch_admin_forms', ['GET'], FALSE, []);
 $router->endpoint('fetch_admin_form_fields', 'admin/admin_forms/fetch_admin_form_fields', ['GET'], FALSE, []);
 $router->endpoint('delete_admin_form', 'admin/admin_forms/delete_admin_form', ['POST'], FALSE, ['form_id']);
@@ -100,3 +99,9 @@ $router->endpoint('delete_form', 'admin/admin_forms/delete_form', ['POST'], FALS
 $router->endpoint('fetch_full_form', 'admin/admin_forms/fetch_full_form', ['POST'], FALSE, ['form_id']);
 $router->endpoint('fetch_form_dependencies', 'admin/admin_forms/fetch_form_dependencies', ['POST'], FALSE, ['fetch_field']);
 $router->endpoint('preview_form', 'admin/admin_forms/preview_form', ['POST'], FALSE, ['form_fields']);
+
+
+// Integrations route
+$router->endpoint('fetch_integration_details', 'admin/settings/integrations/fetch_integration_details', ['GET'], FALSE, []);
+$router->endpoint('save_smtp_details', 'admin/settings/integrations/save_smtp_details', ['POST'], FALSE, ['send_from', 'sender_name', 'hostname', 'password', 'port']);
+$router->endpoint('save_razorpay_details', 'admin/settings/integrations/save_razorpay_details', ['POST'], FALSE, ['razorpay_key', 'razorpay_secret']);

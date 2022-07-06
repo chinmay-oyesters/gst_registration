@@ -10,8 +10,6 @@ $token = $_COOKIE["admin_jwt"];
 // checking is the user authorized 
 if(auth($token)){
 
-    $_POST = json_decode(file_get_contents("php://input"), true);
-
     //fetch details from market
     $sql = "SELECT role_id, role_name, role_description, role_permissions FROM roles_table ORDER BY role_id DESC";
     $query = $con -> prepare($sql);
@@ -38,13 +36,6 @@ if(auth($token)){
         $response = [
             "msg" => "Roles Fetched",
             "roles" => $roles_array
-        ];
-
-        
-        $status = 200;
-        $response = [
-            "msg" => "Roles Fetched",
-            "roles" => $roles
         ];
         
     }else{
