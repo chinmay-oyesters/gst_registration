@@ -44,10 +44,10 @@ function authenticate() {
   }
   let user_name = localStorage.getItem("user_name");
   let user_image = localStorage.getItem("user_image");
-  console.log(user_image);
-  console.log(user_name);
   if (user_image != "null") {
-    document.getElementById("user_image").src = user_image;
+    document.getElementById(
+      "user_image"
+    ).src = `data:image/png;base64,${user_image}`;
   }
   if (user_name != "null") {
     document.getElementById("user_name").innerText = user_name;
