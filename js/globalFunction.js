@@ -42,6 +42,16 @@ function authenticate() {
     localStorage.setItem("isLoggedIn", "false");
     location.href = "index.html";
   }
+  let user_name = localStorage.getItem("user_name");
+  let user_image = localStorage.getItem("user_image");
+  if (user_image != "null") {
+    document.getElementById(
+      "user_image"
+    ).src = `data:image/png;base64,${user_image}`;
+  }
+  if (user_name != "null") {
+    document.getElementById("user_name").innerText = user_name;
+  }
 }
 function authenticateAdmin() {
   let isLoggedIn = localStorage.getItem("isAdminLoggedIn");
@@ -112,7 +122,50 @@ function getColorCode(index) {
   let indexReturn = index % 4;
   return colorArray[indexReturn];
 }
-
+function userSignOut() {
+  startLoader();
+  let cookieData = getCookie("user_jwt");
+  if (cookieData?.user_email) {
+    axiosInstance.post("user_logout").then(
+      (response) => {
+        console.log(response);
+        endLoader();
+        if (response.status === 200) {
+          localStorage.setItem("isLoggedIn", "false");
+          location.href = "index.html";
+        } else {
+          $.notify(
+            {
+              title: "",
+              message: response.data?.msg,
+              icon: "fa fa-times",
+            },
+            {
+              type: "danger",
+            }
+          );
+        }
+      },
+      (error) => {
+        endLoader();
+        console.log("error", error);
+        $.notify(
+          {
+            title: "",
+            message: `Something went wrong! Please try again.`,
+            icon: "fa fa-times",
+          },
+          {
+            type: "danger",
+          }
+        );
+      }
+    );
+  } else {
+    localStorage.setItem("isAdminLoggedIn", "false");
+    location.href = "index.html";
+  }
+}
 function adminSignOut() {
   startLoader();
   let cookieData = getCookie("admin_jwt");
@@ -122,8 +175,8 @@ function adminSignOut() {
         console.log(response);
         endLoader();
         if (response.status === 200) {
-          // localStorage.setItem("isAdminLoggedIn", "false");
-          // location.href = "index.html";
+          localStorage.setItem("isAdminLoggedIn", "false");
+          location.href = "index.html";
         } else {
           $.notify(
             {
