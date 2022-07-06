@@ -63,6 +63,20 @@ function authenticateAdmin() {
     localStorage.setItem("isAdminLoggedIn", "false");
     location.href = "index.html";
   }
+  let admin_name = localStorage.getItem("admin_name");
+  let admin_image = localStorage.getItem("admin_image");
+  let admin_role = localStorage.getItem("admin_role");
+  if (admin_image != "null") {
+    document.getElementById(
+      "admin_image"
+    ).src = `data:image/png;base64,${admin_image}`;
+  }
+  if (admin_name != "null") {
+    document.getElementById("admin_name").innerText = admin_name;
+  }
+  if (admin_role != "null") {
+    document.getElementById("admin_role").innerText = admin_role;
+  }
 }
 // baseURL: `/gst/backend/`,
 const axiosInstance = axios.create({
