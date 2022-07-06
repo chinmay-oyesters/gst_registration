@@ -47,7 +47,8 @@ if(auth($token)){
             if($query->execute()){
                 $status = 200;
                 $response = [
-                    "msg" => "Image Uploaded Succesfully"
+                    "msg" => "Image Uploaded Succesfully",
+                    "profile_image" => $image
                 ];
             }else{
                 $status = 203;

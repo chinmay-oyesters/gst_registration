@@ -51,7 +51,8 @@ if(auth($token)){
             $user_profile = $query->fetchAll(PDO::FETCH_OBJ);
             $status = 200;
             $response = [
-                "msg" => "Admin profile updated successfully"
+                "msg" => "Admin profile updated successfully",
+                "admin_name" => $admin_fullname
             ];
         }else{
             $status = 203;
