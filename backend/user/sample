@@ -1,43 +1,73 @@
-            $sql = "SELECT form_fields FROM form_table WHERE form_id=:form_id";
-            $query = $con -> prepare($sql);
-            $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
+<?php
 
-            //updating form status and status in user subscription details table
-            if($query->execute()){
-                $form_status = "";
-                $form_fields = $query->fetchAll(PDO::FETCH_ASSOC)[0]['form_fields'];
-                $form_fields_count = count(json_decode($form_fields));
-                $common_fields = array_intersect(json_decode($form_fields), json_decode($field_id));
-                $common_fields_count = count($common_fields);
-                $form_progress = intval(($common_fields_count/$form_fields_count)*100);
-                if($form_progress<100){
-                    $form_status = "In Progress";
-                }else{
-                    $form_status = "Completed";
-                }
+// import db connection
+require("./dbcon.php");
+require("./middleware.php");
+require_once('../vendor/autoload.php');
+use Firebase\JWT\JWT;
+use \Firebase\JWT\Key;
+use Dotenv\Dotenv;
 
-                $sql = "UPDATE user_subscription_details SET 
-                form_status = :form_status,
-                form_progress = :form_progress,
-                updated_at = :updated_at
-                WHERE user_id=:user_id AND form_id=:form_id";
-                $query = $con -> prepare($sql);
-                $query->bindParam(':user_id', $user_id, PDO::PARAM_STR);
-                $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
-                $query->bindParam(':form_status', $form_status, PDO::PARAM_STR);
-                $query->bindParam(':form_progress', $form_progress, PDO::PARAM_STR);
-                $query->bindparam(":updated_at", $datetime, PDO::PARAM_STR);
-                if($query->execute()){
-                    $status = 200;
-                    $response = [
-                        "msg" => "User response saved successfully"
-                    ];
-                }else{
-                    $status = 203;
-                    $response = [
-                        "msg" => "Form status and progress could not be saved"
-                    ];
-                }
-            }
+// Looing for .env at the root directory
+$dotenv = Dotenv::createImmutable('./');
+$dotenv->load();
 
+//Retrive env variable
+$SECRET_KEY = $_ENV['SECRET_KEY'];
+
+// getting token from cookie
+$token = $_COOKIE["user_jwt"];
+
+// checking is the user authorized 
+if(auth($token)){
+
+    //extracting payload from jwt
+    $payload = JWT::decode($token, new Key($SECRET_KEY, 'HS512'));
+
+    // retrieve request data
+    $_POST = json_decode(file_get_contents("php://input"), true);
+
+    // retrieve required variables
+    $user_id = $payload->user_id;
+    $form_id = $_POST['form_id'];
+
+    $sql = "SELECT field_id, field_frontend_id, form_response_answer as answer FROM form_response_table
+    WHERE form_id=:form_id AND user_id=:user_id";
+    $query = $con -> prepare($sql);
+    $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
+    $query->bindParam(':user_id', $user_id, PDO::PARAM_STR);
+    $query->execute();
+
+    if($query->rowCount() === 0){
+        $status = 203;
+        $response = [
+            "msg" => "No responses  found"
+        ]; 
+    }else{
+        $responses = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        $responses_array = array();
+
+        foreach ($responses as $response) {
+            array_push($responses_array,
+                [
+                    "user_id" => $customer->user_id,
+                    "entity_name" => $customer->entity_fullname,
+                    "entity_pan" => $customer->entity_pan,
+                    "entity_mobilenumber" => $customer->entity_phonenumber,
+                    "entity_email" => $customer->entity_email,
+                    "user_fullname" => $customer->user_fullname,
+                    "user_email" => $customer->user_email,
+                    "user_mobilenumber" => $customer->user_phonenumber
+                ]
+            );
+        }
         
+        $status = 200;
+        $response = [
+            "msg" => "Responses fetched successsfully",
+            "response" => $responses_array
+        ];
+    }
+
+}

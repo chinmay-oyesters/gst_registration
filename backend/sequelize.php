@@ -99,6 +99,7 @@ $database_tables = array(
         `user_id` INT(255) NOT NULL,
         `form_response_answer` VARCHAR(255) DEFAULT NULL,
         `field_frontend_id` INT(255),
+        `upload_image` BLOB,
         `created_at` DATETIME,
         `updated_at` DATETIME,
         FOREIGN KEY (form_id)

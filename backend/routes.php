@@ -24,6 +24,9 @@ $router->endpoint('home', 'user/home', ['GET'], FALSE, []);
 // Save responses route to save response of user
 $router->endpoint('save_response', 'user/save_response', ['POST'], FALSE, []);
 
+// upload response image
+$router->endpoint('upload_response_image', 'user/upload_response_image', ['POST'], FALSE, []);
+
 // fetch user response
 $router->endpoint('fetch_user_response', 'user/fetch_user_response', ['POST'], FALSE, ['form_id']);
 
