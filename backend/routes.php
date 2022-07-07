@@ -22,7 +22,7 @@ $router->endpoint('user_image_upload', 'user/user_profile/user_image_upload', ['
 $router->endpoint('home', 'user/home', ['GET'], FALSE, []);
 
 // Save responses route to save response of user
-$router->endpoint('save_response', 'user/save_response', ['POST'], FALSE, []);
+$router->endpoint('save_user_response', 'user/save_user_response', ['POST'], FALSE, []);
 
 // upload response image
 $router->endpoint('upload_response_image', 'user/upload_response_image', ['POST'], FALSE, []);
@@ -95,13 +95,16 @@ $router->endpoint('fetch_admin_form_fields', 'admin/admin_forms/fetch_admin_form
 $router->endpoint('delete_admin_form', 'admin/admin_forms/delete_admin_form', ['POST'], FALSE, ['form_id']);
 $router->endpoint('fetch_users', 'admin/admin_forms/fetch_users', ['POST'], FALSE, ['form_id']);
 $router->endpoint('fetch_fields', 'admin/admin_forms/fetch_fields', ['GET'], FALSE, []);
-$router->endpoint('fetch_response', 'admin/admin_forms/fetch_response', ['POST'], FALSE, ['form_id', 'user_id']);
+$router->endpoint('fetch_admin_response', 'admin/admin_forms/fetch_admin_response', ['POST'], FALSE, ['form_id', 'user_id']);
 $router->endpoint('edit_admin_form', 'admin/admin_forms/edit_admin_form', ['POST'], FALSE, ['form_id']);
 $router->endpoint('approve_form', 'admin/admin_forms/approve_form', ['POST'], FALSE, ['form_id', 'user_id']);
 $router->endpoint('delete_form', 'admin/admin_forms/delete_form', ['POST'], FALSE, ['form_id', 'user_id']);
 $router->endpoint('fetch_full_form', 'admin/admin_forms/fetch_full_form', ['POST'], FALSE, ['form_id']);
 $router->endpoint('fetch_form_dependencies', 'admin/admin_forms/fetch_form_dependencies', ['POST'], FALSE, ['fetch_field']);
 $router->endpoint('preview_form', 'admin/admin_forms/preview_form', ['POST'], FALSE, ['form_fields']);
+$router->endpoint('fetch_simple_form', 'admin/admin_forms/fetch_simple_form', ['POST'], FALSE, ['form_id']);
+$router->endpoint('raise_discrepancy', 'admin/admin_forms/raise_discrepancy', ['POST'], FALSE, ['form_id', 'send_to', 'mail_body', 'mail_subject']);
+$router->endpoint('save_admin_response', 'admin/admin_forms/save_admin_response', ['POST'], FALSE, []);
 
 
 // Integrations route
