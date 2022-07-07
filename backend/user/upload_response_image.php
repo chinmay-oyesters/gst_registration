@@ -26,10 +26,7 @@ if(auth($token)){
     //extracting payload from jwt
     $payload = JWT::decode($token, new Key($SECRET_KEY, 'HS512'));
     
-
-    
-    //Checking files specifcation
-    //checking extension of file
+    //extrating param from files variable
     $temp = explode('.', $_FILES["choosefile"]["name"]);
     $extn = strtolower(end($temp));
     // Filetype is correct. Check size

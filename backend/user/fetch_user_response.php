@@ -28,7 +28,7 @@ if(auth($token)){
     $_POST = json_decode(file_get_contents("php://input"), true);
 
     // retrieve required variables
-    $user_id = 7;
+    $user_id = $payload->user_id;
     $form_id = $_POST['form_id'];
 
     $sql = "SELECT field_id, field_frontend_id, form_response_answer as answer, upload_image FROM form_response_table
