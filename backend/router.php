@@ -34,7 +34,8 @@ class Router{
                     $get_url_params[$value[0]] = urldecode($value[1]);
                 }
             }
-
+            array_push($_GET, $get_url_params);
+            
             // Check Authorization
             // if($authorization_required == TRUE){
             //     require_once("authenticate.php");
@@ -56,6 +57,7 @@ class Router{
                         exit();
                     }
                 }
+                
 
                 $file = str_replace(".php", "", $file);
                 $TIMEZONE_SET = TRUE;

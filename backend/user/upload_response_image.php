@@ -31,17 +31,19 @@ if(auth($token)){
     $extn = strtolower(end($temp));
     // Filetype is correct. Check size
     if($_FILES["choosefile"]["size"] < 2000000) {
+        
         //extracting data from uploaded file
         $filename = $_FILES["choosefile"]["name"];
         $tempname = $_FILES["choosefile"]["tmp_name"];
         $upload_image = base64_encode(file_get_contents($tempname));
 
-        $param = explode("-", $filename);
-        //taking param name from input file name
-        $form_id = $param[0];
-        $field_id = $param[1];
-        $removing_ext = explode(".", $param[2]);
-        $field_frontend_id = strval($removing_ext[0]);
+        //taking param name from query parameters
+
+        $query_param = $_GET[0];
+
+        $form_id = $query_param['form_id'];
+        $field_id = $query_param['field_id'];
+        $field_frontend_id = $query_param['field_frontend_id'];
         $user_id = $payload->user_id;
         
     
