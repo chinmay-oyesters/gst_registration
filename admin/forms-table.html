@@ -179,14 +179,14 @@
                                     data: 'form_progress',
                                 },
                                 {
-                                    data: 'user_fullname',
+                                    data: 'user_id',
                                     render: function (data) {
                                         return `<div class="d-flex justify-content-around" >
                                             <button class="btn-sm btn-success" onclick="setEditForm(${data})" data-toggle="modal" data-target="#edit_game_rate_modal" ><i
                                                   class="fa fa-check cp" aria-hidden="true"></i>&nbsp;Approve</button>
                                                   <button class="btn-sm btn-info" onclick="setEditForm(${data})" data-toggle="modal" data-target="#edit_game_rate_modal" ><i
                                                   class="fa fa-hand-paper-o cp" aria-hidden="true"></i>&nbsp;Raise Discrepency</button><button
-                                         class="btn-sm btn-danger" onclick="deleteRow(${data})" ><i class="fa fa-trash cp"
+                                         class="btn-sm btn-danger" onclick="event.stopPropagation();deleteRow(${data})" ><i class="fa fa-trash cp"
                                            aria-hidden="true"></i>&nbsp;Delete</button>
                                                  </div > `;
                                     },
@@ -226,6 +226,63 @@
                     type: "danger"
                 });
             })
+        }
+        function deleteRow(m_id) {
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: true,
+                closeOnCancel: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    startLoader()
+                    axiosInstance.post('delete_form', {
+                        "form_id": parseInt(form_id),
+                        "user_id": m_id
+                    }).then((response) => {
+                        endLoader()
+                        if (response.status === 200) {
+                            $.notify({
+                                title: "",
+                                message: response.data?.msg,
+                                icon: 'fa fa-check'
+                            }, {
+                                type: "success",
+                            });
+                            getList(form_id);
+                        } else {
+                            if (response?.data?.is_logged_out) {
+                                localStorage.setItem("isAdminLoggedIn", "false");
+                                location.href = "index.html";
+                            } else {
+                                $.notify({
+                                    title: "",
+                                    message: response.data?.msg,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
+                            }
+                        }
+                    }, (error) => {
+                        console.log('error', error);
+                        endLoader()
+                        $.notify({
+                            title: "",
+                            message: `Something went wrong! Please try again.`,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger"
+                        });
+                    })
+                } else {
+                    swal("Cancelled", "Your data is safe.", "error");
+                }
+            });
         }
     </script>
 </body>
