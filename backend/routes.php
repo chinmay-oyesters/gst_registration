@@ -37,7 +37,7 @@ $router->endpoint('fetch_user_forms', 'user/fetch_user_forms', ['POST'], FALSE, 
 $router->endpoint('fetch_user_dependencies', 'user/fetch_user_dependencies', ['POST'], FALSE, ['fetch_field']);
 
 //payments
-$router->endpoint('user_fetch_payments', 'user/user_payments', ['GET'], FALSE, []);
+$router->endpoint('generate_order_id', 'user/user_payments/generate_order_id', ['POST'], FALSE, ['form_id']);
 
 
 //all endpoints specified for admin
