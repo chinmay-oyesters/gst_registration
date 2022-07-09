@@ -118,6 +118,49 @@
             </div>
         </div>
     </main>
+    <!-- rais Discrepency -->
+    <div class="modal fade" id="edit_modal" role="dialog">
+        <div class="modal-dialog  modal-dialog-centered ">
+
+            <!-- Modal content-->
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Rais Discrepency<br />
+                        <p style="text-align:left; font-size:13px;font-weight:500;">
+                        <p>
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="uploadPreAssessmentId">
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Send To</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" placeholder="-" id="edit_send_to" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Subject</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" placeholder="-" id="edit_subject">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Body</label>
+                            <div class="col-md-8">
+                                <textarea class="form-control" rows="3" id="edit_body"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer " style="justify-content: center;margin-top:20px;">
+                            <button class="btn btn-success" type="button" id="edit_save_btn">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
     <!-- Essential javascripts for application to work-->
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/popper.min.js"></script>
@@ -154,7 +197,7 @@
                 console.log(response)
                 if (response.status === 200) {
                     let dataSet = response.data?.subscribed_user
-                    userList = dataSet
+                    list = dataSet
                     $(document).ready(function () {
                         $('#sampleTable').DataTable().destroy();
                         $('#sampleTable').DataTable({
@@ -182,9 +225,9 @@
                                     data: 'user_id',
                                     render: function (data) {
                                         return `<div class="d-flex justify-content-around" >
-                                            <button class="btn-sm btn-success" onclick="setEditForm(${data})" data-toggle="modal" data-target="#edit_game_rate_modal" ><i
+                                            <button class="btn-sm btn-success" type="button"  onclick="event.stopPropagation();approveRow(${data})" ><i
                                                   class="fa fa-check cp" aria-hidden="true"></i>&nbsp;Approve</button>
-                                                  <button class="btn-sm btn-info" onclick="setEditForm(${data})" data-toggle="modal" data-target="#edit_game_rate_modal" ><i
+                                                  <button class="btn-sm btn-info" onclick="event.stopPropagation();setEditForm(${data})"  type="button"  data-toggle="modal" data-target="#edit_modal" ><i
                                                   class="fa fa-hand-paper-o cp" aria-hidden="true"></i>&nbsp;Raise Discrepency</button><button
                                          class="btn-sm btn-danger" onclick="event.stopPropagation();deleteRow(${data})" ><i class="fa fa-trash cp"
                                            aria-hidden="true"></i>&nbsp;Delete</button>
@@ -201,6 +244,73 @@
                             });
                         }, 200);
                     });
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isAdminLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
+        function setEditForm(g_id) {
+            $('#edit_modal').modal('show');
+            let rowNow = list?.filter(m => `${m.user_id}` == `${g_id}`)
+            console.log(rowNow)
+            if (rowNow?.length > 0) {
+                document.getElementById('edit_send_to').value = rowNow[0]?.user_email
+                document.getElementById('edit_save_btn').setAttribute("onClick", `raisDiscrepency(${g_id})`);
+            }
+        }
+        function raisDiscrepency() {
+            startLoader()
+            let sendTo = document.getElementById('edit_send_to').value
+            let subject = document.getElementById('edit_subject').value
+            let body_now = document.getElementById('edit_body').value
+            if (subject == "" || body_now == "") {
+                $.notify({
+                    title: "",
+                    message: `Please enter all fields.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+                endLoader()
+                return
+            }
+            axiosInstance.post('raise_discrepancy', {
+                "form_id": form_id,
+                "send_to": sendTo,
+                "mail_body": body_now,
+                "mail_subject": subject
+            }).then((response) => {
+                endLoader()
+                if (response.status === 200) {
+                    $.notify({
+                        title: "",
+                        message: response.data?.msg,
+                        icon: 'fa fa-check'
+                    }, {
+                        type: "success",
+                    });
+                    $('#edit_modal').modal('hide');
                 } else {
                     if (response?.data?.is_logged_out) {
                         localStorage.setItem("isAdminLoggedIn", "false");
@@ -281,6 +391,63 @@
                     })
                 } else {
                     swal("Cancelled", "Your data is safe.", "error");
+                }
+            });
+        }
+        function approveRow(m_id) {
+            swal({
+                title: "Are you sure?",
+                text: "You want to approve this!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Approve it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: true,
+                closeOnCancel: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    startLoader()
+                    axiosInstance.post('approve_form', {
+                        "form_id": parseInt(form_id),
+                        "user_id": m_id
+                    }).then((response) => {
+                        endLoader()
+                        if (response.status === 200) {
+                            $.notify({
+                                title: "",
+                                message: response.data?.msg,
+                                icon: 'fa fa-check'
+                            }, {
+                                type: "success",
+                            });
+                            getList(form_id);
+                        } else {
+                            if (response?.data?.is_logged_out) {
+                                localStorage.setItem("isAdminLoggedIn", "false");
+                                location.href = "index.html";
+                            } else {
+                                $.notify({
+                                    title: "",
+                                    message: response.data?.msg,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
+                            }
+                        }
+                    }, (error) => {
+                        console.log('error', error);
+                        endLoader()
+                        $.notify({
+                            title: "",
+                            message: `Something went wrong! Please try again.`,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger"
+                        });
+                    })
+                } else {
+                    swal("Cancelled", "", "error");
                 }
             });
         }
