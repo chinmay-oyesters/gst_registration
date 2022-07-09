@@ -31,7 +31,7 @@ if(auth($token)){
     $extn = strtolower(end($temp));
     // Filetype is correct. Check size
     if($_FILES["choosefile"]["size"] < 2000000) {
-        
+
         //extracting data from uploaded file
         $filename = $_FILES["choosefile"]["name"];
         $tempname = $_FILES["choosefile"]["tmp_name"];
@@ -45,32 +45,77 @@ if(auth($token)){
         $field_id = $query_param['field_id'];
         $field_frontend_id = $query_param['field_frontend_id'];
         $user_id = $payload->user_id;
-        
-    
-        // query to insert the submitted data
-        $sql = "UPDATE form_response_table SET 
-        upload_image = :upload_image WHERE 
-        user_id = :user_id AND
-        form_id = :form_id AND
-        field_id = :field_id AND
+
+
+        $sql = "SELECT response_id FROM form_response_table WHERE form_id=:form_id AND field_id=:field_id AND user_id=:user_id AND
         field_frontend_id = :field_frontend_id";
         $query = $con -> prepare($sql);
-        $query->bindParam(':user_id', $user_id, PDO::PARAM_STR);
-        $query->bindParam(':upload_image', $upload_image, PDO::PARAM_LOB);
         $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
         $query->bindParam(':field_id', $field_id, PDO::PARAM_STR);
+        $query->bindParam(':user_id', $user_id, PDO::PARAM_STR);
         $query->bindParam(':field_frontend_id', $field_frontend_id, PDO::PARAM_STR);
-        if($query->execute()){
-            $status = 200;
-            $response = [
-                "msg" => "Image Uploaded Succesfully",
-                "profile_image" => $upload_image
-            ];
+        $query->execute();
+        if($query->rowCount() === 0){
+            $sql = "INSERT INTO form_response_table (user_id, form_id, field_id, field_frontend_id, upload_image, created_at, updated_at) VALUES
+            (:user_id, :form_id, :field_id, :field_frontend_id, :upload_image, :created_at, :updated_at)";
+            $query = $con -> prepare($sql);
+            $query->bindParam(':user_id', $user_id, PDO::PARAM_STR);
+            $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
+            $query->bindParam(':field_id', $field_id, PDO::PARAM_STR);
+            $query->bindParam(':field_frontend_id', $field_frontend_id, PDO::PARAM_STR);
+            $query->bindParam(':upload_image', $upload_image, PDO::PARAM_STR);
+            $query->bindparam(":created_at", $datetime, PDO::PARAM_STR);
+            $query->bindparam(":updated_at", $datetime, PDO::PARAM_STR);
+            
+    
+            if($query->execute()){
+                $status = 200;
+                $response = [
+                    "msg" => "Response saved successfully",
+                    "upload_image" => $upload_image
+                ];           
+            }else{
+                
+                $status = 203;
+                $response = [
+                    "msg" => "Responses could not be saved"
+                ];
+            }
         }else{
-            $status = 203;
-            $response = [
-                "msg" => "Image can't be saved to database"
-            ];
+            $response_id = $query->fetchAll(PDO::FETCH_ASSOC)[0]['response_id'];
+            $datetime = date("Y-m-d H:i:s");
+
+            $sql = "UPDATE form_response_table SET 
+            upload_image = :upload_image
+            WHERE response_id = :response_id AND
+            user_id = :user_id AND
+            form_id = :form_id AND
+            field_id = :field_id AND
+            field_frontend_id = :field_frontend_id AND
+            updated_at = :updated_at";  
+            $query = $con->prepare($sql);
+            $query->bindParam(':user_id', $user_id, PDO::PARAM_STR);
+            $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
+            $query->bindParam(':field_id', $field_id, PDO::PARAM_STR);
+            $query->bindParam(':field_frontend_id', $field_frontend_id, PDO::PARAM_STR);
+            $query->bindParam(':upload_image', $upload_image, PDO::PARAM_LOB);
+            $query->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
+            $query->bindParam(':response_id', $response_id, PDO::PARAM_STR);
+
+            if($query->execute()){
+                $status = 200;
+                $response = [
+                    "msg" => "Image uploaded successfully",
+                    "upload_image" => $upload_image
+                ]; 
+            }else{
+                
+                $status = 203;
+                $response = [
+                    "msg" => "Image can't be saved to database",
+                    "upload_image" => $upload_image
+                ];
+            }
         }
     }else{
         $status  = 203;
