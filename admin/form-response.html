@@ -150,7 +150,7 @@
                     let dataSet = response.data?.fields
                     fetchedFields = dataSet
                     setFields('form_container', dataSet)
-                    axiosInstance.post('fetch_response', {
+                    axiosInstance.post('fetch_admin_response', {
                         "form_id": ids,
                         "user_id": usrid
                     }).then((response2) => {

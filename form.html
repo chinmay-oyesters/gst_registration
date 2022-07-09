@@ -401,7 +401,7 @@
             console.log(dataList)
             if (dataList?.length != 0) {
                 startLoader()
-                axiosInstance.post('save_response', {
+                axiosInstance.post('save_user_response', {
                     "response_list": dataList
                 }).then((response) => {
                     endLoader()
