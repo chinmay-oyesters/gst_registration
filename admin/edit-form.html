@@ -347,7 +347,8 @@
             nowSelectedFields = nowSelectedFields.map(str => {
                 return Number(str);
             });
-            axiosInstance.post('add_form', {
+            axiosInstance.post('edit_admin_form', {
+                "form_id": form_id,
                 "form_name": name,
                 "form_fields": nowSelectedFields
             }).then((response) => {
