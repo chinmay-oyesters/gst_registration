@@ -240,7 +240,17 @@
                             var table = $('#sampleTable').DataTable();
                             $('#sampleTable tbody').on('click', 'tr', function () {
                                 let nowD = table.row(this).data()
-                                location.href = `form-response.html?id=${form_id}&ref=${nowD?.user_id}&type=${form_name}`
+                                if (nowD?.form_progress == "0") {
+                                    $.notify({
+                                        title: "",
+                                        message: 'No data to display',
+                                        icon: 'fa fa-times'
+                                    }, {
+                                        type: "danger",
+                                    });
+                                } else {
+                                    location.href = `form-response.html?id=${form_id}&ref=${nowD?.user_id}&type=${form_name}`
+                                }
                             });
                         }, 200);
                     });
