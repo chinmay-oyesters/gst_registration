@@ -73,9 +73,13 @@
   <script src="js/plugins/pace.min.js"></script>
   <script type="text/javascript" src="js/plugins/chart.js"></script>
   <script src="js/globalFunction.js"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
     authenticate()
     window.onload = function () {
+      getList()
+    }
+    function getList() {
       startLoader()
       axiosInstance.get('home').then((response) => {
         endLoader()
@@ -98,11 +102,77 @@
               <div style="width:${element?.form_progress}%">${element?.form_progress}%</div>
               </div>` : ''
               }
-              <button>${element?.form_status == 'Pay to Avail the Service' ? 'Pay Now' : 'Fill the Form'}</button>
+              ${element?.form_status == 'Pay to Avail the Service' ? `<button id='rzp-button1' onclick="handlePayNow('${element?.form_id}')" >Pay Now</button>` : '<button>Fill the Form</button>'}
                </div>
               </div>
             `
           }
+        } else {
+          if (response?.data?.is_logged_out) {
+            localStorage.setItem("isLoggedIn", "false");
+            location.href = "index.html";
+          } else {
+            $.notify({
+              title: "",
+              message: response.data?.msg,
+              icon: 'fa fa-times'
+            }, {
+              type: "danger",
+            });
+          }
+        }
+        console.log(response)
+      }, (error) => {
+        console.log('error', error);
+        endLoader()
+        $.notify({
+          title: "",
+          message: `Something went wrong! Please try again.`,
+          icon: 'fa fa-times'
+        }, {
+          type: "danger"
+        });
+      })
+    }
+    function handlePayNow(f_id) {
+      startLoader()
+      axiosInstance.post('generate_order_id', {
+        "form_id": parseInt(f_id)
+      }).then((response) => {
+        endLoader()
+        if (response.status === 200) {
+          var options = {
+            "key": "rzp_test_Z8O2w3Vauqmphr", // Enter the Key ID generated from the Dashboard
+            "amount": "100", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "GST - R",
+            "description": "Description",
+            "image": "https://gst.oyesters.in/images/landing-left-1.png",
+            "order_id": response?.data?.order_id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+              alert(response.razorpay_payment_id);
+              alert(response.razorpay_order_id);
+              alert(response.razorpay_signature)
+              getList()
+            },
+            "notes": {
+              "address": "GST  Corporate Office"
+            },
+            "theme": {
+              "color": "#3399cc"
+            }
+          };
+          var rzp1 = new Razorpay(options);
+          rzp1.on('payment.failed', function (response) {
+            alert(response.error.code);
+            alert(response.error.description);
+            alert(response.error.source);
+            alert(response.error.step);
+            alert(response.error.reason);
+            alert(response.error.metadata.order_id);
+            alert(response.error.metadata.payment_id);
+          });
+          rzp1.open();
         } else {
           if (response?.data?.is_logged_out) {
             localStorage.setItem("isLoggedIn", "false");
