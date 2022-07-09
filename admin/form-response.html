@@ -181,6 +181,9 @@
                                         }
                                         $(`#${res?.field_frontend_id}`).val(updatedArrVaa).change()
 
+                                    } if (nowFieldType == 'File') {
+                                        let nowDownloadId = document.getElementById(`download_link_${res?.field_frontend_id}`)
+                                        nowDownloadId.innerHTML = `Uploaded Document: <button onclick='downloadBase64("${res?.answer}")' type="button" style="color:white;background:none;" >Downlaod</button>`
                                     } else nowInput.value = res.answer
                                 }
                             })
