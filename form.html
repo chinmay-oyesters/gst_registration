@@ -145,6 +145,9 @@
                                         }
                                         $(`#${res?.field_frontend_id}`).val(updatedArrVaa).change()
 
+                                    } if (nowFieldType == 'File') {
+                                        let nowDownloadId = document.getElementById(`download_link_${res?.field_frontend_id}`)
+                                        nowDownloadId.innerHTML = `Uploaded Document: <button onclick='downloadBase64("${res?.answer}")' type="button" style="color:white;background:none;" >Downlaod</button>`
                                     } else nowInput.value = res.answer
                                 }
                             })
@@ -280,7 +283,7 @@
                 document.getElementById(`field_value_associate_${id}`).innerHTML = ''
             }
         }
-        function submitForm() {
+        async function submitForm() {
             let validateFirst = validateAllFields(fetchedFields)
             if (!validateFirst) {
                 return
@@ -291,7 +294,7 @@
                 return
             }
             let dataList = []
-            fetchedFields?.forEach(element => {
+            for (const element of fetchedFields) {
                 if (element?.field_type == "Text" || element?.field_type == "Dropdown" || element?.field_type == "Date" || element?.field_type == "Toggle") {
                     let nowValue = null
                     if (element?.field_type == "Toggle") nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).checked
@@ -317,8 +320,33 @@
                         "form_response_answer": `${nowValueList}`
                     })
                 }
-            })
-            fieldsAssociate?.forEach(element => {
+                if (element?.field_type == "File") {
+                    let nowFile = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).files[0]
+                    console.log(nowFile)
+                    if (nowFile != undefined) {
+                        startLoader()
+                        var formData = new FormData();
+                        formData.append('choosefile', nowFile)
+                        let response = await axiosInstance.post(`upload_response_image?form_id=${form_id}&field_id=${element?.field_id}&field_frontend_id=${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`, formData)
+                        if (response.status === 200) {
+                        } else {
+                            if (response?.data?.is_logged_out) {
+                                localStorage.setItem("isLoggedIn", "false");
+                                location.href = "index.html";
+                            } else {
+                                $.notify({
+                                    title: "",
+                                    message: response.data?.msg,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            for (const element of fieldsAssociate) {
                 if (element?.field_type == "Text" || element?.field_type == "Date" || element?.field_type == "Dropdown" || element?.field_type == "Toggle") {
                     let nowValue = null
                     if (element?.field_type == "Toggle") nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).checked
@@ -344,47 +372,78 @@
                         "form_response_answer": `${nowValueList}`
                     })
                 }
-            })
+                if (element?.field_type == "File") {
+                    let nowFile = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).files[0]
+                    console.log(nowFile)
+                    if (nowFile != undefined) {
+                        startLoader()
+                        var formData = new FormData();
+                        formData.append('choosefile', nowFile)
+                        let response = await axiosInstance.post(`upload_response_image?form_id=${form_id}&field_id=${element?.field_id}&field_frontend_id=${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`, formData)
+                        if (response.status === 200) {
+                        } else {
+                            if (response?.data?.is_logged_out) {
+                                localStorage.setItem("isLoggedIn", "false");
+                                location.href = "index.html";
+                            } else {
+                                $.notify({
+                                    title: "",
+                                    message: response.data?.msg,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
+                            }
+                        }
+                    }
+                }
+            }
             console.log(dataList)
-            startLoader()
-            axiosInstance.post('save_response', {
-                "response_list": dataList
-            }).then((response) => {
-                endLoader()
-                if (response.status === 200) {
-                    $.notify({
-                        title: "",
-                        message: response.data?.msg,
-                        icon: 'fa fa-check'
-                    }, {
-                        type: "success",
-                    });
-                    location.href = 'dashboard.html'
-                } else {
-                    if (response?.data?.is_logged_out) {
-                        localStorage.setItem("isLoggedIn", "false");
-                        location.href = "index.html";
-                    } else {
+            if (dataList?.length != 0) {
+                startLoader()
+                axiosInstance.post('save_response', {
+                    "response_list": dataList
+                }).then((response) => {
+                    endLoader()
+                    if (response.status === 200) {
                         $.notify({
                             title: "",
                             message: response.data?.msg,
-                            icon: 'fa fa-times'
+                            icon: 'fa fa-check'
                         }, {
-                            type: "danger",
+                            type: "success",
                         });
+                        location.href = 'dashboard.html'
+                    } else {
+                        if (response?.data?.is_logged_out) {
+                            localStorage.setItem("isLoggedIn", "false");
+                            location.href = "index.html";
+                        } else {
+                            $.notify({
+                                title: "",
+                                message: response.data?.msg,
+                                icon: 'fa fa-times'
+                            }, {
+                                type: "danger",
+                            });
+                        }
                     }
-                }
-            }, (error) => {
-                console.log('error', error);
+                }, (error) => {
+                    console.log('error', error);
+                    endLoader()
+                    $.notify({
+                        title: "",
+                        message: `Something went wrong! Please try again.`,
+                        icon: 'fa fa-times'
+                    }, {
+                        type: "danger"
+                    });
+                })
+            } else {
                 endLoader()
-                $.notify({
-                    title: "",
-                    message: `Something went wrong! Please try again.`,
-                    icon: 'fa fa-times'
-                }, {
-                    type: "danger"
-                });
-            })
+                location.href = 'dashboard.html'
+            }
+
         }
         function updateValueInAssociateFields() {
             responseList?.forEach(res => {

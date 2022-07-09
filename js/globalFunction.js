@@ -419,6 +419,27 @@ function validateAllFields(validateFieldList) {
             );
             return false;
           }
+          break;
+        case "File":
+          let FileValue = document.getElementById(
+            `${element?.field_type}_${element?.field_id}${
+              element?.field_parent_id || ""
+            }`
+          ).files[0];
+          if (FileValue == undefined) {
+            $.notify(
+              {
+                title: "",
+                message: `Please select ${element?.field_title.toLocaleLowerCase()}`,
+                icon: "fa fa-times",
+              },
+              {
+                type: "danger",
+              }
+            );
+            return false;
+          }
+          break;
         default:
           break;
       }
@@ -569,22 +590,27 @@ function setFields(container_id_n, nowFields) {
                 </div>
                 `;
         break;
-        case "File":
-          container_id.innerHTML =
-            container_id.innerHTML +
-            `
+      case "File":
+        container_id.innerHTML =
+          container_id.innerHTML +
+          `
                   <div class="form-group" >
                   <label class="control-label">${element?.field_title}</label>${
-              element?.field_required
-                ? '<span class="text-danger" style="font-size:23px;" >*</span>'
-                : ""
-            }
-                  <input class="form-control" id='${element?.field_type}_${
-              element?.field_id
-            }${element?.field_parent_id || ""}' type="file"  >
+            element?.field_required
+              ? '<span class="text-danger" style="font-size:23px;" >*</span>'
+              : ""
+          }
+                  <input class="form-control" accept="image/*" id='${
+                    element?.field_type
+                  }_${element?.field_id}${
+            element?.field_parent_id || ""
+          }' type="file"  >
+          <div style="margin-top:20px;" id='download_link_${
+            element?.field_type
+          }_${element?.field_id}${element?.field_parent_id || ""}'></div>
                   </div>
                   `;
-          break;
+        break;
       default:
         break;
     }
@@ -595,4 +621,12 @@ function updateSelect2() {
   $(document).ready(function () {
     $(".js-example-basic-multiple").select2();
   });
+}
+
+function downloadBase64(base64URL) {
+  var a = document.createElement("a"); //Create <a>
+  a.target = "_blank";
+  a.href = "data:image/png;base64," + base64URL; //Image Base64 Goes here
+  a.download = "Image.png"; //File name Here
+  a.click(); //Downloaded file
 }
