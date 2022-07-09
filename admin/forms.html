@@ -123,7 +123,7 @@
                 let forms_container = document.getElementById('forms_container')
                 forms_container.innerHTML = `
                 <div class="col-md-6 col-lg-4 ">
-                <div class="p-4 m-2 cp add_new_form_box" onclick="location.href='new-form.html'">
+                <div class="p-4 m-2 cp add_new_form_box" onclick="sessionStorage.removeItem('field_list');location.href='new-form.html'">
                     <h4>+</h4>
                     <h6>Add New Form</h6>
                 </div>
@@ -141,7 +141,8 @@
                     <h4>${element?.form_name}</h4>
                     <h6>Total Forms: ${element?.total_forms}</h6>
                     <h6>Total Completed: ${element?.total_completed}</h6>
-                    <span onclick='event.stopPropagation();deleteForm("${element?.form_id}");' ><i  class="fa fa-trash" aria-hidden="true"></i></span>
+                    <span  ><i onclick='event.stopPropagation();sessionStorage.removeItem("field_list");location.href = "edit-form.html?id=${element?.form_id}&type=${element?.form_name}"' class="fa fa-pencil" aria-hidden="true"></i>
+                        &nbsp;&nbsp;&nbsp;<i  onclick='event.stopPropagation();deleteForm("${element?.form_id}");' class="fa fa-trash" aria-hidden="true"></i></span>
                 </div>
             </div>
                     `

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forms Table - GST</title>
+    <title>Edit Form - GST Admin</title>
     <!-- Main CSS-->
     <link rel="stylesheet" type="text/css" href="../css/main.css">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
@@ -74,7 +74,7 @@
                         class="app-menu__label">Payments</span></a></li>
             <li><a class="app-menu__item" href="forms.html"><i class="app-menu__icon fa fa-file-text-o"
                         aria-hidden="true"></i><span class="app-menu__label">Forms</span></a></li>
-            <li><a class="app-menu__item " href="fields.html"><i class="app-menu__icon fa fa-align-center"
+            <li><a class="app-menu__item" href="fields.html"><i class="app-menu__icon fa fa-align-center"
                         aria-hidden="true"></i><span class="app-menu__label">Fields</span></a></li>
             <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
                         class="app-menu__icon fa fa-cog"></i><span class="app-menu__label">Settings</span><i
@@ -90,77 +90,63 @@
     <main class="app-content">
         <div class="app-title">
             <div>
-                <h1><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp;Forms Table</h1>
+                <h1><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp;Edit Form</h1>
             </div>
         </div>
         <div class="tile">
             <div class="tile-body">
-                <button class="btn btn-sm btn-primary mb-4" data-toggle="modal" data-target="#add_modal">+ Add
-                    Field</button>
-                <div class="table-responsive">
-                    <table class="table table-hover table-bordered" id="sampleTable">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone Number</th>
-                                <th>Entity Name</th>
-                                <th>Status</th>
-                                <th>Progress</th>
-                                <th style="width: 300px;">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <form action="" id="new_form_id">
+                    <div class="form-group row mt-4">
+                        <label class="control-label col-md-3">Form Name</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" placeholder="-" id="name">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label col-md-3">Form Image</label>
+                        <div class="col-md-8">
+                            <input type="file" accept="image/*" onchange="loadFile(event,'form_logo')">
+                            <img id="form_logo" style="border-radius: 50%;height:150px;width: 150px;"
+                                src="data:image/jpeg;base64,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" />
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="control-label col-md-3">Selectd Field</label>
+                        <div class="col-md-8  d-flex">
+                            <select class="form-control" id="fields_dropdown">
+                            </select>
+                            <button onclick="addFieldToTable()" class="btn btn-success pl-5 pr-5 ml-4"
+                                type="button">Add</button>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="mt-4 mb-3">Selected Fields</p>
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Field Name</th>
+                                    <th>Field Type</th>
+                                    <th>Require</th>
+                                    <th align="center" style="width: 100px;text-align: center;">Sort</th>
+                                    <th align="center" style="width: 100px;text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fields_table">
 
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-5 mb-5 d-flex justify-content-end">
+                        <button type="button" class="btn btn-info mr-3"
+                            onclick="location.href ='preview-form.html'">Preview</button>
+
+                        <button type="button" class="btn btn-success" onclick="submitForm()">Save</button>
+                    </div>
+                </form>
             </div>
         </div>
     </main>
-    <!-- rais Discrepency -->
-    <div class="modal fade" id="edit_modal" role="dialog">
-        <div class="modal-dialog  modal-dialog-centered ">
-
-            <!-- Modal content-->
-
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Rais Discrepency<br />
-                        <p style="text-align:left; font-size:13px;font-weight:500;">
-                        <p>
-                    </h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <form class="form-horizontal" id="uploadPreAssessmentId">
-                        <div class="form-group row">
-                            <label class="control-label col-md-3">Send To</label>
-                            <div class="col-md-8">
-                                <input class="form-control" type="text" placeholder="-" id="edit_send_to" readonly>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="control-label col-md-3">Subject</label>
-                            <div class="col-md-8">
-                                <input class="form-control" type="text" placeholder="-" id="edit_subject">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="control-label col-md-3">Body</label>
-                            <div class="col-md-8">
-                                <textarea class="form-control" rows="3" id="edit_body"></textarea>
-                            </div>
-                        </div>
-                        <div class="modal-footer " style="justify-content: center;margin-top:20px;">
-                            <button class="btn btn-success" type="button" id="edit_save_btn">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-        </div>
-    </div>
     <!-- Essential javascripts for application to work-->
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/popper.min.js"></script>
@@ -174,94 +160,91 @@
     <!-- alert  -->
     <script type="text/javascript" src="../js/plugins/bootstrap-notify.min.js"></script>
     <script type="text/javascript" src="../js/plugins/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script type="text/javascript">
         authenticateAdmin();
-        let list = [];
+
+        $(document).ready(function () {
+            $('#fields_dropdown').select2();
+        });
         let form_id = '';
         let form_name = '';
+        let fieldsList = [];
+        let selectdFields = [];
+        let fields_dropdown = document.getElementById('fields_dropdown')
+        let fields_table = document.getElementById('fields_table')
         window.onload = function () {
             if (getUrlVars()["id"]) {
                 form_id = getUrlVars()["id"]
                 form_name = decodeURI(getUrlVars()["type"])
+                if (form_name) {
+                    document.getElementById('name').value = form_name
+                }
                 getList(form_id)
             } else {
                 location.href = 'forms.html'
             }
+            let nowFieldsList = JSON.parse(sessionStorage.getItem('field_list'))
+            console.log(nowFieldsList)
+            if (nowFieldsList?.length == 0 || nowFieldsList == undefined || nowFieldsList == null || nowFieldsList == "") {
+
+            } else {
+                selectdFields = nowFieldsList
+            }
+            // getList()
+
         }
         function getList(m_id) {
             startLoader()
-            axiosInstance.post('fetch_users', {
-                "form_id": parseInt(m_id)
-            }).then((response) => {
-                endLoader()
-                console.log(response)
-                if (response.status === 200) {
-                    let dataSet = response.data?.subscribed_user
-                    list = dataSet
-                    $(document).ready(function () {
-                        $('#sampleTable').DataTable().destroy();
-                        $('#sampleTable').DataTable({
-                            data: dataSet,
-                            columns: [
-                                {
-                                    data: 'user_fullname',
-                                },
-                                {
-                                    data: 'user_email',
-                                },
-                                {
-                                    data: 'user_phonenumber',
-                                },
-                                {
-                                    data: 'entity_fullname',
-                                },
-                                {
-                                    data: 'form_status',
-                                },
-                                {
-                                    data: 'form_progress',
-                                },
-                                {
-                                    data: 'user_id',
-                                    render: function (data) {
-                                        return `<div class="d-flex justify-content-around" >
-                                            <button class="btn-sm btn-success" type="button"  onclick="event.stopPropagation();approveRow(${data})" ><i
-                                                  class="fa fa-check cp" aria-hidden="true"></i>&nbsp;Approve</button>
-                                                  <button class="btn-sm btn-info" onclick="event.stopPropagation();setEditForm(${data})"  type="button"  data-toggle="modal" data-target="#edit_modal" ><i
-                                                  class="fa fa-hand-paper-o cp" aria-hidden="true"></i>&nbsp;Raise Discrepency</button><button
-                                         class="btn-sm btn-danger" onclick="event.stopPropagation();deleteRow(${data})" ><i class="fa fa-trash cp"
-                                           aria-hidden="true"></i>&nbsp;Delete</button>
-                                                 </div > `;
-                                    },
-                                },
-                            ],
-                        });
-                        setTimeout(() => {
-                            var table = $('#sampleTable').DataTable();
-                            $('#sampleTable tbody').on('click', 'tr', function () {
-                                let nowD = table.row(this).data()
-                                if (nowD?.form_progress == "0") {
-                                    $.notify({
-                                        title: "",
-                                        message: 'No data to display',
-                                        icon: 'fa fa-times'
-                                    }, {
-                                        type: "danger",
-                                    });
-                                } else {
-                                    location.href = `form-response.html?id=${form_id}&ref=${nowD?.user_id}&type=${form_name}`
-                                }
-                            });
-                        }, 200);
+            axiosInstance.post('fetch_simple_form', {
+                "form_id": m_id
+            }).then((response1) => {
+                if (response1.status === 200) {
+                    let nowD = response1?.data?.forms[0]?.form_fields
+                    selectdFields = JSON.parse(nowD)
+                    selectdFields = selectdFields.map(str => {
+                        return `${str}`;
                     });
+                    axiosInstance.get('fetch_admin_form_fields').then((response) => {
+                        endLoader()
+                        if (response.status === 200) {
+                            let dataSet = response?.data?.fields
+                            fieldsList = dataSet
+                            updateFields()
+                        } else {
+                            if (response?.data?.is_logged_out) {
+                                localStorage.setItem("isAdminLoggedIn", "false");
+                                location.href = "index.html";
+                            } else {
+                                $.notify({
+                                    title: "",
+                                    message: response.data?.msg,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
+                            }
+                        }
+                    }, (error) => {
+                        console.log('error', error);
+                        endLoader()
+                        $.notify({
+                            title: "",
+                            message: `Something went wrong! Please try again.`,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger"
+                        });
+                    })
                 } else {
-                    if (response?.data?.is_logged_out) {
+                    endLoader()
+                    if (response1?.data?.is_logged_out) {
                         localStorage.setItem("isAdminLoggedIn", "false");
                         location.href = "index.html";
                     } else {
                         $.notify({
                             title: "",
-                            message: response.data?.msg,
+                            message: response1.data?.msg,
                             icon: 'fa fa-times'
                         }, {
                             type: "danger",
@@ -280,24 +263,68 @@
                 });
             })
         }
-        function setEditForm(g_id) {
-            $('#edit_modal').modal('show');
-            let rowNow = list?.filter(m => `${m.user_id}` == `${g_id}`)
-            console.log(rowNow)
-            if (rowNow?.length > 0) {
-                document.getElementById('edit_send_to').value = rowNow[0]?.user_email
-                document.getElementById('edit_save_btn').setAttribute("onClick", `raisDiscrepency(${g_id})`);
+        function updateFields() {
+            let dataSet = fieldsList
+            fields_dropdown.innerHTML = ''
+            fields_dropdown.innerHTML = `<option value=""> -- Select Field -- </option>`
+            for (let i = 0; i < dataSet.length; i++) {
+                const element = dataSet[i];
+                if (!selectdFields?.includes(element?.field_id)) {
+                    fields_dropdown.innerHTML = fields_dropdown.innerHTML +
+                        `<option value='${element?.field_id}' >${element?.field_name} - ${element?.field_type}${element?.required == '1' ? `<span style="color:red;" >&nbsp;*<span>` : ""}</option>`
+                }
+            }
+            fields_table.innerHTML = ''
+            for (let j = 0; j < selectdFields.length; j++) {
+                let element = fieldsList?.filter(fs => fs?.field_id == selectdFields[j])
+                if (element?.length > 0) {
+                    fields_table.innerHTML = fields_table.innerHTML +
+                        `<tr><td>${j + 1}</td><td>${element[0]?.field_name}</td><td>${element[0]?.field_type}</td><td>${element[0]?.required == '1' ? 'true' : 'false'}</td><td align="center"><i class="fa fa-long-arrow-up cp" onclick="sortTable('up','${j}');" aria-hidden="true"></i>&nbsp;&nbsp;<i onclick="sortTable('down','${j}');"  class="fa fa-long-arrow-down cp" aria-hidden="true"></i></td><td align="center" ><i class="fa fa-trash text-danger cp" onclick="removeField('${j}')" aria-hidden="true"></i></td></tr>`
+                }
+            }
+            if (selectdFields?.length == 0) {
+                fields_table.innerHTML = '<tr><td align="center" colspan="6" class="p-5">No field selected</td></tr>'
+            }
+            console.log(selectdFields)
+            sessionStorage.removeItem('field_list')
+            sessionStorage.setItem('field_list', JSON.stringify(selectdFields))
+        }
+        function addFieldToTable() {
+            let fields_dropdown = document.getElementById('fields_dropdown')
+            if (fields_dropdown.value) {
+                selectdFields?.push(fields_dropdown.value)
+                updateFields()
+                fields_dropdown.value = ''
             }
         }
-        function raisDiscrepency() {
+        function removeField(idx) {
+            let nowSelectedFields = selectdFields;
+            nowSelectedFields.splice(idx, 1);
+            selectdFields = [...nowSelectedFields]
+            updateFields()
+        }
+        function sortTable(mode, idx) {
+            let nowSelectedFields = selectdFields;
+            let oldIndex = parseInt(idx);
+            if (mode == 'up') {
+                if (oldIndex != 0) {
+                    arrayMove(nowSelectedFields, oldIndex, oldIndex - 1)
+                }
+            } else if (mode == 'down') {
+                if (oldIndex !== nowSelectedFields?.length - 1) {
+                    arrayMove(nowSelectedFields, oldIndex, oldIndex + 1)
+                }
+            }
+            selectdFields = nowSelectedFields
+            updateFields()
+        }
+        function submitForm() {
             startLoader()
-            let sendTo = document.getElementById('edit_send_to').value
-            let subject = document.getElementById('edit_subject').value
-            let body_now = document.getElementById('edit_body').value
-            if (subject == "" || body_now == "") {
+            let name = document.getElementById('name').value
+            if (name == "") {
                 $.notify({
                     title: "",
-                    message: `Please enter all fields.`,
+                    message: `Plese enter a name.`,
                     icon: 'fa fa-times'
                 }, {
                     type: "danger"
@@ -305,11 +332,24 @@
                 endLoader()
                 return
             }
-            axiosInstance.post('raise_discrepancy', {
-                "form_id": form_id,
-                "send_to": sendTo,
-                "mail_body": body_now,
-                "mail_subject": subject
+            if (selectdFields?.length == 0) {
+                $.notify({
+                    title: "",
+                    message: `Plese select atleast one field.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+                endLoader()
+                return
+            }
+            let nowSelectedFields = selectdFields
+            nowSelectedFields = nowSelectedFields.map(str => {
+                return Number(str);
+            });
+            axiosInstance.post('add_form', {
+                "form_name": name,
+                "form_fields": nowSelectedFields
             }).then((response) => {
                 endLoader()
                 if (response.status === 200) {
@@ -320,7 +360,12 @@
                     }, {
                         type: "success",
                     });
-                    $('#edit_modal').modal('hide');
+                    $('#new_form_id')[0].reset();
+                    selectdFields = []
+                    sessionStorage.removeItem('field_list')
+                    updateFields()
+                    location.href = 'forms.html'
+                    document.getElementById('form_logo').src = "data:image/jpeg;base64,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";
                 } else {
                     if (response?.data?.is_logged_out) {
                         localStorage.setItem("isAdminLoggedIn", "false");
@@ -346,120 +391,6 @@
                     type: "danger"
                 });
             })
-        }
-        function deleteRow(m_id) {
-            swal({
-                title: "Are you sure?",
-                text: "You will not be able to recover this!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "No, cancel plx!",
-                closeOnConfirm: true,
-                closeOnCancel: false
-            }, function (isConfirm) {
-                if (isConfirm) {
-                    startLoader()
-                    axiosInstance.post('delete_form', {
-                        "form_id": parseInt(form_id),
-                        "user_id": m_id
-                    }).then((response) => {
-                        endLoader()
-                        if (response.status === 200) {
-                            $.notify({
-                                title: "",
-                                message: response.data?.msg,
-                                icon: 'fa fa-check'
-                            }, {
-                                type: "success",
-                            });
-                            getList(form_id);
-                        } else {
-                            if (response?.data?.is_logged_out) {
-                                localStorage.setItem("isAdminLoggedIn", "false");
-                                location.href = "index.html";
-                            } else {
-                                $.notify({
-                                    title: "",
-                                    message: response.data?.msg,
-                                    icon: 'fa fa-times'
-                                }, {
-                                    type: "danger",
-                                });
-                            }
-                        }
-                    }, (error) => {
-                        console.log('error', error);
-                        endLoader()
-                        $.notify({
-                            title: "",
-                            message: `Something went wrong! Please try again.`,
-                            icon: 'fa fa-times'
-                        }, {
-                            type: "danger"
-                        });
-                    })
-                } else {
-                    swal("Cancelled", "Your data is safe.", "error");
-                }
-            });
-        }
-        function approveRow(m_id) {
-            swal({
-                title: "Are you sure?",
-                text: "You want to approve this!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes, Approve it!",
-                cancelButtonText: "No, cancel plx!",
-                closeOnConfirm: true,
-                closeOnCancel: false
-            }, function (isConfirm) {
-                if (isConfirm) {
-                    startLoader()
-                    axiosInstance.post('approve_form', {
-                        "form_id": parseInt(form_id),
-                        "user_id": m_id
-                    }).then((response) => {
-                        endLoader()
-                        if (response.status === 200) {
-                            $.notify({
-                                title: "",
-                                message: response.data?.msg,
-                                icon: 'fa fa-check'
-                            }, {
-                                type: "success",
-                            });
-                            getList(form_id);
-                        } else {
-                            if (response?.data?.is_logged_out) {
-                                localStorage.setItem("isAdminLoggedIn", "false");
-                                location.href = "index.html";
-                            } else {
-                                $.notify({
-                                    title: "",
-                                    message: response.data?.msg,
-                                    icon: 'fa fa-times'
-                                }, {
-                                    type: "danger",
-                                });
-                            }
-                        }
-                    }, (error) => {
-                        console.log('error', error);
-                        endLoader()
-                        $.notify({
-                            title: "",
-                            message: `Something went wrong! Please try again.`,
-                            icon: 'fa fa-times'
-                        }, {
-                            type: "danger"
-                        });
-                    })
-                } else {
-                    swal("Cancelled", "", "error");
-                }
-            });
         }
     </script>
 </body>

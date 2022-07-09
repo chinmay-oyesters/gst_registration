@@ -123,6 +123,7 @@
         let fieldsList = [];
         window.onload = function () {
             fieldsList = JSON.parse(sessionStorage.getItem('field_list'))
+            console.log(fieldsList)
             if (fieldsList?.length == 0 || fieldsList == undefined || fieldsList == null || fieldsList == "") {
                 location.href = "new-form.html"
             }

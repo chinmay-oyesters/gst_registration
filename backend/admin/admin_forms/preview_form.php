@@ -16,7 +16,7 @@ $dotenv->load();
 $SECRET_KEY = $_ENV['SECRET_KEY'];
 
 // getting token from cookie
-$token = $_COOKIE["user_jwt"];
+$token = $_COOKIE["admin_jwt"];
 
 // checking is the user authorized 
 if(auth($token)){
