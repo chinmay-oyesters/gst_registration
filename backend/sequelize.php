@@ -73,11 +73,17 @@ $database_tables = array(
     CREATE TABLE IF NOT EXISTS `payments_table` (
         `payment_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
         `user_id` INT(255),
-        `payment_amount` VARCHAR(255) NOT NULL,
+        `form_id` INT(255),
+        `order_id` VARCHAR(255) NOT NULL,
+        `signature` VARCHAR(255) NOT NULL,
+        `order_amount` VARCHAR(255) NOT NULL,
         `created_at` DATETIME,
         `updated_at` DATETIME,
         FOREIGN KEY (user_id) 
           REFERENCES user_table(user_id) 
+          ON DELETE CASCADE,
+        FOREIGN KEY (form_id) 
+          REFERENCES form_table(form_id) 
           ON DELETE CASCADE
     )",
     "
