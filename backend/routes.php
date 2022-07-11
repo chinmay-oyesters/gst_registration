@@ -5,7 +5,7 @@
 //all endpoints specified for user
 // authorization routes
 $router->endpoint('user_signin', 'user/auth/user_signin', ['POST'], FALSE, ['user_email', 'user_password']);
-$router->endpoint('user_signup', 'user/auth/user_signup', ['POST'], FALSE, ['user_password', 'entity_fullname', 'entity_pan', 'entity_phonenumber', 'entity_email', 'user_fullname', 'user_email', 'user_phonenumber']);
+$router->endpoint('user_signup', 'user/auth/user_signup', ['POST'], FALSE, ['user_password', 'entity_fullname', 'entity_pan', 'entity_phonenumber', 'entity_email', 'user_fullname', 'user_email', 'user_phonenumber', 'register_for']);
 $router->endpoint('user_logout', 'user/auth/user_logout', ['POST'], FALSE, []);
 $router->endpoint('user_reset_password', 'user/auth/user_reset_password', ['POST'], FALSE, ['old_password', 'new_password']);
 
@@ -20,6 +20,9 @@ $router->endpoint('user_image_upload', 'user/user_profile/user_image_upload', ['
 
 //home page
 $router->endpoint('home', 'user/home', ['GET'], FALSE, []);
+
+//fetch form details to know register form details 
+$router->endpoint('register_for', 'user/register_for', ['GET'], FALSE, []);
 
 // Save responses route to save response of user
 $router->endpoint('save_user_response', 'user/save_user_response', ['POST'], FALSE, []);
