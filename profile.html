@@ -303,10 +303,6 @@
                             document.getElementById(
                                 "user_image"
                             ).src = `data:image/png;base64,${respp?.data?.profile_image}`;
-                            if (response?.status == 200) {
-                                document.getElementById("user_name").innerText = response?.data?.user_name;
-                                localStorage.setItem('user_name', response?.data?.user_name)
-                            }
                         } else {
                             if (respp?.data?.is_logged_out) {
                                 localStorage.setItem("isLoggedIn", "false");
@@ -325,6 +321,8 @@
                 } else {
                     endLoader()
                     if (response.status === 200) {
+                        document.getElementById("user_name").innerText = response?.data?.user_name;
+                        localStorage.setItem('user_name', response?.data?.user_name)
                         $.notify({
                             title: "",
                             message: response.data?.msg,
