@@ -46,6 +46,7 @@ $database_tables = array(
         `form_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
         `form_name` VARCHAR(255) NOT NULL,
         `form_fields` VARCHAR(255) NOT NULL,
+        `form_amount` VARCHAR(255) NOT NULL,
         `form_image` BLOB,
         `created_at` DATETIME,
         `updated_at` DATETIME 

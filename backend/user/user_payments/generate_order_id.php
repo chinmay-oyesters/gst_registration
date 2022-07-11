@@ -31,22 +31,22 @@ if(auth($token)){
     $form_id = $_POST['form_id'];
     
     
-    // $sql = "SELECT form_amount FROM form_table WHERE form_id=:form_id";
-    // $query = $con -> prepare($sql);
-    // $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
-    // $query->execute();
+    $sql = "SELECT form_amount FROM form_table WHERE form_id=:form_id";
+    $query = $con -> prepare($sql);
+    $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
+    $query->execute();
 
-    // if($query->rowCount() === 0){
+    if($query->rowCount() === 0){
 
-    //     $status = 203;
-    //     $response = [
-    //         "msg" => "Internal Server Error: Order ID creation failed"
-    //     ];       
+        $status = 203;
+        $response = [
+            "msg" => "Internal Server Error: Order ID creation failed"
+        ];       
 
-    // }else{
+    }else{
 
-        // $form_amount = $query->fetchAll(PDO::FETCH_ASSOC)[0]['form_amount'];
-        $form_amount = 100;
+        $form_amount = $query->fetchAll(PDO::FETCH_ASSOC)[0]['form_amount'];
+        // $form_amount = 100;
 
         //extracting razorpay details
         $sql = "SELECT razorpay_key, razorpay_secret FROM integrations_table";
@@ -68,7 +68,9 @@ if(auth($token)){
             $status = 200;
             $response = [
                 "msg" => "Order ID created successfully",
-                "order_id" => $order_details['id']
+                "order_id" => $order_details['id'],
+                "order_amount" => $form_amount,
+                "key" => $razorpay_key
             ];           
         }else{
             
@@ -77,10 +79,7 @@ if(auth($token)){
                 "msg" => "Internal Server Error"
             ];
             
-        }
+        }  
 
-
-        
-
-    // }
+    }
 }
