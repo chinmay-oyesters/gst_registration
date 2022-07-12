@@ -142,35 +142,70 @@
         endLoader()
         if (response.status === 200) {
           var options = {
-            "key": "rzp_test_Z8O2w3Vauqmphr", // Enter the Key ID generated from the Dashboard
-            "amount": "100", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "key": response?.data?.key, // Enter the Key ID generated from the Dashboard
+            "amount": response?.data?.order_amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
             "currency": "INR",
             "name": "GST - R",
             "description": "Description",
             "image": "https://gst.oyesters.in/images/landing-left-1.png",
             "order_id": response?.data?.order_id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-            "handler": function (response) {
-              alert(response.razorpay_payment_id);
-              alert(response.razorpay_order_id);
-              alert(response.razorpay_signature)
-              getList()
+            "handler": function (response1) {
+              // alert(response1.razorpay_payment_id);
+              // alert(response1.razorpay_order_id);
+              // alert(response1.razorpay_signature)
+              startLoader()
+              axiosInstance.post('success_payment', {
+                "form_id": parseInt(f_id),
+                "order_amount": response?.data?.order_amount,
+                "signature": response1.razorpay_signature,
+                "order_id": response1.razorpay_order_id
+              }).then((response2) => {
+                endLoader()
+                if (response2?.status == 200) {
+                  alert(response2.data?.msg)
+                  getList()
+                } else {
+                  if (response2?.data?.is_logged_out) {
+                    localStorage.setItem("isLoggedIn", "false");
+                    location.href = "index.html";
+                  } else {
+                    $.notify({
+                      title: "",
+                      message: response2.data?.msg,
+                      icon: 'fa fa-times'
+                    }, {
+                      type: "danger",
+                    });
+                  }
+                }
+              }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                  title: "",
+                  message: `Something went wrong! Please try again.`,
+                  icon: 'fa fa-times'
+                }, {
+                  type: "danger"
+                });
+              })
             },
             "notes": {
               "address": "GST  Corporate Office"
             },
             "theme": {
-              "color": "#3399cc"
+              "color": "#193866"
             }
           };
           var rzp1 = new Razorpay(options);
           rzp1.on('payment.failed', function (response) {
-            alert(response.error.code);
+            // alert(response.error.code);
             alert(response.error.description);
-            alert(response.error.source);
-            alert(response.error.step);
-            alert(response.error.reason);
-            alert(response.error.metadata.order_id);
-            alert(response.error.metadata.payment_id);
+            // alert(response.error.source);
+            // alert(response.error.step);
+            // alert(response.error.reason);
+            // alert(response.error.metadata.order_id);
+            // alert(response.error.metadata.payment_id);
           });
           rzp1.open();
         } else {
