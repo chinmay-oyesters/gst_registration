@@ -90,11 +90,6 @@
                         <div class="input-field">
                             <i class="fa fa-file-text" aria-hidden="true"></i>
                             <select name="" id="reg_form" style="border:none;background: none;outline: none;">
-                                <option value=""><span style="color:gray;">-- Select Form --</span></option>
-                                <option value="GST">GST</option>
-                                <option value="IEC">IEC</option>
-                                <option value="PAN">PAN</option>
-                                <option value="Udhyam Registration">Udhyam Registration</option>
                             </select>
                         </div>
                     </div>
@@ -180,6 +175,50 @@
             container.classList.remove("sign-up-mode");
             document.getElementById("auth_logo").classList.remove("sign-up-mode");
         });
+        window.onload = function () {
+            getList()
+        }
+        function getList() {
+            startLoader()
+            axiosInstance.get('register_for').then((response) => {
+                endLoader()
+                if (response.status === 200) {
+                    let dataSet = response?.data?.form_dropdown
+                    console.log(dataSet)
+                    let cards_container = document.getElementById('reg_form')
+                    cards_container.innerHTML = '<option value=""><span style="color:gray;">-- Select Form --</span></option>';
+                    for (let i = 0; i < dataSet.length; i++) {
+                        const element = dataSet[i];
+                        cards_container.innerHTML = cards_container.innerHTML +
+                            `<option value='${element?.form_id}'>${element?.form_name}</option>`
+                    }
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+                console.log(response)
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
         function handleSignUp() {
             startLoader()
             let entity_name = document.getElementById('sign_up_entity_name')
@@ -189,6 +228,7 @@
             let name = document.getElementById('sign_up_name')
             let email = document.getElementById('sign_up_email')
             let mobile = document.getElementById('sign_up_mobile')
+            let reg_form = document.getElementById('reg_form')
             let password = document.getElementById('sign_up_password')
             let confirm_password = document.getElementById('sign_up_confirm_password')
             if (entity_name.value == "" || entity_email.value == "" || entity_pan.value == "" || entity_mobile.value == "" || name.value == "" || email.value == "" || mobile.value == "" || password.value == "" || confirm_password.value == "") {
@@ -268,6 +308,19 @@
                 endLoader();
                 return
             }
+            if (reg_form.value == "") {
+                $.notify({
+                    title: "",
+                    message: `Please select registration from.`,
+                    icon: 'fa fa-times'
+
+                }, {
+                    type: "danger",
+
+                });
+                endLoader();
+                return
+            }
             axiosInstance.post('user_signup', {
                 "user_password": password.value,
                 "user_fullname": name.value,
@@ -276,7 +329,8 @@
                 "entity_pan": entity_pan.value,
                 "entity_fullname": entity_name.value,
                 "entity_email": entity_email.value,
-                "entity_phonenumber": entity_mobile.value
+                "entity_phonenumber": entity_mobile.value,
+                "register_for": reg_form?.value
             }).then((response) => {
                 console.log(response)
                 endLoader()
