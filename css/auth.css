@@ -515,6 +515,8 @@ form.sign-in-form {
   border: 0 !important;
   max-width: 400px;
   color: #fff;
+  padding: 5px !important;
+  border-radius: 5px !important;
 }
 
 .notify-alert.alert-success {
@@ -534,6 +536,5 @@ form.sign-in-form {
 }
 
 .notify-alert button[data-notify="dismiss"] {
-  margin-left: 5px;
-  outline: none !important;
+  display: none !important;
 }
