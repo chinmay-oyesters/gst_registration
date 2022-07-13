@@ -20,21 +20,13 @@ if(auth($token)){
     $field_tag1 = $_POST['field_tag1'];
     $field_title = $_POST['field_title'];
     $field_type = $_POST['field_type'];
-    $field_associated_to = json_encode($_POST['field_associated_to']);
     $field_required = $_POST['field_required'];
     $datetime = date("Y-m-d H:i:s");
 
-    if(isset($_POST['field_values'])){
-        $field_values = json_encode($_POST['field_values']);
-    }else{
-        $field_values = NULL;
-    }
+    $field_values = isset($_POST['field_values']) ? json_encode($_POST['field_values']) : NULL;
+    $field_validation = isset($_POST['field_validation']) ? json_encode($_POST['field_validation']) : NULL;
+    $field_associated_to = isset($_POST['field_associated_to']) ? json_encode($_POST['field_associated_to']) : NULL;
 
-    if(isset($_POST['field_validation'])){
-        $field_validation = $_POST['field_validation'];
-    }else{
-        $field_validation = NULL;
-    }
 
     // looking for the max form field id in database
     // need to return id for new field that will be created
