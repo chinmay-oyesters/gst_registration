@@ -12,13 +12,13 @@ if(auth($token)){
 
     //fetch details from query parameter
     $user_id = $_POST['user_id'];
-    $entity_fullname = $_POST['entity_fullname'];
+    $entity_fullname = $_POST['entity_name'];
     $entity_pan = $_POST['entity_pan'];
     $entity_phonenumber = $_POST['entity_phonenumber'];
     $entity_email = $_POST['entity_email'];
-    $user_fullname = $_POST['user_fullname'];
-    $user_email = $_POST['user_email'];
-    $user_phonenumber = $_POST['user_phonenumber'];
+    $user_fullname = $_POST['person_name'];
+    $user_email = $_POST['person_email'];
+    $user_phonenumber = $_POST['person_phonenumber'];
 
     //fetch details from market
     $sql = "UPDATE user_table SET 

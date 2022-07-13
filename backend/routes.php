@@ -70,7 +70,7 @@ $router->endpoint('admin_fetch_payments', 'admin/admin_payments/admin_fetch_paym
 
 // users/customers
 $router->endpoint('fetch_customers', 'admin/users/customers/fetch_customers', ['GET'], FALSE, []);
-$router->endpoint('edit_customers', 'admin/users/customers/edit_customers', ['POST'], FALSE, []);
+$router->endpoint('edit_customers', 'admin/users/customers/edit_customers', ['POST'], FALSE, ['user_id', 'entity_name', 'entity_pan', 'entity_phonenumber', 'entity_email', 'person_name', 'person_email', 'person_phonenumber']);
 $router->endpoint('delete_customers', 'admin/users/customers/delete_customers', ['POST'], FALSE, ['user_id']);
 
 // add new staff
