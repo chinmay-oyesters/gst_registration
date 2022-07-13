@@ -22,6 +22,7 @@ if(auth($token)){
     $mail_body = $_POST['mail_body'];
     $mail_subject = $_POST['mail_subject'];
     $form_id = $_POST['form_id'];
+    $user_id = $_POST['user_id'];
     $datetime = date("Y-m-d H:i:s");
 
     $form_status = "Correct Discrepancy";
@@ -75,15 +76,17 @@ if(auth($token)){
                 $sql = "UPDATE user_subscription_details SET 
                 form_status = :form_status,
                 updated_at = :updated_at
-                WHERE form_id = :form_id";
+                WHERE form_id = :form_id
+                AND user_id = :user_id";
                 $query = $con->prepare($sql);
                 $query->bindParam(':form_status', $form_status, PDO::PARAM_STR);
                 $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
+                $query->bindParam(':user_id', $user_id, PDO::PARAM_STR);
                 $query->bindParam(':updated_at', $datetime, PDO::PARAM_STR);
                 if($query->execute()){
                     $status = 200;
                     $response = [
-                        "msg" => "Mail sent successfully"
+                        "msg" => "Mail sent successfully and form status updated"
                     ];			
                 }else{
                     $status = 203;

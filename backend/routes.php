@@ -112,7 +112,7 @@ $router->endpoint('fetch_full_form', 'admin/admin_forms/fetch_full_form', ['POST
 $router->endpoint('fetch_form_dependencies', 'admin/admin_forms/fetch_form_dependencies', ['POST'], FALSE, ['fetch_field']);
 $router->endpoint('preview_form', 'admin/admin_forms/preview_form', ['POST'], FALSE, ['form_fields']);
 $router->endpoint('fetch_simple_form', 'admin/admin_forms/fetch_simple_form', ['POST'], FALSE, ['form_id']);
-$router->endpoint('raise_discrepancy', 'admin/admin_forms/raise_discrepancy', ['POST'], FALSE, ['form_id', 'send_to', 'mail_body', 'mail_subject']);
+$router->endpoint('raise_discrepancy', 'admin/admin_forms/raise_discrepancy', ['POST'], FALSE, ['form_id', 'user_id', 'send_to', 'mail_body', 'mail_subject']);
 $router->endpoint('save_admin_response', 'admin/admin_forms/save_admin_response', ['POST'], FALSE, []);
 
 

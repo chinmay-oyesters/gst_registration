@@ -16,8 +16,9 @@ if(auth($token)){
     $role_id = $_POST['role_id'];
 
     //fetch details from market
-    $sql = "SELECT role_id, role_name, role_description, role_permissions FROM roles_table ORDER BY role_id DESC";
+    $sql = "SELECT admin_user_id FROM admin_user_table WHERE role_id = :role_id";
     $query = $con -> prepare($sql);
+    $query->bindparam("role_id", $role_id, PDO::PARAM_STR);
     $query->execute();
 
     if($query->rowCount() === 0){
