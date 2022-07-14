@@ -78,9 +78,9 @@ function authenticateAdmin() {
     document.getElementById("admin_role").innerText = admin_role;
   }
 }
-// baseURL: `/gst/backend/`,
+// baseURL: `/gst_registration/backend/`,
 const axiosInstance = axios.create({
-  baseURL: `/gst/backend/`,
+  baseURL: `/gst_registration/backend/`,
   credentials: "include",
   withCredentials: true,
 });

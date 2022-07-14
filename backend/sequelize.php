@@ -29,7 +29,7 @@ $database_tables = array(
         `purchase_form_name` VARCHAR(255) NOT NULL,
         `form_status` VARCHAR(255) NOT NULL,
         `form_progress` VARCHAR(255) NOT NULL,
-        `form_image` BLOB,
+        `form_image` LONGBLOB,
         `created_at` DATETIME,
         `updated_at` DATETIME,
         FOREIGN KEY (user_id) 
@@ -48,7 +48,7 @@ $database_tables = array(
         `form_name` VARCHAR(255) NOT NULL,
         `form_fields` VARCHAR(255) NOT NULL,
         `form_amount` VARCHAR(255) NOT NULL,
-        `form_image` BLOB,
+        `form_image` LONGBLOB,
         `created_at` DATETIME,
         `updated_at` DATETIME 
     )",

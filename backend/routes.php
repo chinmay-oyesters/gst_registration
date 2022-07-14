@@ -99,6 +99,7 @@ $router->endpoint('save_form', 'form/save_form', ['POST'], FALSE, ['form_values'
 $router->endpoint('fetch_dependencies', 'form/fetch_dependencies', ['POST'], FALSE, ['fetch_field']);
 
 //  Admin Form related routes
+$router->endpoint('add_form_image', 'admin/admin_forms/add_form_image', ['POST'], FALSE, []);
 $router->endpoint('fetch_admin_forms', 'admin/admin_forms/fetch_admin_forms', ['GET'], FALSE, []);
 $router->endpoint('fetch_admin_form_fields', 'admin/admin_forms/fetch_admin_form_fields', ['GET'], FALSE, []);
 $router->endpoint('delete_admin_form', 'admin/admin_forms/delete_admin_form', ['POST'], FALSE, ['form_id']);
