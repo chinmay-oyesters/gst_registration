@@ -75,6 +75,7 @@ $database_tables = array(
         `user_id` INT(255),
         `form_id` INT(255),
         `order_id` VARCHAR(255) NOT NULL,
+        `razorpay_payment_id` VARCHAR(255) NOT NULL,
         `signature` VARCHAR(255) NOT NULL,
         `order_amount` VARCHAR(255) NOT NULL,
         `created_at` DATETIME,

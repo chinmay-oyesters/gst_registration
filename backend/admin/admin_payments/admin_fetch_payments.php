@@ -11,7 +11,7 @@ $token = $_COOKIE["admin_jwt"];
 if(auth($token)){
     
     $sql = "SELECT ut.user_id, ut.user_fullname, ut.entity_fullname, ut.user_email, ut.user_phonenumber, 
-    pt.order_id, pt.payment_id, pt.order_amount, ft.form_name FROM user_table as ut
+    pt.order_id, pt.razorpay_payment_id, pt.order_amount, ft.form_name FROM user_table as ut
     LEFT JOIN payments_table as pt
     ON ut.user_id = pt.user_id
     LEFT JOIN form_table as ft

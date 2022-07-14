@@ -31,16 +31,18 @@ if(auth($token)){
     $form_id = $_POST['form_id'];
     $signature = $_POST['signature'];
     $order_amount = $_POST['order_amount'];
+    $razorpay_payment_id = $_POST['razorpay_payment_id'];
     $datetime = date("Y-m-d H:i:s");
 
-    $sql = "INSERT INTO payments_table (user_id, order_id, form_id, signature, order_amount, created_at, updated_at) VALUES 
-    (:user_id, :order_id, :form_id, :signature, :order_amount, :created_at, :updated_at)";
+    $sql = "INSERT INTO payments_table (user_id, order_id, form_id, signature, order_amount, razorpay_payment_id, created_at, updated_at) VALUES 
+    (:user_id, :order_id, :form_id, :signature, :order_amount, :razorpay_payment_id, :created_at, :updated_at)";
     $query = $con -> prepare($sql);
     $query->bindParam(':user_id', $user_id, PDO::PARAM_STR);
     $query->bindParam(':order_id', $order_id, PDO::PARAM_STR);
     $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
     $query->bindParam(':signature', $signature, PDO::PARAM_STR);
     $query->bindParam(':order_amount', $order_amount, PDO::PARAM_STR);
+    $query->bindParam(':razorpay_payment_id', $razorpay_payment_id, PDO::PARAM_STR);
     $query->bindparam(":created_at", $datetime, PDO::PARAM_STR);
     $query->bindparam(":updated_at", $datetime, PDO::PARAM_STR);
     

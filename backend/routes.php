@@ -46,7 +46,7 @@ $router->endpoint('fetch_user_dependencies', 'user/fetch_user_dependencies', ['P
 $router->endpoint('generate_order_id', 'user/user_payments/generate_order_id', ['POST'], FALSE, ['form_id']);
 
 // payment success route
-$router->endpoint('success_payment', 'user/user_payments/success_payment', ['POST'], FALSE, ['form_id', 'signature', 'order_amount', 'order_id']);
+$router->endpoint('success_payment', 'user/user_payments/success_payment', ['POST'], FALSE, ['form_id', 'signature', 'order_amount', 'order_id', 'razorpay_payment_id']);
 
 //payments
 $router->endpoint('user_fetch_payments', 'user/user_payments/user_fetch_payments', ['GET'], FALSE, []);

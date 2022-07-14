@@ -25,7 +25,7 @@ if(auth($token)){
     $payload = JWT::decode($token, new Key($SECRET_KEY, 'HS512'));
     
     
-    $sql = "SELECT ft.form_name, pt.order_id, pt.order_amount, pt.created_at FROM payments_table as pt 
+    $sql = "SELECT ft.form_name, pt.order_id, pt.razorpay_payment_id, pt.order_amount, pt.created_at FROM payments_table as pt 
     LEFT JOIN form_table as ft
     ON ft.form_id = pt.form_id
     WHERE user_id=:user_id
