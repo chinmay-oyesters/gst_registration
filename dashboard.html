@@ -162,7 +162,13 @@
               }).then((response2) => {
                 endLoader()
                 if (response2?.status == 200) {
-                  alert(response2.data?.msg)
+                  $.notify({
+                    title: "",
+                    message: `${response2.data?.msg}`,
+                    icon: 'fa fa-check'
+                  }, {
+                    type: "success"
+                  });
                   getList()
                 } else {
                   if (response2?.data?.is_logged_out) {

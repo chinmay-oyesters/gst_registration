@@ -299,6 +299,8 @@
                             }, {
                                 type: "success",
                             });
+                            document.getElementById("user_name").innerText = response?.data?.user_name;
+                            localStorage.setItem('user_name', response?.data?.user_name)
                             localStorage.setItem('user_image', respp?.data?.profile_image)
                             document.getElementById(
                                 "user_image"
