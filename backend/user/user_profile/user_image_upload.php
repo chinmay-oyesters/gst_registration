@@ -29,43 +29,35 @@ if(auth($token)){
     //Checking files specifcation
     //checking extension of file
     $temp = explode('.', $_FILES["choosefile"]["name"]);
-    $extn = strtolower(end($temp));
-    if(($extn == "jpg") || ($extn == "png") ) {
-        // Filetype is correct. Check size
-        if($_FILES["choosefile"]["size"] < 2000000) {
-            //extracting data from uploaded file
-            $filename = $_FILES["choosefile"]["name"];
-            $tempname = $_FILES["choosefile"]["tmp_name"];
-            $image = base64_encode(file_get_contents($tempname));
-        
-        
-            // query to insert the submitted data
-            $sql = "UPDATE user_table SET profile_image = :profile_image WHERE user_id = :user_id";
-            $query = $con -> prepare($sql);
-            $query->bindParam(':user_id', $payload->user_id, PDO::PARAM_STR);
-            $query->bindParam(':profile_image', $image, PDO::PARAM_LOB);
-            if($query->execute()){
-                $status = 200;
-                $response = [
-                    "msg" => "Image Uploaded Succesfully",
-                    "profile_image" => $image
-                ];
-            }else{
-                $status = 203;
-                $response = [
-                    "msg" => "Image can't be saved to database"
-                ];
-            }
-        }else{
-            $status  = 203;
+    // Filetype is correct. Check size
+    if($_FILES["choosefile"]["size"] < 2000000) {
+        //extracting data from uploaded file
+        $filename = $_FILES["choosefile"]["name"];
+        $tempname = $_FILES["choosefile"]["tmp_name"];
+        $image = base64_encode(file_get_contents($tempname));
+    
+    
+        // query to insert the submitted data
+        $sql = "UPDATE user_table SET profile_image = :profile_image WHERE user_id = :user_id";
+        $query = $con -> prepare($sql);
+        $query->bindParam(':user_id', $payload->user_id, PDO::PARAM_STR);
+        $query->bindParam(':profile_image', $image, PDO::PARAM_LOB);
+        if($query->execute()){
+            $status = 200;
             $response = [
-                "msg" => "Reduce file size to 2 MB."
+                "msg" => "Image Uploaded Succesfully",
+                "profile_image" => $image
+            ];
+        }else{
+            $status = 203;
+            $response = [
+                "msg" => "Image can't be saved to database"
             ];
         }
     }else{
-        $status = 203;
+        $status  = 203;
         $response = [
-            "msg" => "File is not in specified format."
+            "msg" => "Reduce file size to 2 MB."
         ];
     }
 }
