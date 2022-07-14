@@ -91,7 +91,7 @@ $router->endpoint('delete_role', 'admin/roles/delete_role', ['POST'], FALSE, ['r
 // all endpoints specified for form related operations
 
 // creation of form
-$router->endpoint('add_form', 'form/add_form', ['POST'], FALSE, ['form_name', 'form_fields']);
+$router->endpoint('add_form', 'form/add_form', ['POST'], FALSE, ['form_name', 'form_fields', 'form_amount']);
 // creation of form fields
 $router->endpoint('add_field', 'form/add_field', ['POST'], FALSE, []);
 // fetch form

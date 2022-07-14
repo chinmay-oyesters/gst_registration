@@ -18,6 +18,7 @@ if(auth($token)){
 
     // retrieve required variables
     $form_name = $_POST['form_name'];
+    $form_amount = $_POST['form_amount'];
     $form_fields = json_encode($_POST['form_fields']);
     $datetime = date("Y-m-d H:i:s");
 
@@ -38,13 +39,15 @@ if(auth($token)){
     $form_id += 1;
 
     // query to add a new form field in the table
-    $sql = "INSERT INTO form_table (form_id, form_name, form_fields, created_at, updated_at) VALUES (:form_id, :form_name, :form_fields, :created_at, :updated_at)";
+    $sql = "INSERT INTO form_table (form_id, form_name, form_amount,  form_fields, created_at, updated_at) VALUES 
+    (:form_id, :form_name, :form_amount, :form_fields, :created_at, :updated_at)";
     $query = $con -> prepare($sql);
 
     // binding the parameters to the sql query in order to insert new data
     $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
     $query->bindParam(':form_name', $form_name, PDO::PARAM_STR);
     $query->bindParam(':form_fields', $form_fields, PDO::PARAM_STR);
+    $query->bindParam(':form_amount', $form_amount, PDO::PARAM_STR);
     $query->bindparam(":created_at", $datetime, PDO::PARAM_STR);
     $query->bindparam(":updated_at", $datetime, PDO::PARAM_STR);
 
@@ -57,7 +60,8 @@ if(auth($token)){
             "msg" => "Form created successfully",
             "form" => [
                 "form_id" => $form_id,
-                "form_name" => $form_name
+                "form_name" => $form_name,
+                "form_amount" => $form_amount
             ]
         ];
     }
