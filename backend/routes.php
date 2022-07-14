@@ -30,9 +30,6 @@ $router->endpoint('save_user_response', 'user/save_user_response', ['POST'], FAL
 // upload response image
 $router->endpoint('upload_response_image', 'user/upload_response_image', ['POST'], FALSE, []);
 
-// upload response image
-// $router->endpoint('sample', 'user/sample', ['POST'], FALSE, []);
-
 // fetch user response
 $router->endpoint('fetch_user_response', 'user/fetch_user_response', ['POST'], FALSE, ['form_id']);
 
@@ -117,6 +114,7 @@ $router->endpoint('preview_form', 'admin/admin_forms/preview_form', ['POST'], FA
 $router->endpoint('fetch_simple_form', 'admin/admin_forms/fetch_simple_form', ['POST'], FALSE, ['form_id']);
 $router->endpoint('raise_discrepancy', 'admin/admin_forms/raise_discrepancy', ['POST'], FALSE, ['form_id', 'user_id', 'send_to', 'mail_body', 'mail_subject']);
 $router->endpoint('save_admin_response', 'admin/admin_forms/save_admin_response', ['POST'], FALSE, []);
+$router->endpoint('in_process_form', 'admin/admin_forms/in_process_form', ['POST'], FALSE, ['form_id', 'user_id']);
 
 
 // Integrations route
