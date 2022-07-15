@@ -249,7 +249,8 @@
                                         type: "danger",
                                     });
                                 } else {
-                                    location.href = `form-response.html?id=${form_id}&ref=${nowD?.user_id}&type=${form_name}`
+                                    location.href = `form-response.html?id=${form_id}&ref=${nowD?.user_id}&type=${form_name}&email=${nowD?.user_email}`
+
                                 }
                             });
                         }, 200);
@@ -305,6 +306,7 @@
                 endLoader()
                 return
             }
+            $('#edit_modal').modal('hide');
             axiosInstance.post('raise_discrepancy', {
                 "form_id": form_id,
                 "send_to": sendTo,
@@ -321,7 +323,9 @@
                     }, {
                         type: "success",
                     });
-                    $('#edit_modal').modal('hide');
+                    document.getElementById('edit_send_to').value = ""
+                    document.getElementById('edit_subject').value = ""
+                    document.getElementById('edit_body').value = ""
                 } else {
                     if (response?.data?.is_logged_out) {
                         localStorage.setItem("isAdminLoggedIn", "false");
