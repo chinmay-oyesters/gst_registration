@@ -92,7 +92,19 @@
     <main class="app-content">
 
         <div class="tile p-5">
-            <h3 class="tile-title" id="form_title"></h3>
+            <div class="d-flex justify-content-between align-items-center ">
+                <h3 class="tile-title" id="form_title"></h3>
+                <div>
+                    <div class="d-flex">
+                        <button class="btn-sm btn-success mr-1" onclick="approveRow()" type="button"><i
+                                class="fa fa-check cp" aria-hidden="true"></i>&nbsp;Approve</button>
+                        <button class="btn-sm btn-info mr-1" type="button" onclick="setEditForm()"><i
+                                class="fa fa-hand-paper-o cp" aria-hidden="true"></i>&nbsp;Raise
+                            Discrepency</button><button onclick="deleteRow()" class="btn-sm btn-danger" type="button"><i
+                                class="fa fa-trash cp" aria-hidden="true"></i>&nbsp;Delete</button>
+                    </div>
+                </div>
+            </div>
             <div class="tile-body">
                 <form id="form_container">
 
@@ -104,6 +116,49 @@
             </div>
         </div>
     </main>
+    <!-- rais Discrepency -->
+    <div class="modal fade" id="edit_modal" role="dialog">
+        <div class="modal-dialog  modal-dialog-centered ">
+
+            <!-- Modal content-->
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Raise Descripency<br />
+                        <p style="text-align:left; font-size:13px;font-weight:500;">
+                        <p>
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="uploadPreAssessmentId">
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Send To</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" placeholder="-" id="edit_send_to" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Subject</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" placeholder="-" id="edit_subject">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Body</label>
+                            <div class="col-md-8">
+                                <textarea class="form-control" rows="3" id="edit_body"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer " style="justify-content: center;margin-top:20px;">
+                            <button class="btn btn-success" type="button" id="edit_save_btn">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
     <!-- Essential javascripts for application to work-->
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/popper.min.js"></script>
@@ -125,6 +180,7 @@
         let form_id = null
         let form_name = null
         let user_ref = null
+        let user_email = null
         window.onload = function () {
             if (getUrlVars()["id"]) {
                 if (getUrlVars()["ref"]) {
@@ -132,12 +188,16 @@
                     user_ref = getUrlVars()["ref"]
                     form_name = decodeURI(getUrlVars()["type"])
                     document.getElementById('form_title').innerHTML = `${form_name} Form`
-                    getList(form_id, user_ref);
+                    if (getUrlVars()["email"]) {
+                        user_email = getUrlVars()["email"]
+                        getList(form_id, user_ref);
+                    } else location.href = 'forms.html'
+
                 } else {
-                    location.href = 'dashboard.html'
+                    location.href = 'forms.html'
                 }
             } else {
-                location.href = 'dashboard.html'
+                location.href = 'forms.html'
             }
         }
         function getList(ids, usrid) {
@@ -353,6 +413,200 @@
                     } else nowInput.value = res.answer
                 }
             })
+        }
+
+
+
+
+        // NOTE:
+        // START:
+        //  raise descripency , approve , delete
+        function setEditForm() {
+            $('#edit_modal').modal('show');
+            if (user_email) {
+                document.getElementById('edit_send_to').value = user_email
+                document.getElementById('edit_save_btn').setAttribute("onClick", `raisDiscrepency()`);
+            }
+        }
+        function raisDiscrepency() {
+            startLoader()
+            let sendTo = document.getElementById('edit_send_to').value
+            let subject = document.getElementById('edit_subject').value
+            let body_now = document.getElementById('edit_body').value
+            if (subject == "" || body_now == "") {
+                $.notify({
+                    title: "",
+                    message: `Please enter all fields.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+                endLoader()
+                return
+            }
+            $('#edit_modal').modal('hide');
+            axiosInstance.post('raise_discrepancy', {
+                "form_id": form_id,
+                "send_to": sendTo,
+                "mail_body": body_now,
+                "mail_subject": subject,
+                "user_id": user_ref
+            }).then((response) => {
+                endLoader()
+                if (response.status === 200) {
+                    $.notify({
+                        title: "",
+                        message: response.data?.msg,
+                        icon: 'fa fa-check'
+                    }, {
+                        type: "success",
+                    });
+                    document.getElementById('edit_send_to').value = ""
+                    document.getElementById('edit_subject').value = ""
+                    document.getElementById('edit_body').value = ""
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isAdminLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
+        function approveRow() {
+            swal({
+                title: "Are you sure?",
+                text: "You want to approve this!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Approve it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: true,
+                closeOnCancel: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    startLoader()
+                    axiosInstance.post('approve_form', {
+                        "form_id": parseInt(form_id),
+                        "user_id": parseInt(user_ref)
+                    }).then((response) => {
+                        endLoader()
+                        if (response.status === 200) {
+                            $.notify({
+                                title: "",
+                                message: response.data?.msg,
+                                icon: 'fa fa-check'
+                            }, {
+                                type: "success",
+                            });
+                            setTimeout(() => {
+                                location.href = `forms-table.html?id=${form_id}&type=${form_name}`
+                            }, 1500);
+                        } else {
+                            if (response?.data?.is_logged_out) {
+                                localStorage.setItem("isAdminLoggedIn", "false");
+                                location.href = "index.html";
+                            } else {
+                                $.notify({
+                                    title: "",
+                                    message: response.data?.msg,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
+                            }
+                        }
+                    }, (error) => {
+                        console.log('error', error);
+                        endLoader()
+                        $.notify({
+                            title: "",
+                            message: `Something went wrong! Please try again.`,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger"
+                        });
+                    })
+                } else {
+                    swal("Cancelled", "", "error");
+                }
+            });
+        }
+        function deleteRow() {
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: true,
+                closeOnCancel: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    startLoader()
+                    axiosInstance.post('delete_form', {
+                        "form_id": parseInt(form_id),
+                        "user_id": parseInt(user_ref)
+                    }).then((response) => {
+                        endLoader()
+                        if (response.status === 200) {
+                            $.notify({
+                                title: "",
+                                message: response.data?.msg,
+                                icon: 'fa fa-check'
+                            }, {
+                                type: "success",
+                            });
+                            setTimeout(() => {
+                                location.href = `forms-table.html?id=${form_id}&type=${form_name}`
+                            }, 1000);
+                        } else {
+                            if (response?.data?.is_logged_out) {
+                                localStorage.setItem("isAdminLoggedIn", "false");
+                                location.href = "index.html";
+                            } else {
+                                $.notify({
+                                    title: "",
+                                    message: response.data?.msg,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
+                            }
+                        }
+                    }, (error) => {
+                        console.log('error', error);
+                        endLoader()
+                        $.notify({
+                            title: "",
+                            message: `Something went wrong! Please try again.`,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger"
+                        });
+                    })
+                } else {
+                    swal("Cancelled", "Your data is safe.", "error");
+                }
+            });
         }
     </script>
 </body>

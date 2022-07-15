@@ -452,11 +452,11 @@
   top: 15px;
   color: white;
   font-size: 20px;
-  -webkit-box-shadow: 0px 3px 45px 0px rgba(0, 0, 0, 0.75);
-          box-shadow: 0px 3px 45px 0px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 0px 13px 25px 0px rgba(0, 0, 0, 0.75);
+          box-shadow: 0px 13px 25px 0px rgba(0, 0, 0, 0.75);
   border-radius: 8px;
-  height: 20px;
-  padding: 0 3px;
+  height: 40px;
+  padding: 5px;
   text-align: center;
   display: none;
 }

@@ -12,9 +12,18 @@
     <!-- Font-icon css-->
     <link rel="stylesheet" type="text/css"
         href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 
 <body class="app sidebar-mini">
+    <!-- NOTE: START: -->
+    <!-- loader -->
+    <div class="overlay"></div>
+    <div class="spanner">
+        <div class="loader"></div>
+    </div>
+    <!-- END: -->
     <!-- Navbar-->
     <header class="app-header"><a class="app-header__logo" href="index.html">GST - ®️</a>
         <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
@@ -26,7 +35,8 @@
                     aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
                 <ul class="dropdown-menu settings-menu dropdown-menu-right">
                     <li><a class="dropdown-item" href="profile.html"><i class="fa fa-user fa-lg"></i> Profile</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="userSignOut()"><i class="fa fa-sign-out fa-lg"></i> Logout</a>
+                    <li><a class="dropdown-item" href="#" onclick="userSignOut()"><i class="fa fa-sign-out fa-lg"></i>
+                            Logout</a>
                     </li>
                 </ul>
             </li>
@@ -51,19 +61,15 @@
     </aside>
     <main class="app-content">
         <div class="tile">
-            <div class="tile-title">
-                <h4>Payments</h4>
-            </div>
             <div class="tile-body">
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered" id="sampleTable">
                         <thead>
                             <tr>
                                 <th>Transaction Id</th>
+                                <th>Date</th>
+                                <th>Form Name</th>
                                 <th>Amount</th>
-                                <th>Description</th>
-                                <th>Status</th>
-                                <th>Date and Time</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -80,6 +86,82 @@
     <script src="js/main.js"></script>
     <script src="js/plugins/pace.min.js"></script>
     <script type="text/javascript" src="js/plugins/chart.js"></script>
+
+    <script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/plugins/bootstrap-notify.min.js"></script>
+    <script type="text/javascript" src="js/plugins/sweetalert.min.js"></script>
+    <script type="text/javascript">$('#sampleTable').DataTable();</script>
+    <script src="js/globalFunction.js"></script>
+    <script>
+        authenticate()
+        window.onload = function () {
+            getList()
+        }
+        function getList() {
+            startLoader()
+            axiosInstance.get('user_fetch_payments').then((response) => {
+                endLoader()
+                console.log(response)
+                if (response.status === 200) {
+                    let dataSet = response.data?.user_payments
+                    list = dataSet
+                    $(document).ready(function () {
+                        $('#sampleTable').DataTable().destroy();
+                        $('#sampleTable').DataTable({
+                            data: dataSet,
+                            columns: [
+                                {
+                                    data: 'razorpay_payment_id',
+                                },
+                                {
+                                    data: 'created_at',
+
+                                    render: function (data) {
+                                        return `<p>${convertDateAndTime(data)}</p>`;
+                                    },
+                                },
+                                {
+                                    data: 'form_name',
+                                },
+                                {
+                                    data: 'order_amount',
+
+                                    render: function (data) {
+                                        return `<p>₹&nbsp;${data}</p>`;
+                                    },
+                                }
+                            ],
+                            order: []
+                        });
+                    });
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
+    </script>
 </body>
 
 </html>

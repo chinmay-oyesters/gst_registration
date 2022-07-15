@@ -80,7 +80,7 @@ function authenticateAdmin() {
 }
 // baseURL: `/gst_registration/backend/`,
 const axiosInstance = axios.create({
-  baseURL: `/gst_registration/backend/`,
+  baseURL: `/gst/backend/`,
   credentials: "include",
   withCredentials: true,
 });
@@ -629,4 +629,58 @@ function downloadBase64(base64URL) {
   a.href = "data:image/png;base64," + base64URL; //Image Base64 Goes here
   a.download = "Image.png"; //File name Here
   a.click(); //Downloaded file
+}
+
+const getDateInWord = (month) => {
+  switch (month) {
+    case 1:
+      return "Jan";
+      break;
+    case 2:
+      return "Feb";
+      break;
+    case 3:
+      return "Mar";
+      break;
+    case 4:
+      return "Apr";
+      break;
+    case 5:
+      return "May";
+      break;
+    case 6:
+      return "Jun";
+      break;
+    case 7:
+      return "Jul";
+      break;
+    case 8:
+      return "Aug";
+      break;
+    case 9:
+      return "Sep";
+      break;
+    case 10:
+      return "Oct";
+      break;
+    case 11:
+      return "Nov";
+    case 12:
+      return "Dec";
+    default:
+      break;
+  }
+};
+
+function convertDateAndTime(stamp) {
+  let day_now = new Date(stamp).getDate();
+  let month_now = new Date(stamp).getMonth();
+  let month_in_word = getDateInWord(month_now + 1);
+  let time_now = new Date(stamp).toLocaleTimeString("IST", {
+    timeZone: "IST",
+    hour12: true,
+    hour: "numeric",
+    minute: "numeric",
+  });
+  return `${day_now} ${month_in_word}, ${time_now}`;
 }
