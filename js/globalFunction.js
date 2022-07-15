@@ -80,7 +80,7 @@ function authenticateAdmin() {
 }
 // baseURL: `/gst_registration/backend/`,
 const axiosInstance = axios.create({
-  baseURL: `/gst_registration/backend/`,
+  baseURL: `/gst/backend/`,
   credentials: "include",
   withCredentials: true,
 });
