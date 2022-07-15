@@ -58,8 +58,6 @@ if(auth($token)){
 
         $integration_id = $query->fetchAll(PDO::FETCH_ASSOC)[0]['integration_id'];
 
-        print_r($integration_id);
-
         $sql = "UPDATE integrations_table SET 
         sender_name = :sender_name, 
         send_from  = :send_from, 
