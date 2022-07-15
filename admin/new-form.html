@@ -102,6 +102,13 @@
                             <input class="form-control" type="text" placeholder="-" id="name">
                         </div>
                     </div>
+                    <div class="form-group row mt-4">
+                        <label class="control-label col-md-3">Form Amount</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="text"
+                                oninput="this.value=this.value.replace(/[^0-9]/g,'');" placeholder="-" id="amount">
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="control-label col-md-3">Form Image</label>
                         <div class="col-md-8">
@@ -274,10 +281,22 @@
         function submitForm() {
             startLoader()
             let name = document.getElementById('name').value
+            let amount = document.getElementById('amount').value
             if (name == "") {
                 $.notify({
                     title: "",
                     message: `Plese enter a name.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+                endLoader()
+                return
+            }
+            if (amount == "") {
+                $.notify({
+                    title: "",
+                    message: `Plese enter form subscription amount.`,
                     icon: 'fa fa-times'
                 }, {
                     type: "danger"
@@ -302,7 +321,8 @@
             });
             axiosInstance.post('add_form', {
                 "form_name": name,
-                "form_fields": nowSelectedFields
+                "form_fields": nowSelectedFields,
+                "form_amount": amount
             }).then((response) => {
                 endLoader()
                 if (response.status === 200) {
