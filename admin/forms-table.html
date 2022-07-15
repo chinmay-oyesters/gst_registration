@@ -126,7 +126,7 @@
 
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Rais Discrepency<br />
+                    <h4 class="modal-title">Raise Descripency<br />
                         <p style="text-align:left; font-size:13px;font-weight:500;">
                         <p>
                     </h4>
@@ -289,7 +289,7 @@
                 document.getElementById('edit_save_btn').setAttribute("onClick", `raisDiscrepency(${g_id})`);
             }
         }
-        function raisDiscrepency() {
+        function raisDiscrepency(g_id) {
             startLoader()
             let sendTo = document.getElementById('edit_send_to').value
             let subject = document.getElementById('edit_subject').value
@@ -309,7 +309,8 @@
                 "form_id": form_id,
                 "send_to": sendTo,
                 "mail_body": body_now,
-                "mail_subject": subject
+                "mail_subject": subject,
+                "user_id": g_id
             }).then((response) => {
                 endLoader()
                 if (response.status === 200) {
