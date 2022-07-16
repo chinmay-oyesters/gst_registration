@@ -98,6 +98,8 @@
                     <div class="d-flex">
                         <button class="btn-sm btn-success mr-1" onclick="approveRow()" type="button"><i
                                 class="fa fa-check cp" aria-hidden="true"></i>&nbsp;Approve</button>
+                        <button class="btn-sm btn-warning mr-1" onclick="changeStatus()" type="button"><i
+                                class="fa fa-check cp" aria-hidden="true"></i>&nbsp;Change Status</button>
                         <button class="btn-sm btn-info mr-1" type="button" onclick="setEditForm()"><i
                                 class="fa fa-hand-paper-o cp" aria-hidden="true"></i>&nbsp;Raise
                             Discrepency</button><button onclick="deleteRow()" class="btn-sm btn-danger" type="button"><i
@@ -519,6 +521,62 @@
                             setTimeout(() => {
                                 location.href = `forms-table.html?id=${form_id}&type=${form_name}`
                             }, 1500);
+                        } else {
+                            if (response?.data?.is_logged_out) {
+                                localStorage.setItem("isAdminLoggedIn", "false");
+                                location.href = "index.html";
+                            } else {
+                                $.notify({
+                                    title: "",
+                                    message: response.data?.msg,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
+                            }
+                        }
+                    }, (error) => {
+                        console.log('error', error);
+                        endLoader()
+                        $.notify({
+                            title: "",
+                            message: `Something went wrong! Please try again.`,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger"
+                        });
+                    })
+                } else {
+                    swal("Cancelled", "", "error");
+                }
+            });
+        }
+        function changeStatus() {
+            swal({
+                title: "Are you sure?",
+                text: "Change status to “In-Process at concern Department”!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Change it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: true,
+                closeOnCancel: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    startLoader()
+                    axiosInstance.post('in_process_form', {
+                        "form_id": parseInt(form_id),
+                        "user_id": parseInt(user_ref)
+                    }).then((response) => {
+                        endLoader()
+                        if (response.status === 200) {
+                            $.notify({
+                                title: "",
+                                message: response.data?.msg,
+                                icon: 'fa fa-check'
+                            }, {
+                                type: "success",
+                            });
                         } else {
                             if (response?.data?.is_logged_out) {
                                 localStorage.setItem("isAdminLoggedIn", "false");
