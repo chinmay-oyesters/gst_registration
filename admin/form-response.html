@@ -98,6 +98,8 @@
                     <div class="d-flex">
                         <button class="btn-sm btn-success mr-1" onclick="approveRow()" type="button"><i
                                 class="fa fa-check cp" aria-hidden="true"></i>&nbsp;Approve</button>
+                        <button class="btn-sm btn-warning mr-1" onclick="changeStatus()" type="button"><i
+                                class="fa fa-check cp" aria-hidden="true"></i>&nbsp;Change Status</button>
                         <button class="btn-sm btn-info mr-1" type="button" onclick="setEditForm()"><i
                                 class="fa fa-hand-paper-o cp" aria-hidden="true"></i>&nbsp;Raise
                             Discrepency</button><button onclick="deleteRow()" class="btn-sm btn-danger" type="button"><i
@@ -111,8 +113,8 @@
                 </form>
             </div>
             <div class="tile-footer">
-                <!-- <button onclick="submitForm()" class="btn btn-primary" type="button"><i
-                        class="fa fa-fw fa-lg fa-check-circle"></i>Save</button> -->
+                <button type="button" onclick="submitForm()" class="btn btn-success"><i class="fa fa-floppy-o"
+                        aria-hidden="true"></i>&nbsp;&nbsp;Save</button>
             </div>
         </div>
     </main>
@@ -414,7 +416,172 @@
                 }
             })
         }
+        async function submitForm() {
+            let validateFirst = validateAllFields(fetchedFields)
+            if (!validateFirst) {
+                return
+            }
+            console.log(fieldsAssociate)
+            let validateSecond = validateAllFields(fieldsAssociate)
+            if (!validateSecond) {
+                return
+            }
+            let dataList = []
+            for (const element of fetchedFields) {
+                if (element?.field_type == "Text" || element?.field_type == "Dropdown" || element?.field_type == "Date" || element?.field_type == "Toggle") {
+                    let nowValue = null
+                    if (element?.field_type == "Toggle") nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).checked
+                    else nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).value
+                    dataList?.push({
+                        "form_id": form_id,
+                        "field_id": element?.field_id,
+                        "field_frontend_id": `${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`,
+                        "form_response_answer": `${nowValue}`
+                    })
+                }
+                if (element?.field_type == "Multi-Select") {
+                    let nowValue = $(`#${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).val()
+                    let nowValueList = []
+                    nowValue?.forEach(nv => {
+                        let nowValLI = nv?.split(',');
+                        nowValueList?.push(nowValLI[0])
+                    })
+                    dataList?.push({
+                        "form_id": form_id,
+                        "field_id": element?.field_id,
+                        "field_frontend_id": `${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`,
+                        "form_response_answer": `${nowValueList}`
+                    })
+                }
+                if (element?.field_type == "File") {
+                    let nowFile = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).files[0]
+                    console.log(nowFile)
+                    if (nowFile != undefined) {
+                        startLoader()
+                        var formData = new FormData();
+                        formData.append('choosefile', nowFile)
+                        let response = await axiosInstance.post(`upload_response_image?form_id=${form_id}&field_id=${element?.field_id}&field_frontend_id=${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`, formData)
+                        if (response.status === 200) {
+                        } else {
+                            if (response?.data?.is_logged_out) {
+                                localStorage.setItem("isLoggedIn", "false");
+                                location.href = "index.html";
+                            } else {
+                                $.notify({
+                                    title: "",
+                                    message: response.data?.msg,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            for (const element of fieldsAssociate) {
+                if (element?.field_type == "Text" || element?.field_type == "Date" || element?.field_type == "Dropdown" || element?.field_type == "Toggle") {
+                    let nowValue = null
+                    if (element?.field_type == "Toggle") nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).checked
+                    else nowValue = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).value
+                    dataList?.push({
+                        "form_id": form_id,
+                        "field_id": element?.field_id,
+                        "field_frontend_id": `${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`,
+                        "form_response_answer": `${nowValue}`
+                    })
+                }
+                if (element?.field_type == "Multi-Select") {
+                    let nowValue = $(`#${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).val()
+                    let nowValueList = []
+                    nowValue?.forEach(nv => {
+                        let nowValLI = nv?.split(',');
+                        nowValueList?.push(nowValLI[0])
+                    })
+                    dataList?.push({
+                        "form_id": form_id,
+                        "field_id": element?.field_id,
+                        "field_frontend_id": `${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`,
+                        "form_response_answer": `${nowValueList}`
+                    })
+                }
+                if (element?.field_type == "File") {
+                    let nowFile = document.getElementById(`${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`).files[0]
+                    console.log(nowFile)
+                    if (nowFile != undefined) {
+                        startLoader()
+                        var formData = new FormData();
+                        formData.append('choosefile', nowFile)
+                        let response = await axiosInstance.post(`upload_response_image?form_id=${form_id}&field_id=${element?.field_id}&field_frontend_id=${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`, formData)
+                        if (response.status === 200) {
+                        } else {
+                            if (response?.data?.is_logged_out) {
+                                localStorage.setItem("isLoggedIn", "false");
+                                location.href = "index.html";
+                            } else {
+                                $.notify({
+                                    title: "",
+                                    message: response.data?.msg,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            console.log(dataList)
+            dataList.map(o => {
+                o.user_id = user_ref;
+                return o;
+            });
+            if (dataList?.length != 0) {
+                startLoader()
+                axiosInstance.post('save_admin_response', {
+                    "response_list": dataList
+                }).then((response) => {
+                    endLoader()
+                    if (response.status === 200) {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-check'
+                        }, {
+                            type: "success",
+                        });
+                        location.href = 'forms.html'
+                    } else {
+                        if (response?.data?.is_logged_out) {
+                            localStorage.setItem("isLoggedIn", "false");
+                            location.href = "index.html";
+                        } else {
+                            $.notify({
+                                title: "",
+                                message: response.data?.msg,
+                                icon: 'fa fa-times'
+                            }, {
+                                type: "danger",
+                            });
+                        }
+                    }
+                }, (error) => {
+                    console.log('error', error);
+                    endLoader()
+                    $.notify({
+                        title: "",
+                        message: `Something went wrong! Please try again.`,
+                        icon: 'fa fa-times'
+                    }, {
+                        type: "danger"
+                    });
+                })
+            } else {
+                endLoader()
+                location.href = 'dashboard.html'
+            }
 
+        }
 
 
 
@@ -519,6 +686,62 @@
                             setTimeout(() => {
                                 location.href = `forms-table.html?id=${form_id}&type=${form_name}`
                             }, 1500);
+                        } else {
+                            if (response?.data?.is_logged_out) {
+                                localStorage.setItem("isAdminLoggedIn", "false");
+                                location.href = "index.html";
+                            } else {
+                                $.notify({
+                                    title: "",
+                                    message: response.data?.msg,
+                                    icon: 'fa fa-times'
+                                }, {
+                                    type: "danger",
+                                });
+                            }
+                        }
+                    }, (error) => {
+                        console.log('error', error);
+                        endLoader()
+                        $.notify({
+                            title: "",
+                            message: `Something went wrong! Please try again.`,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger"
+                        });
+                    })
+                } else {
+                    swal("Cancelled", "", "error");
+                }
+            });
+        }
+        function changeStatus() {
+            swal({
+                title: "Are you sure?",
+                text: "Change status to “In-Process at concern Department”!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Change it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: true,
+                closeOnCancel: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    startLoader()
+                    axiosInstance.post('in_process_form', {
+                        "form_id": parseInt(form_id),
+                        "user_id": parseInt(user_ref)
+                    }).then((response) => {
+                        endLoader()
+                        if (response.status === 200) {
+                            $.notify({
+                                title: "",
+                                message: response.data?.msg,
+                                icon: 'fa fa-check'
+                            }, {
+                                type: "success",
+                            });
                         } else {
                             if (response?.data?.is_logged_out) {
                                 localStorage.setItem("isAdminLoggedIn", "false");
