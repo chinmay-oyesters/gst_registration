@@ -158,7 +158,8 @@
                 "form_id": parseInt(f_id),
                 "order_amount": response?.data?.order_amount,
                 "signature": response1.razorpay_signature,
-                "order_id": response1.razorpay_order_id
+                "order_id": response1.razorpay_order_id,
+                "razorpay_payment_id": response1.razorpay_payment_id
               }).then((response2) => {
                 endLoader()
                 if (response2?.status == 200) {
