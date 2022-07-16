@@ -17,7 +17,7 @@ if(auth($token)){
     $form_id = $_POST['form_id'];
 
 
-    $sql = "SELECT form_id, form_name, form_image, form_fields FROM form_table WHERE form_id = :form_id";
+    $sql = "SELECT form_id, form_name, form_image, from_amount, form_fields FROM form_table WHERE form_id = :form_id";
     $query = $con -> prepare($sql);
     $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
 
