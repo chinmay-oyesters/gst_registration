@@ -177,6 +177,7 @@ if(auth($token)){
         FROM form_field_table WHERE form_field_id IN $form_fields
         ORDER BY FIND_IN_SET(form_field_id,'";
 
+        // to see the field results in the order as the fields are passes the last line find_in_set is added
         foreach($form_fields_given as $field){
             $sql = $sql.$field.",";
         }
