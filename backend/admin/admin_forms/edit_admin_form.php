@@ -22,6 +22,7 @@ if(auth($token)){
         // retrieve required variables
         $form_id = $_POST['form_id'];
         $form_name = $_POST['form_name'];
+        $form_amount = $_POST['form_amount'];
         $form_fields = json_encode($_POST['form_fields']);
         $datetime = date("Y-m-d H:i:s");
 
@@ -29,6 +30,7 @@ if(auth($token)){
         $sql = "UPDATE form_table SET  
         form_name =  :form_name,
         form_fields = :form_fields,
+        form_amount = :form_amount,
         updated_at = :updated_at
         WHERE form_id = :form_id";
         $query = $con -> prepare($sql);
@@ -37,6 +39,7 @@ if(auth($token)){
         $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
         $query->bindParam(':form_name', $form_name, PDO::PARAM_STR);
         $query->bindParam(':form_fields', $form_fields, PDO::PARAM_STR);
+        $query->bindParam(':form_amount', $form_amount, PDO::PARAM_STR);
         $query->bindparam(":updated_at", $datetime, PDO::PARAM_STR);
 
         // success
@@ -56,7 +59,12 @@ if(auth($token)){
             if($query->execute()){
                 $status = 200;
                 $response = [
-                    "msg" => "Form name and details edited successfully"
+                    "msg" => "Form name and details edited successfully",
+                    "form" => [
+                        "form_id" => $form_id,
+                        "form_amount" => $form_amount,
+                        "form_fields" => $form_fields
+                    ]
                 ];
             }else{
                 $status = 203;
@@ -79,11 +87,13 @@ if(auth($token)){
         // retrieve required variables
         $form_id = $_POST['form_id'];
         $form_fields = json_encode($_POST['form_fields']);
+        $form_amount = json_encode($_POST['form_amount']);
         $datetime = date("Y-m-d H:i:s");
 
         // query to edit the form field in the table
         $sql = "UPDATE form_table SET
         form_fields = :form_fields,
+        form_amount = :form_amount,
         updated_at = :updated_at
         WHERE form_id = :form_id";
         $query = $con -> prepare($sql);
@@ -91,6 +101,7 @@ if(auth($token)){
         // binding the parameters to the sql query in order to insert new data
         $query->bindParam(':form_id', $form_id, PDO::PARAM_STR);
         $query->bindParam(':form_fields', $form_fields, PDO::PARAM_STR);
+        $query->bindParam(':form_amount', $form_amount, PDO::PARAM_STR);
         $query->bindparam(":updated_at", $datetime, PDO::PARAM_STR);
 
 
@@ -101,6 +112,7 @@ if(auth($token)){
                 "msg" => "Form edited successfully",
                 "form" => [
                     "form_id" => $form_id,
+                    "form_amount" => $form_amount,
                     "form_fields" => $form_fields
                 ]
             ];

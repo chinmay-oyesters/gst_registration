@@ -158,7 +158,9 @@ if(auth($token)){
     }
 
 
-    
+
+    $form_fields_given = json_decode($form_fields);
+
     // get the form_fields array
     $form_fields = str_replace("[", "(", $form_fields);
     $form_fields = str_replace("]", ")", $form_fields);
@@ -172,7 +174,14 @@ if(auth($token)){
         form_field_values,
         form_field_associated_to,
         form_field_validation
-        FROM form_field_table WHERE form_field_id IN $form_fields";
+        FROM form_field_table WHERE form_field_id IN $form_fields
+        ORDER BY FIND_IN_SET(form_field_id,'";
+
+        foreach($form_fields_given as $field){
+            $sql = $sql.$field.",";
+        }
+        $sql[strlen($sql)-1] = "'";
+        $sql = $sql.")";
 
     $query = $con -> prepare($sql);
     $query->execute();
