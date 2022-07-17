@@ -284,12 +284,13 @@
             }
         }
         async function submitForm() {
-            let validateFirst = validateAllFields(fetchedFields)
+            console.log(fetchedFields)
+            let validateFirst = validateAllFields(fetchedFields,responseList)
             if (!validateFirst) {
                 return
             }
             console.log(fieldsAssociate)
-            let validateSecond = validateAllFields(fieldsAssociate)
+            let validateSecond = validateAllFields(fieldsAssociate,responseList)
             if (!validateSecond) {
                 return
             }

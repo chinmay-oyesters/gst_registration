@@ -243,7 +243,7 @@ function getUrlVars() {
 }
 
 //
-function validateAllFields(validateFieldList) {
+function validateAllFields(validateFieldList, responseList) {
   for (let i = 0; i < validateFieldList.length; i++) {
     const element = validateFieldList[i];
     if (element?.field_required) {
@@ -426,18 +426,27 @@ function validateAllFields(validateFieldList) {
               element?.field_parent_id || ""
             }`
           ).files[0];
-          if (FileValue == undefined) {
-            $.notify(
-              {
-                title: "",
-                message: `Please select ${element?.field_title.toLocaleLowerCase()}`,
-                icon: "fa fa-times",
-              },
-              {
-                type: "danger",
-              }
-            );
-            return false;
+          let filterFileResponse = responseList?.filter(
+            (rsl) =>
+              rsl?.field_frontend_id ==
+              `${element?.field_type}_${element?.field_id}${
+                element?.field_parent_id || ""
+              }`
+          );
+          if (filterFileResponse?.length == 0) {
+            if (FileValue == undefined) {
+              $.notify(
+                {
+                  title: "",
+                  message: `Please select ${element?.field_title.toLocaleLowerCase()}`,
+                  icon: "fa fa-times",
+                },
+                {
+                  type: "danger",
+                }
+              );
+              return false;
+            }
           }
           break;
         default:
