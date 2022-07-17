@@ -192,8 +192,46 @@
     <script src="../js/main.js"></script>
     <script src="../js/plugins/pace.min.js"></script>
     <script src="../js/globalFunction.js"></script>
+    <script type="text/javascript" src="../js/plugins/bootstrap-notify.min.js"></script>
+
     <script type="text/javascript">
         authenticateAdmin();
+        window.onload = function () {
+            getList()
+        }
+        function getList() {
+            startLoader()
+            axiosInstance.get('fetch_dashboard').then((response) => {
+                endLoader()
+                console.log(response)
+                if (response.status === 200) {
+                   
+                } else {
+                    if (response?.data?.is_logged_out) {
+                        localStorage.setItem("isAdminLoggedIn", "false");
+                        location.href = "index.html";
+                    } else {
+                        $.notify({
+                            title: "",
+                            message: response.data?.msg,
+                            icon: 'fa fa-times'
+                        }, {
+                            type: "danger",
+                        });
+                    }
+                }
+            }, (error) => {
+                console.log('error', error);
+                endLoader()
+                $.notify({
+                    title: "",
+                    message: `Something went wrong! Please try again.`,
+                    icon: 'fa fa-times'
+                }, {
+                    type: "danger"
+                });
+            })
+        }
     </script>
 </body>
 
