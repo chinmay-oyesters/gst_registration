@@ -327,7 +327,7 @@
                         startLoader()
                         var formData = new FormData();
                         formData.append('choosefile', nowFile)
-                        let response = await axiosInstance.post(`upload_response_image?form_id=${form_id}&field_id=${element?.field_id}&field_frontend_id=${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`, formData)
+                        let response = await axiosInstance.post(`upload_user_response_image?form_id=${form_id}&field_id=${element?.field_id}&field_frontend_id=${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`, formData)
                         if (response.status === 200) {
                         } else {
                             if (response?.data?.is_logged_out) {
@@ -379,7 +379,7 @@
                         startLoader()
                         var formData = new FormData();
                         formData.append('choosefile', nowFile)
-                        let response = await axiosInstance.post(`upload_response_image?form_id=${form_id}&field_id=${element?.field_id}&field_frontend_id=${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`, formData)
+                        let response = await axiosInstance.post(`upload_user_response_image?form_id=${form_id}&field_id=${element?.field_id}&field_frontend_id=${element?.field_type}_${element?.field_id}${element?.field_parent_id || ''}`, formData)
                         if (response.status === 200) {
                         } else {
                             if (response?.data?.is_logged_out) {

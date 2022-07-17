@@ -63,7 +63,6 @@ if(auth($token)){
             $api = new Api($razorpay_key, $razorpay_secret);
             $order_details = $api->order->create(array('amount' => $form_amount, 'currency' => 'INR'));
             
-            print_r($order_details);
 
             $status = 200;
             $response = [
