@@ -16,7 +16,7 @@ if(auth($token)){
     $user_id = $_POST['user_id'];
     $datetime = date("Y-m-d H:i:s");
 
-    $form_status = "In-Process at concern Department";
+    $form_status = "In Progress at concern department";
     
     $sql = "UPDATE user_subscription_details SET 
     form_status = :form_status,

@@ -124,3 +124,7 @@ $router->endpoint('upload_admin_response_image', 'admin/admin_forms/upload_admin
 $router->endpoint('fetch_integration_details', 'admin/settings/integrations/fetch_integration_details', ['GET'], FALSE, []);
 $router->endpoint('save_smtp_details', 'admin/settings/integrations/save_smtp_details', ['POST'], FALSE, ['send_from', 'sender_name', 'hostname', 'password', 'port']);
 $router->endpoint('save_razorpay_details', 'admin/settings/integrations/save_razorpay_details', ['POST'], FALSE, ['razorpay_key', 'razorpay_secret']);
+
+
+// dashboard route to get details for admin dashboard
+$router->endpoint('fetch_dashboard', 'admin/dashboard/fetch_dashboard', ['GET'], FALSE, []);
