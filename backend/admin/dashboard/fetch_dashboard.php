@@ -173,8 +173,11 @@ if(auth($token)){
 
         }
 
-        print_r($dashboard);
-        
+        $status = 200;
+        $response = [
+            "msg" => "Dashboard data fetched successfully",
+            "dashboard" => $dashboard
+        ];
 
     }else{
         $status = 203;
