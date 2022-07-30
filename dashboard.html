@@ -32,7 +32,11 @@
       aria-label="Hide Sidebar"></a>
     <!-- Navbar Right Menu-->
     <ul class="app-nav">
-      <li class="mr-2"><a class="app-nav__item" href="cart.html"><i class="fa fa-shopping-cart fa-lg"></i></a></li>
+      <li class="mr-2"><a class="app-nav__item position-relative" href="cart.html"><i class="fa fa-shopping-cart fa-lg"></i>
+        <span id="cart_count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+          0
+        </span>
+      </a></li>
       <!-- User Menu-->
       <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu"><i
             class="fa fa-user fa-lg"></i></a>
@@ -79,6 +83,7 @@
 
   <script>
     authenticate()
+    updateCartCount('true')
     let list = []
     window.onload = function () {
       getList()
@@ -254,9 +259,9 @@
           let cartArray = JSON.parse(cartData)
           let getForm = cartArray?.filter(ca => ca?.form_id == data)
           if (getForm?.length == 0) {
-            cartArray?.push
             cartArray?.push(formData[0])
             localStorage.setItem('cartData', JSON.stringify(cartArray))
+            updateCartCount(cartArray?.length)
             $.notify({
               title: "",
               message: `Form added to cart.`,

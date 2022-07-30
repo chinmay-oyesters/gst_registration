@@ -693,3 +693,20 @@ function convertDateAndTime(stamp) {
   });
   return `${day_now} ${month_in_word}, ${time_now}`;
 }
+
+function updateCartCount(c) {
+  if (c === "true") {
+    let cartData = localStorage.getItem("cartData");
+    if (cartData) {
+      let cartArray = JSON.parse(cartData);
+      cart_count.innerHTML = cartArray.length;
+    } else {
+      cart_count.innerHTML = 0;
+    }
+  } else {
+    let cart_count = document.getElementById("cart_count");
+    if (cart_count) {
+      cart_count.innerHTML = c;
+    }
+  }
+}
