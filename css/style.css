@@ -533,12 +533,26 @@
   padding: 20px 0;
 }
 
-.cart_item img {
-  height: 100px;
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
+.cart_item .form_card {
+  background-color: red;
   border-radius: 10px;
+  height: 100px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 25%;
+}
+
+.cart_item .form_card img {
+  height: 40px;
+  border-radius: 50%;
+  width: 40px;
 }
 
 .cart_item button {

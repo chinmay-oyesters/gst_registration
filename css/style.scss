@@ -452,10 +452,19 @@ $danger: #dc3545;
 /////////////////////////////////////////////////
 .cart_item{
   padding: 20px 0;
-  img{
-    height: 100px;
-    width: fit-content;
+  .form_card{
+    background-color: red;
     border-radius: 10px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25%;
+    img{
+      height: 40px;
+      border-radius: 50%;
+      width: 40px;
+    }
   }
   button{
     outline: none;
