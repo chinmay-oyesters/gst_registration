@@ -447,3 +447,21 @@ $danger: #dc3545;
     }
   }
 }
+///////////////////////////////////////////////////
+// /////////////////// cart   /////////////////
+/////////////////////////////////////////////////
+.cart_item{
+  padding: 20px 0;
+  img{
+    height: 100px;
+    width: fit-content;
+    border-radius: 10px;
+  }
+  button{
+    outline: none;
+    background: $default-bg-3;
+    color: white;
+    border-radius: 4px;
+    border: 1px solid white;
+  }
+}
