@@ -514,4 +514,18 @@
   border: 2px dotted gray;
   color: gray;
 }
+
+.permission_table {
+  width: 100%;
+  margin: 10px;
+}
+
+.permission_table tr {
+  border-bottom: 1px solid gray;
+}
+
+.permission_table tr td, .permission_table tr th {
+  padding: 10px;
+  text-align: center;
+}
 /*# sourceMappingURL=style.css.map */

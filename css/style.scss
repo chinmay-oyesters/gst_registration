@@ -433,3 +433,17 @@ $danger: #dc3545;
   border: 2px dotted gray;
   color: gray;
 }
+///////////////////////////////////////////////////
+// /////////////////// permission table  /////////////////
+/////////////////////////////////////////////////
+.permission_table {
+  width: 100%;
+  margin: 10px;
+  tr {
+    border-bottom: 1px solid gray;
+    td,th{
+      padding: 10px;
+      text-align: center;
+    }
+  }
+}
