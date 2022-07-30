@@ -19,7 +19,7 @@ if(auth($token)){
     $datetime = date("Y-m-d H:i:s");
 
     //array to string conversion of role permissions
-    $role_permissions = implode(",", $role_permissions);
+    $role_permissions = json_encode($role_permissions);
 
     $sql = "UPDATE roles_table SET 
     role_name = :role_name, 

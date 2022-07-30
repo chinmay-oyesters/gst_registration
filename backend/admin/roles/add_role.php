@@ -18,7 +18,7 @@ if(auth($token)){
     $datetime = date("Y-m-d H:i:s");
 
     //array to string conversion of role permissions
-    $role_permissions = implode(",", $role_permissions);
+    $role_permissions = json_encode($role_permissions);
 
     // print_r($role_permissions);
 

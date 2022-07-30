@@ -21,7 +21,7 @@ if(auth($token)){
         $roles_array = array();
 
         foreach ($roles as $role) {
-            $role->role_permissions = explode(",", $role->role_permissions);
+            $role->role_permissions = json_decode($role->role_permissions);
             array_push($roles_array,
                 [
                     "role_id" => $role->role_id,

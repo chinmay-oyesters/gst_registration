@@ -48,7 +48,8 @@ if(auth($token)){
             entity_phonenumber=:entity_phonenumber,
             entity_email = :entity_email,
             user_fullname = :user_fullname,
-            user_phonenumber = :user_phonenumber
+            user_phonenumber = :user_phonenumber, 
+            updated_at = :updated_at
             WHERE user_id=:user_id";
         $query = $con -> prepare($sql);
         $query->bindParam(':entity_fullname', $entity_fullname, PDO::PARAM_STR);
@@ -59,6 +60,7 @@ if(auth($token)){
         $query->bindParam(':user_email', $user_email, PDO::PARAM_STR);
         $query->bindParam(':user_phonenumber', $user_phonenumber, PDO::PARAM_STR);
         $query->bindParam(':user_id', $payload->user_id, PDO::PARAM_STR);
+        $query->bindparam(":updated_at", $datetime, PDO::PARAM_STR);
         if($query->execute()){
             $user_profile = $query->fetchAll(PDO::FETCH_OBJ);
             $status = 200;

@@ -40,13 +40,15 @@ if(auth($token)){
         $sql = "UPDATE admin_user_table SET 
             admin_fullname = :admin_fullname,
             admin_email = :admin_email,
-            admin_phonenumber=:admin_phonenumber
+            admin_phonenumber=:admin_phonenumber, 
+            updated_at = :updated_at 
             WHERE admin_user_id=:admin_user_id";
         $query = $con -> prepare($sql);
         $query->bindParam(':admin_fullname', $admin_fullname, PDO::PARAM_STR);
         $query->bindParam(':admin_email', $admin_email, PDO::PARAM_STR);
         $query->bindParam(':admin_phonenumber', $admin_phonenumber, PDO::PARAM_STR);
         $query->bindParam(':admin_user_id', $payload->admin_user_id, PDO::PARAM_STR);
+        $query->bindparam(":updated_at", $datetime, PDO::PARAM_STR);
         if($query->execute()){
             $user_profile = $query->fetchAll(PDO::FETCH_OBJ);
             $status = 200;
