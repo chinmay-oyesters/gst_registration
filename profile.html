@@ -30,6 +30,13 @@
             aria-label="Hide Sidebar"></a>
         <!-- Navbar Right Menu-->
         <ul class="app-nav">
+            <li class="mr-2"><a class="app-nav__item position-relative" href="cart.html"><i
+                        class="fa fa-shopping-cart fa-lg"></i>
+                    <span id="cart_count"
+                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        0
+                    </span>
+                </a></li>
             <!-- User Menu-->
             <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown"
                     aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
@@ -156,6 +163,7 @@
     <script src="js/globalFunction.js"></script>
     <script>
         authenticate()
+        updateCartCount('true')
         let entity_name = document.getElementById('entity_name')
         let entity_email = document.getElementById('entity_email')
         let entity_pan = document.getElementById('entity_pan')

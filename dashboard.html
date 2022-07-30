@@ -32,6 +32,11 @@
       aria-label="Hide Sidebar"></a>
     <!-- Navbar Right Menu-->
     <ul class="app-nav">
+      <li class="mr-2"><a class="app-nav__item position-relative" href="cart.html"><i class="fa fa-shopping-cart fa-lg"></i>
+        <span id="cart_count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+          0
+        </span>
+      </a></li>
       <!-- User Menu-->
       <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu"><i
             class="fa fa-user fa-lg"></i></a>
@@ -78,6 +83,8 @@
 
   <script>
     authenticate()
+    updateCartCount('true')
+    let list = []
     window.onload = function () {
       getList()
     }
@@ -87,7 +94,7 @@
         endLoader()
         if (response.status === 200) {
           let dataSet = response?.data?.home_data
-          console.log(dataSet)
+          list = dataSet
           let cards_container = document.getElementById('cards_container')
           cards_container.innerHTML = '';
           for (let i = 0; i < dataSet.length; i++) {
@@ -104,7 +111,7 @@
               <div style="width:${element?.form_progress}%">${element?.form_progress}%</div>
               </div>` : ''
               }
-              ${element?.form_status == 'Pay to Avail the Service' ? `<button id='rzp-button1' onclick="handlePayNow('${element?.form_id}')" >Pay Now</button>` : '<button>Fill the Form</button>'}
+              ${element?.form_status == 'Pay to Avail the Service' ? `<button id='rzp-button1' onclick="addToCart('${element?.form_id}')" >Add to Cart</button>` : '<button>Fill the Form</button>'}
                </div>
               </div>
             `
@@ -243,6 +250,40 @@
           type: "danger"
         });
       })
+    }
+    function addToCart(data) {
+      let formData = list?.filter(fd => fd?.form_id == data)
+      if (formData?.length != 0) {
+        let cartData = localStorage.getItem('cartData')
+        if (cartData) {
+          let cartArray = JSON.parse(cartData)
+          let getForm = cartArray?.filter(ca => ca?.form_id == data)
+          if (getForm?.length == 0) {
+            cartArray?.push(formData[0])
+            localStorage.setItem('cartData', JSON.stringify(cartArray))
+            updateCartCount(cartArray?.length)
+            $.notify({
+              title: "",
+              message: `Form added to cart.`,
+              icon: 'fa fa-check'
+            }, {
+              type: "success"
+            });
+          } else {
+            $.notify({
+              title: "",
+              message: `Form already added to cart.`,
+              icon: 'fa fa-check'
+            }, {
+              type: "success"
+            });
+          }
+        } else {
+          let cartArray = []
+          cartArray?.push(formData[0])
+          localStorage.setItem('cartData', JSON.stringify(cartArray))
+        }
+      }
     }
   </script>
 </body>
