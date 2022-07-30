@@ -149,10 +149,10 @@
                                 <input type="checkbox" id="markAll_add" onclick="markAllDays('add')">
                                 <label for="markAll_add" class="ml-2">Mark All</label>
                             </div>
-                            <table class="permission_table" > 
+                            <table class="permission_table">
                                 <thead>
-                                    <tr >
-                                        <th width="25%" ></th>
+                                    <tr>
+                                        <th width="25%"></th>
                                         <th>View</th>
                                         <th>Add</th>
                                         <th>Edit</th>
@@ -161,52 +161,52 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td style="text-align: left;" >Staff</td>
-                                        <td><input type="checkbox" ></td>
-                                        <td><input type="checkbox" ></td>
-                                        <td><input type="checkbox" ></td>
-                                        <td><input type="checkbox" ></td>
+                                        <td style="text-align: left;">Staff</td>
+                                        <td><input type="checkbox" id="staff_view_add"></td>
+                                        <td><input type="checkbox" id="staff_add_add"></td>
+                                        <td><input type="checkbox" id="staff_edit_add"></td>
+                                        <td><input type="checkbox" id="staff_delete_add"></td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: left;" >Users</td>
-                                        <td><input type="checkbox" ></td>
-                                        <td><input type="checkbox" ></td>
-                                        <td><input type="checkbox" ></td>
-                                        <td><input type="checkbox" ></td>
+                                        <td style="text-align: left;">Users</td>
+                                        <td><input type="checkbox" id="users_view_add"></td>
+                                        <td><input type="checkbox" id="users_add_add"></td>
+                                        <td><input type="checkbox" id="users_edit_add"></td>
+                                        <td><input type="checkbox" id="users_delete_add"></td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: left;" >Roles</td>
-                                        <td><input type="checkbox" ></td>
-                                        <td><input type="checkbox" ></td>
-                                        <td><input type="checkbox" ></td>
-                                        <td><input type="checkbox" ></td>
+                                        <td style="text-align: left;">Roles</td>
+                                        <td><input type="checkbox" id="roles_view_add"></td>
+                                        <td><input type="checkbox" id="roles_add_add"></td>
+                                        <td><input type="checkbox" id="roles_edit_add"></td>
+                                        <td><input type="checkbox" id="roles_delete_add"></td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: left;" >Forms</td>
-                                        <td><input type="checkbox" ></td>
-                                        <td><input type="checkbox" ></td>
-                                        <td><input type="checkbox" ></td>
-                                        <td><input type="checkbox" ></td>
+                                        <td style="text-align: left;">Forms</td>
+                                        <td><input type="checkbox" id="forms_view_add"></td>
+                                        <td><input type="checkbox" id="forms_add_add"></td>
+                                        <td><input type="checkbox" id="forms_edit_add"></td>
+                                        <td><input type="checkbox" id="forms_delete_add"></td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: left;" >Fields </td>
-                                        <td><input type="checkbox" ></td>
-                                        <td><input type="checkbox" ></td>
-                                        <td><input type="checkbox" ></td>
-                                        <td><input type="checkbox" ></td>
+                                        <td style="text-align: left;">Fields </td>
+                                        <td><input type="checkbox" id="fields_view_add"></td>
+                                        <td><input type="checkbox" id="fields_add_add"></td>
+                                        <td><input type="checkbox" id="fields_edit_add"></td>
+                                        <td><input type="checkbox" id="fields_delete_add"></td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: left;" >Payment</td>
-                                        <td><input type="checkbox" ></td>
+                                        <td style="text-align: left;">Payment</td>
+                                        <td><input type="checkbox" id="payment_view_add"></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: left;" >Settings </td>
-                                        <td><input type="checkbox" ></td>
+                                        <td style="text-align: left;">Settings </td>
+                                        <td><input type="checkbox" id="setting_view_add"></td>
                                         <td></td>
-                                        <td><input type="checkbox" ></td>
+                                        <td><input type="checkbox" id="setting_edit_add"></td>
                                         <td></td>
                                     </tr>
                                 </tbody>
@@ -228,7 +228,7 @@
 
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Edit User<br />
+                    <h4 class="modal-title">Edit Role<br />
                         <p style="text-align:left; font-size:13px;font-weight:500;">
                         <p>
                     </h4>
@@ -253,21 +253,69 @@
                             <div class="col-md-8">
                                 <input type="checkbox" id="markAll_edit" onclick="markAllDays('edit')">
                                 <label for="markAll_edit" class="ml-2">Mark All</label>
-                                <div class="d-flex justify-content-between pt-2" style="border-top: 1px solid gray;">
-                                    <div>
-                                        <input type="checkbox" id="asd_edit">
-                                        <label for="asd_edit" class="ml-2">asd</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" id="zyx_edit">
-                                        <label for="zyx_edit" class="ml-2">xyz</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" id="tug_edit">
-                                        <label for="tug_edit" class="ml-2">tug</label>
-                                    </div>
-                                </div>
                             </div>
+                            <table class="permission_table">
+                                <thead>
+                                    <tr>
+                                        <th width="25%"></th>
+                                        <th>View</th>
+                                        <th>Add</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align: left;">Staff</td>
+                                        <td><input type="checkbox" id="staff_view_edit"></td>
+                                        <td><input type="checkbox" id="staff_add_edit"></td>
+                                        <td><input type="checkbox" id="staff_edit_edit"></td>
+                                        <td><input type="checkbox" id="staff_delete_edit"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: left;">Users</td>
+                                        <td><input type="checkbox" id="users_view_edit"></td>
+                                        <td><input type="checkbox" id="users_add_edit"></td>
+                                        <td><input type="checkbox" id="users_edit_edit"></td>
+                                        <td><input type="checkbox" id="users_delete_edit"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: left;">Roles</td>
+                                        <td><input type="checkbox" id="roles_view_edit"></td>
+                                        <td><input type="checkbox" id="roles_add_edit"></td>
+                                        <td><input type="checkbox" id="roles_edit_edit"></td>
+                                        <td><input type="checkbox" id="roles_delete_edit"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: left;">Forms</td>
+                                        <td><input type="checkbox" id="forms_view_edit"></td>
+                                        <td><input type="checkbox" id="forms_add_edit"></td>
+                                        <td><input type="checkbox" id="forms_edit_edit"></td>
+                                        <td><input type="checkbox" id="forms_delete_edit"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: left;">Fields </td>
+                                        <td><input type="checkbox" id="fields_view_edit"></td>
+                                        <td><input type="checkbox" id="fields_add_edit"></td>
+                                        <td><input type="checkbox" id="fields_edit_edit"></td>
+                                        <td><input type="checkbox" id="fields_delete_edit"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: left;">Payment</td>
+                                        <td><input type="checkbox" id="payment_view_edit"></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: left;">Settings </td>
+                                        <td><input type="checkbox" id="setting_view_edit"></td>
+                                        <td></td>
+                                        <td><input type="checkbox" id="setting_edit_edit"></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <div class="modal-footer " style="justify-content: center;margin-top:20px;">
                             <button class="btn btn-success" type="button" id="edit_save_btn">Save</button>
@@ -367,28 +415,136 @@
         }
         function markAllDays(keyNow) {
             var markAll = document.getElementById(`markAll_${keyNow}`);
-            var asd_id = document.getElementById(`asd_${keyNow}`)
-            var zyx_id = document.getElementById(`zyx_${keyNow}`)
-            var tug_id = document.getElementById(`tug_${keyNow}`)
+            var staff_view = document.getElementById(`staff_view_${keyNow}`)
+            var staff_add = document.getElementById(`staff_add_${keyNow}`)
+            var staff_edit = document.getElementById(`staff_edit_${keyNow}`)
+            var staff_delete = document.getElementById(`staff_delete_${keyNow}`)
+            var users_view = document.getElementById(`users_view_${keyNow}`)
+            var users_add = document.getElementById(`users_add_${keyNow}`)
+            var users_edit = document.getElementById(`users_edit_${keyNow}`)
+            var users_delete = document.getElementById(`users_delete_${keyNow}`)
+            var roles_view = document.getElementById(`roles_view_${keyNow}`)
+            var roles_add = document.getElementById(`roles_add_${keyNow}`)
+            var roles_edit = document.getElementById(`roles_edit_${keyNow}`)
+            var roles_delete = document.getElementById(`roles_delete_${keyNow}`)
+            var forms_view = document.getElementById(`forms_view_${keyNow}`)
+            var forms_add = document.getElementById(`forms_add_${keyNow}`)
+            var forms_edit = document.getElementById(`forms_edit_${keyNow}`)
+            var forms_delete = document.getElementById(`forms_delete_${keyNow}`)
+            var fields_view = document.getElementById(`fields_view_${keyNow}`)
+            var fields_add = document.getElementById(`fields_add_${keyNow}`)
+            var fields_edit = document.getElementById(`fields_edit_${keyNow}`)
+            var fields_delete = document.getElementById(`fields_delete_${keyNow}`)
+            var payment_view = document.getElementById(`payment_view_${keyNow}`)
+            var setting_view = document.getElementById(`setting_view_${keyNow}`)
+            var setting_edit = document.getElementById(`setting_edit_${keyNow}`)
             if (markAll.checked == true) {
-                asd_id.checked = true
-                zyx_id.checked = true
-                tug_id.checked = true
+                staff_view.checked = true
+                staff_add.checked = true
+                staff_edit.checked = true
+                staff_delete.checked = true
+                users_view.checked = true
+                users_add.checked = true
+                users_edit.checked = true
+                users_delete.checked = true
+                roles_view.checked = true
+                roles_add.checked = true
+                roles_edit.checked = true
+                roles_delete.checked = true
+                forms_view.checked = true
+                forms_add.checked = true
+                forms_edit.checked = true
+                forms_delete.checked = true
+                fields_view.checked = true
+                fields_add.checked = true
+                fields_edit.checked = true
+                fields_delete.checked = true
+                payment_view.checked = true
+                setting_view.checked = true
+                setting_edit.checked = true
             } else {
-                asd_id.checked = false
-                zyx_id.checked = false
-                tug_id.checked = false
+                staff_view.checked = false
+                staff_add.checked = false
+                staff_edit.checked = false
+                staff_delete.checked = false
+                users_view.checked = false
+                users_add.checked = false
+                users_edit.checked = false
+                users_delete.checked = false
+                roles_view.checked = false
+                roles_add.checked = false
+                roles_edit.checked = false
+                roles_delete.checked = false
+                forms_view.checked = false
+                forms_add.checked = false
+                forms_edit.checked = false
+                forms_delete.checked = false
+                fields_view.checked = false
+                fields_add.checked = false
+                fields_edit.checked = false
+                fields_delete.checked = false
+                payment_view.checked = false
+                setting_view.checked = false
+                setting_edit.checked = false
             }
         }
+        function getPermissionObj(keyNow){
+            var staff_view = document.getElementById(`staff_view_${keyNow}`)
+            var staff_add = document.getElementById(`staff_add_${keyNow}`)
+            var staff_edit = document.getElementById(`staff_edit_${keyNow}`)
+            var staff_delete = document.getElementById(`staff_delete_${keyNow}`)
+            var users_view = document.getElementById(`users_view_${keyNow}`)
+            var users_add = document.getElementById(`users_add_${keyNow}`)
+            var users_edit = document.getElementById(`users_edit_${keyNow}`)
+            var users_delete = document.getElementById(`users_delete_${keyNow}`)
+            var roles_view = document.getElementById(`roles_view_${keyNow}`)
+            var roles_add = document.getElementById(`roles_add_${keyNow}`)
+            var roles_edit = document.getElementById(`roles_edit_${keyNow}`)
+            var roles_delete = document.getElementById(`roles_delete_${keyNow}`)
+            var forms_view = document.getElementById(`forms_view_${keyNow}`)
+            var forms_add = document.getElementById(`forms_add_${keyNow}`)
+            var forms_edit = document.getElementById(`forms_edit_${keyNow}`)
+            var forms_delete = document.getElementById(`forms_delete_${keyNow}`)
+            var fields_view = document.getElementById(`fields_view_${keyNow}`)
+            var fields_add = document.getElementById(`fields_add_${keyNow}`)
+            var fields_edit = document.getElementById(`fields_edit_${keyNow}`)
+            var fields_delete = document.getElementById(`fields_delete_${keyNow}`)
+            var payment_view = document.getElementById(`payment_view_${keyNow}`)
+            var setting_view = document.getElementById(`setting_view_${keyNow}`)
+            var setting_edit = document.getElementById(`setting_edit_${keyNow}`)
+            let obj = {}
+            obj['staff_view'] = staff_view.checked
+            obj['staff_add'] = staff_add.checked
+            obj['staff_edit'] = staff_edit.checked
+            obj['staff_delete'] = staff_delete.checked
+            obj['users_view'] = users_view.checked
+            obj['users_add'] = users_add.checked
+            obj['users_edit'] = users_edit.checked
+            obj['users_delete'] = users_delete.checked
+            obj['roles_view'] = roles_view.checked
+            obj['roles_add'] = roles_add.checked
+            obj['roles_edit'] = roles_edit.checked
+            obj['roles_delete'] = roles_delete.checked
+            obj['forms_view'] = forms_view.checked
+            obj['forms_add'] = forms_add.checked
+            obj['forms_edit'] = forms_edit.checked
+            obj['forms_delete'] = forms_delete.checked
+            obj['fields_view'] = fields_view.checked
+            obj['fields_add'] = fields_add.checked
+            obj['fields_edit'] = fields_edit.checked
+            obj['fields_delete'] = fields_delete.checked
+            obj['payment_view'] = payment_view.checked
+            obj['setting_view'] = setting_view.checked
+            obj['setting_edit'] = setting_edit.checked
+            return obj
+        }
         function submitModal() {
-            startLoader()
+            // startLoader()
             let name = document.getElementById('add_name')
             let description = document.getElementById('add_description')
-
-            var markAll = document.getElementById(`markAll_add`);
-            var asd_id = document.getElementById(`asd_add`)
-            var zyx_id = document.getElementById(`zyx_add`)
-            var tug_id = document.getElementById(`tug_add`)
+            let permissionObj =   getPermissionObj('add')
+            console.log(permissionObj)
+            return
             if (name.value == "" || description.value == "") {
                 endLoader()
                 $.notify({
@@ -401,19 +557,7 @@
                 return
             }
             let permissions = []
-            if (markAll?.checked) {
-                permissions = ['asd', 'zyx', 'tug']
-            } else {
-                if (asd_id.checked) {
-                    permissions?.push('asd')
-                }
-                if (zyx_id.checked) {
-                    permissions?.push('zyx')
-                }
-                if (tug_id.checked) {
-                    permissions?.push('tug')
-                }
-            }
+           
             $('#add_modal').modal('hide');
             axiosInstance.post('add_role', {
                 "role_name": name.value,
