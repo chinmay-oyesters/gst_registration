@@ -72,7 +72,7 @@
                         class="app-menu__label">Payments</span></a></li>
             <li><a class="app-menu__item" href="forms.html"><i class="app-menu__icon fa fa-file-text-o"
                         aria-hidden="true"></i><span class="app-menu__label">Forms</span></a></li>
-            <li><a class="app-menu__item" href="fields.html"><i class="app-menu__icon fa fa-align-center"
+            <li id="field_tab"><a class="app-menu__item" href="fields.html"><i class="app-menu__icon fa fa-align-center"
                         aria-hidden="true"></i><span class="app-menu__label">Fields</span></a></li>
             <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
                         class="app-menu__icon fa fa-cog"></i><span class="app-menu__label">Settings</span><i
@@ -162,6 +162,7 @@
 
     <script type="text/javascript">
         authenticateAdmin();
+        checkPermissions();
         window.onload = function () {
             getList()
         }
@@ -171,7 +172,7 @@
                 endLoader()
                 console.log(response)
                 if (response.status === 200) {
-                   
+
                 } else {
                     if (response?.data?.is_logged_out) {
                         localStorage.setItem("isAdminLoggedIn", "false");

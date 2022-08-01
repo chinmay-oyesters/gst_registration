@@ -710,3 +710,19 @@ function updateCartCount(c) {
     }
   }
 }
+
+function checkPermissions() {
+  let permissionTab = localStorage.getItem("permissionTab");
+  if (permissionTab) {
+    let permissionObj = JSON.parse(permissionTab);
+    console.log(permissionObj);
+    if (!permissionObj?.fields_view) {
+      document.getElementById("field_tab").style = "display:none;";
+      if (window.location?.pathname?.includes("fields.html") || window.location?.pathname?.includes("new-field.html")) {
+        location.href = "dashboard.html";
+      }
+    }
+  } else {
+    alert("Please login again");
+  }
+}
