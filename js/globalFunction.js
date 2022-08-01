@@ -789,9 +789,15 @@ function checkPermissions() {
       if (window.location?.pathname?.includes("staff.html"))
         location.href = "dashboard.html";
     }
-    if (permissionObj?.staff_add) {
+    if (!permissionObj?.staff_add) {
       if (window.location?.pathname?.includes("staff.html"))
-          document.getElementById("add_staff_button").remove();
+        document.getElementById("add_staff_button").remove();
+    }
+    // NOTE: user
+    if (!permissionObj?.users_view) {
+      document.getElementById("users_tab").remove();
+      if (window.location?.pathname?.includes("customer.html"))
+        location.href = "dashboard.html";
     }
   } else {
     alert("Please login again");
