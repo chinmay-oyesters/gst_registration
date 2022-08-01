@@ -751,6 +751,14 @@ function checkPermissions() {
       if (window.location?.pathname?.includes("edit-form.html"))
         location.href = "forms.html";
     }
+     // NOTE: payment
+     if (!permissionObj?.payment_view) {
+      document.getElementById("payment_tab").style = "display:none;";
+      if (
+        window.location?.pathname?.includes("payments.html")
+      )
+        location.href = "dashboard.html";
+    }
   } else {
     alert("Please login again");
   }
