@@ -716,11 +716,32 @@ function checkPermissions() {
   if (permissionTab) {
     let permissionObj = JSON.parse(permissionTab);
     console.log(permissionObj);
+    // NOTE: field
     if (!permissionObj?.fields_view) {
       document.getElementById("field_tab").style = "display:none;";
-      if (window.location?.pathname?.includes("fields.html") || window.location?.pathname?.includes("new-field.html")) {
+      if (
+        window.location?.pathname?.includes("fields.html") ||
+        window.location?.pathname?.includes("new-field.html") ||
+        window.location?.pathname?.includes("edit-field.html")
+      )
         location.href = "dashboard.html";
-      }
+    }
+    if (!permissionObj?.fields_add) {
+      if (window.location?.pathname?.includes("new-field.html"))
+        location.href = "fields.html";
+
+      if (window.location?.pathname?.includes("fields.html"))
+        document.getElementById("add_field_button").style = "display:none;";
+    }
+    // NOTE: form
+    if (!permissionObj?.forms_view) {
+      document.getElementById("form_tab").style = "display:none;";
+      if (
+        window.location?.pathname?.includes("forms.html") ||
+        window.location?.pathname?.includes("new-form.html") ||
+        window.location?.pathname?.includes("edit-form.html")
+      )
+        location.href = "dashboard.html";
     }
   } else {
     alert("Please login again");

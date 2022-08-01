@@ -74,7 +74,7 @@
                         class="app-menu__label">Payments</span></a></li>
             <li><a class="app-menu__item" href="forms.html"><i class="app-menu__icon fa fa-file-text-o"
                         aria-hidden="true"></i><span class="app-menu__label">Forms</span></a></li>
-            <li><a class="app-menu__item" href="fields.html"><i class="app-menu__icon fa fa-align-center"
+            <li id="field_tab"><a class="app-menu__item" href="fields.html"><i class="app-menu__icon fa fa-align-center"
                         aria-hidden="true"></i><span class="app-menu__label">Fields</span></a></li>
             <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
                         class="app-menu__icon fa fa-cog"></i><span class="app-menu__label">Settings</span><i
@@ -255,6 +255,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script type="text/javascript">
         authenticateAdmin();
+        checkPermissions() 
         // value fields
         let valueList = [];
         let valueAssociateList = [];
