@@ -743,6 +743,14 @@ function checkPermissions() {
       )
         location.href = "dashboard.html";
     }
+    if (!permissionObj?.forms_add) {
+      if (window.location?.pathname?.includes("new-form.html"))
+        location.href = "forms.html";
+    }
+    if (!permissionObj?.forms_edit) {
+      if (window.location?.pathname?.includes("edit-form.html"))
+        location.href = "forms.html";
+    }
   } else {
     alert("Please login again");
   }
