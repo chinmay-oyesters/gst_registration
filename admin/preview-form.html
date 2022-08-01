@@ -61,22 +61,22 @@
                         class="app-menu__icon fa fa-user"></i><span class="app-menu__label">Users</span><i
                         class="treeview-indicator fa fa-angle-right"></i></a>
                 <ul class="treeview-menu">
-                    <li><a class="treeview-item " href="staff.html"><i class="icon fa fa-circle-o"></i> Staff</a>
+                    <li  id="staff_tab"><a class="treeview-item " href="staff.html"><i class="icon fa fa-circle-o"></i> Staff</a>
                     </li>
-                    <li><a class="treeview-item " href="customer.html"><i class="icon fa fa-circle-o"></i>
+                    <li  id="users_tab"><a class="treeview-item " href="customer.html"><i class="icon fa fa-circle-o"></i>
                             Customer</a>
                     </li>
                 </ul>
             </li>
-            <li><a class="app-menu__item" href="roles.html"><i class="app-menu__icon fa fa-male"
+            <li id="roles_tab"><a class="app-menu__item" href="roles.html"><i class="app-menu__icon fa fa-male"
                         aria-hidden="true"></i><span class="app-menu__label">Roles</span></a></li>
-            <li><a class="app-menu__item" href="payments.html"><i class="app-menu__icon fa fa-money"></i><span
+            <li id="payment_tab"><a class="app-menu__item" href="payments.html"><i class="app-menu__icon fa fa-money"></i><span
                         class="app-menu__label">Payments</span></a></li>
-            <li><a class="app-menu__item" href="forms.html"><i class="app-menu__icon fa fa-file-text-o"
+            <li id="form_tab"><a class="app-menu__item" href="forms.html"><i class="app-menu__icon fa fa-file-text-o"
                         aria-hidden="true"></i><span class="app-menu__label">Forms</span></a></li>
-            <li><a class="app-menu__item" href="fields.html"><i class="app-menu__icon fa fa-align-center"
+            <li id="field_tab"><a class="app-menu__item" href="fields.html"><i class="app-menu__icon fa fa-align-center"
                         aria-hidden="true"></i><span class="app-menu__label">Fields</span></a></li>
-            <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
+            <li id="setting_tab" class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
                         class="app-menu__icon fa fa-cog"></i><span class="app-menu__label">Settings</span><i
                         class="treeview-indicator fa fa-angle-right"></i></a>
                 <ul class="treeview-menu">
@@ -120,6 +120,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script type="text/javascript">
         authenticateAdmin();
+        checkPermissions();
         let fieldsList = [];
         window.onload = function () {
             fieldsList = JSON.parse(sessionStorage.getItem('field_list'))

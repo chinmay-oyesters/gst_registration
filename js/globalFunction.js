@@ -739,7 +739,10 @@ function checkPermissions() {
       if (
         window.location?.pathname?.includes("forms.html") ||
         window.location?.pathname?.includes("new-form.html") ||
-        window.location?.pathname?.includes("edit-form.html")
+        window.location?.pathname?.includes("edit-form.html") ||
+        window.location?.pathname?.includes("forms-table.html") ||
+        window.location?.pathname?.includes("form-response.html")  ||
+        window.location?.pathname?.includes("preview-form.html") 
       )
         location.href = "dashboard.html";
     }
