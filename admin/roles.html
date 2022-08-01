@@ -63,15 +63,17 @@
                         class="app-menu__icon fa fa-user"></i><span class="app-menu__label">Users</span><i
                         class="treeview-indicator fa fa-angle-right"></i></a>
                 <ul class="treeview-menu">
-                    <li  id="staff_tab" ><a class="treeview-item " href="staff.html"><i class="icon fa fa-circle-o"></i> Staff</a></li>
-                    <li  id="users_tab"><a class="treeview-item" href="customer.html"><i class="icon fa fa-circle-o"></i> Customer</a>
+                    <li id="staff_tab"><a class="treeview-item " href="staff.html"><i class="icon fa fa-circle-o"></i>
+                            Staff</a></li>
+                    <li id="users_tab"><a class="treeview-item" href="customer.html"><i class="icon fa fa-circle-o"></i>
+                            Customer</a>
                     </li>
                 </ul>
             </li>
             <li id="roles_tab"><a class="app-menu__item active" href="roles.html"><i class=" app-menu__icon fa fa-male"
                         aria-hidden="true"></i><span class="app-menu__label">Roles</span></a></li>
-            <li id="payment_tab"><a class="app-menu__item" href="payments.html"><i class="app-menu__icon fa fa-money"></i><span
-                        class="app-menu__label">Payments</span></a></li>
+            <li id="payment_tab"><a class="app-menu__item" href="payments.html"><i
+                        class="app-menu__icon fa fa-money"></i><span class="app-menu__label">Payments</span></a></li>
             <li id="form_tab"><a class="app-menu__item" href="forms.html"><i class="app-menu__icon fa fa-file-text-o"
                         aria-hidden="true"></i><span class="app-menu__label">Forms</span></a></li>
             <li id="field_tab"><a class="app-menu__item" href="fields.html"><i class="app-menu__icon fa fa-align-center"
@@ -351,6 +353,7 @@
                 endLoader()
                 console.log(response)
                 if (response.status === 200) {
+                    let permissionObj_in = JSON.parse(localStorage.getItem("permissionTab"))
                     let dataSet = response.data?.roles
                     userList = dataSet
                     $(document).ready(function () {
@@ -376,12 +379,18 @@
                                 {
                                     data: 'role_id',
                                     render: function (data) {
-                                        return `<div class="d-flex justify-content-around" >
-                                                  <button class="btn-sm btn-info" onclick="setEditForm(${data})" data-toggle="modal" data-target="#edit_game_rate_modal" ><i
-                                                  class="fa fa-pencil cp" aria-hidden="true"></i>&nbsp;Edit</button>
-                                                  <button
+                                        let actionString = ''
+                                        if (permissionObj_in?.roles_edit) {
+                                            actionString = `<button class="btn-sm btn-info" onclick="setEditForm(${data})" data-toggle="modal" data-target="#edit_game_rate_modal" ><i
+                                                  class="fa fa-pencil cp" aria-hidden="true"></i>&nbsp;Edit</button>`
+                                        }
+                                        if (permissionObj_in?.roles_delete) {
+                                            actionString = actionString + `<button
                                          class="btn-sm btn-danger" onclick="deleteRow(${data})" ><i class="fa fa-trash cp"
-                                           aria-hidden="true"></i>&nbsp;Delete</button>
+                                           aria-hidden="true"></i>&nbsp;Delete</button>`
+                                        }
+                                        return `<div class="d-flex justify-content-around" >
+                                                  ${actionString}
                                                  </div > `;
                                     },
                                 },
@@ -489,7 +498,7 @@
                 setting_edit.checked = false
             }
         }
-        function getPermissionObj(keyNow){
+        function getPermissionObj(keyNow) {
             var staff_view = document.getElementById(`staff_view_${keyNow}`)
             var staff_add = document.getElementById(`staff_add_${keyNow}`)
             var staff_edit = document.getElementById(`staff_edit_${keyNow}`)
@@ -540,12 +549,10 @@
             return obj
         }
         function submitModal() {
-            // startLoader()
+            startLoader()
             let name = document.getElementById('add_name')
             let description = document.getElementById('add_description')
-            let permissionObj =   getPermissionObj('add')
-            console.log(permissionObj)
-            return
+            let permissionObj = getPermissionObj('add')
             if (name.value == "" || description.value == "") {
                 endLoader()
                 $.notify({
@@ -558,12 +565,12 @@
                 return
             }
             let permissions = []
-           
+
             $('#add_modal').modal('hide');
             axiosInstance.post('add_role', {
                 "role_name": name.value,
                 "role_description": description.value,
-                "role_permissions": permissions
+                "role_permissions": permissionObj
             }).then((response) => {
                 $('#add_modal_form')[0].reset();
                 endLoader()
@@ -604,20 +611,65 @@
         }
         function setEditForm(g_id) {
             let gameNow = userList?.filter(m => `${m.role_id}` == `${g_id}`)
+            console.log(gameNow)
             if (gameNow?.length > 0) {
                 document.getElementById('edit_name').value = gameNow[0]?.role_name
                 document.getElementById('edit_description').value = gameNow[0]?.role_description
                 document.getElementById('edit_save_btn').setAttribute("onClick", `updateModal(${g_id})`);
+                let role_permissions = gameNow[0]?.role_permissions
+                var staff_view = document.getElementById(`staff_view_edit`)
+                var staff_add = document.getElementById(`staff_add_edit`)
+                var staff_edit = document.getElementById(`staff_edit_edit`)
+                var staff_delete = document.getElementById(`staff_delete_edit`)
+                var users_view = document.getElementById(`users_view_edit`)
+                var users_add = document.getElementById(`users_add_edit`)
+                var users_edit = document.getElementById(`users_edit_edit`)
+                var users_delete = document.getElementById(`users_delete_edit`)
+                var roles_view = document.getElementById(`roles_view_edit`)
+                var roles_add = document.getElementById(`roles_add_edit`)
+                var roles_edit = document.getElementById(`roles_edit_edit`)
+                var roles_delete = document.getElementById(`roles_delete_edit`)
+                var forms_view = document.getElementById(`forms_view_edit`)
+                var forms_add = document.getElementById(`forms_add_edit`)
+                var forms_edit = document.getElementById(`forms_edit_edit`)
+                var forms_delete = document.getElementById(`forms_delete_edit`)
+                var fields_view = document.getElementById(`fields_view_edit`)
+                var fields_add = document.getElementById(`fields_add_edit`)
+                var fields_edit = document.getElementById(`fields_edit_edit`)
+                var fields_delete = document.getElementById(`fields_delete_edit`)
+                var payment_view = document.getElementById(`payment_view_edit`)
+                var setting_view = document.getElementById(`setting_view_edit`)
+                var setting_edit = document.getElementById(`setting_edit_edit`)
+                staff_view.checked = role_permissions['staff_view']
+                staff_add.checked = role_permissions['staff_add']
+                staff_edit.checked = role_permissions['staff_edit']
+                staff_delete.checked = role_permissions['staff_delete']
+                users_view.checked = role_permissions['users_view']
+                users_add.checked = role_permissions['users_add']
+                users_edit.checked = role_permissions['users_edit']
+                users_delete.checked = role_permissions['users_delete']
+                roles_view.checked = role_permissions['roles_view']
+                roles_add.checked = role_permissions['roles_add']
+                roles_edit.checked = role_permissions['roles_edit']
+                roles_delete.checked = role_permissions['roles_delete']
+                forms_view.checked = role_permissions['forms_view']
+                forms_add.checked = role_permissions['forms_add']
+                forms_edit.checked = role_permissions['forms_edit']
+                forms_delete.checked = role_permissions['forms_delete']
+                fields_view.checked = role_permissions['fields_view']
+                fields_add.checked = role_permissions['fields_add']
+                fields_edit.checked = role_permissions['fields_edit']
+                fields_delete.checked = role_permissions['fields_delete']
+                payment_view.checked = role_permissions['payment_view']
+                setting_view.checked = role_permissions['setting_view']
+                setting_edit.checked = role_permissions['setting_edit']
             }
         }
         function updateModal(g_id) {
             startLoader()
             let edit_name = document.getElementById('edit_name').value
             let edit_description = document.getElementById('edit_description').value
-            var markAll = document.getElementById(`markAll_edit`);
-            var asd_id = document.getElementById(`asd_edit`)
-            var zyx_id = document.getElementById(`zyx_edit`)
-            var tug_id = document.getElementById(`tug_edit`)
+            let permissionObj = getPermissionObj('edit')
             if (edit_name == "" || edit_description == "") {
                 endLoader()
                 $.notify({
@@ -629,26 +681,12 @@
                 });
                 return
             }
-            let permissions = []
-            if (markAll?.checked) {
-                permissions = ['asd', 'zyx', 'tug']
-            } else {
-                if (asd_id.checked) {
-                    permissions?.push('asd')
-                }
-                if (zyx_id.checked) {
-                    permissions?.push('zyx')
-                }
-                if (tug_id.checked) {
-                    permissions?.push('tug')
-                }
-            }
             $('#edit_game_rate_modal').modal('hide');
             axiosInstance.post('edit_role', {
                 "role_id": g_id,
                 "role_name": edit_name,
                 "role_description": edit_description,
-                "role_permissions": permissions
+                "role_permissions": permissionObj
             }).then((response) => {
                 endLoader()
                 if (response.status === 200) {

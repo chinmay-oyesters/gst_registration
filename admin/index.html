@@ -136,34 +136,8 @@
           localStorage.setItem('admin_name', response?.data?.admin_details.admin_fullname)
           localStorage.setItem('admin_image', response?.data?.admin_details.admin_profileimage)
           localStorage.setItem('admin_role', response?.data?.admin_details.role_name)
-          localStorage.setItem('admin_permission', response?.data?.admin_details.role_permissions)
+          localStorage.setItem('permissionTab', JSON.stringify(response?.data?.admin_details.role_permissions))
           location.href = "dashboard.html";
-          let permissionObje = {
-            "staff_view": true,
-            "staff_add": true,
-            "staff_edit": true,
-            "staff_delete": true,
-            "users_view": true,
-            "users_add": true,
-            "users_edit": true,
-            "users_delete": true,
-            "roles_view": true,
-            "roles_add": true,
-            "roles_edit": true,
-            "roles_delete": true,
-            "forms_view": true,
-            "forms_add": true,
-            "forms_edit": true,
-            "forms_delete": true,
-            "fields_view": true,
-            "fields_add": true,
-            "fields_edit": true,
-            "fields_delete": true,
-            "payment_view": true,
-            "setting_view": true,
-            "setting_edit": true
-          }
-          localStorage.setItem('permissionTab', JSON.stringify(permissionObje))
         } else {
           $.notify({
             title: "",

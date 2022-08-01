@@ -715,7 +715,6 @@ function checkPermissions() {
   let permissionTab = localStorage.getItem("permissionTab");
   if (permissionTab) {
     let permissionObj = JSON.parse(permissionTab);
-    console.log(permissionObj);
     // NOTE: field
     if (!permissionObj?.fields_view) {
       document.getElementById("field_tab").remove();
@@ -803,6 +802,6 @@ function checkPermissions() {
         location.href = "dashboard.html";
     }
   } else {
-    alert("Please login again");
+    adminSignOut()
   }
 }
