@@ -751,20 +751,16 @@ function checkPermissions() {
       if (window.location?.pathname?.includes("edit-form.html"))
         location.href = "forms.html";
     }
-     // NOTE: payment
-     if (!permissionObj?.payment_view) {
+    // NOTE: payment
+    if (!permissionObj?.payment_view) {
       document.getElementById("payment_tab").style = "display:none;";
-      if (
-        window.location?.pathname?.includes("payments.html")
-      )
+      if (window.location?.pathname?.includes("payments.html"))
         location.href = "dashboard.html";
     }
     // NOTE: roles
     if (!permissionObj?.roles_view) {
       document.getElementById("roles_tab").style = "display:none;";
-      if (
-        window.location?.pathname?.includes("roles.html")
-      )
+      if (window.location?.pathname?.includes("roles.html"))
         location.href = "dashboard.html";
     }
     // if (!permissionObj?.forms_add) {
@@ -775,7 +771,19 @@ function checkPermissions() {
     //   if (window.location?.pathname?.includes("edit-form.html"))
     //     location.href = "forms.html";
     // }
-
+    // NOTE: roles
+    if (!permissionObj?.setting_view) {
+      document.getElementById("setting_tab").style = "display:none;";
+      if (window.location?.pathname?.includes("integrations.html"))
+        location.href = "dashboard.html";
+    }
+    if (!permissionObj?.forms_edit) {
+      if (window.location?.pathname?.includes("integrations.html"))
+      {
+        document.getElementById('update_razorpay_button').style = "display:none;";
+        document.getElementById('update_smtp_button').style = "display:none;";
+      }
+    }
   } else {
     alert("Please login again");
   }
