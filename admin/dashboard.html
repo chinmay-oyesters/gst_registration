@@ -61,15 +61,17 @@
                         class="app-menu__icon fa fa-user"></i><span class="app-menu__label">Users</span><i
                         class="treeview-indicator fa fa-angle-right"></i></a>
                 <ul class="treeview-menu">
-                    <li id="staff_tab"><a class="treeview-item" href="staff.html"><i class="icon fa fa-circle-o"></i> Staff</a></li>
-                    <li id="users_tab"><a class="treeview-item" href="customer.html"><i class="icon fa fa-circle-o"></i> Customer</a>
+                    <li id="staff_tab"><a class="treeview-item" href="staff.html"><i class="icon fa fa-circle-o"></i>
+                            Staff</a></li>
+                    <li id="users_tab"><a class="treeview-item" href="customer.html"><i class="icon fa fa-circle-o"></i>
+                            Customer</a>
                     </li>
                 </ul>
             </li>
             <li id="roles_tab"><a class="app-menu__item" href="roles.html"><i class="app-menu__icon fa fa-male"
                         aria-hidden="true"></i><span class="app-menu__label">Roles</span></a></li>
-            <li id="payment_tab"><a class="app-menu__item" href="payments.html"><i class="app-menu__icon fa fa-money"></i><span
-                        class="app-menu__label">Payments</span></a></li>
+            <li id="payment_tab"><a class="app-menu__item" href="payments.html"><i
+                        class="app-menu__icon fa fa-money"></i><span class="app-menu__label">Payments</span></a></li>
             <li id="form_tab"><a class="app-menu__item" href="forms.html"><i class="app-menu__icon fa fa-file-text-o"
                         aria-hidden="true"></i><span class="app-menu__label">Forms</span></a></li>
             <li id="field_tab"><a class="app-menu__item" href="fields.html"><i class="app-menu__icon fa fa-align-center"
@@ -92,59 +94,25 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-8">
-                <div class="tile">
+            <div class="col-12">
+                <div class="tile" style="overflow-x: auto;">
                     <table class="table">
                         <thead>
-                            <tr style="border-top: none;">
-                                <th></th>
-                                <th>GST</th>
-                                <th>IEC</th>
-                                <th>DGFT</th>
+                            <tr style="border-top: none;" id="header_row">
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>No. of visitors</td>
-                                <td>10</td>
-                                <td>23</td>
-                                <td>45</td>
+                            <tr id="user_register_row">
                             </tr>
-                            <tr>
-                                <td>Users registered</td>
-                                <td>10</td>
-                                <td>23</td>
-                                <td>45</td>
+                            <tr id="user_converted_row">
                             </tr>
-                            <tr>
-                                <td>Users Converted</td>
-                                <td>10</td>
-                                <td>23</td>
-                                <td>45</td>
+                            <tr id="application_in_progress_user_row">
                             </tr>
-                            <tr>
-                                <td>Applications in-progress (user)</td>
-                                <td>10</td>
-                                <td>23</td>
-                                <td>45</td>
+                            <tr id="application_in_progress_admin_row">
                             </tr>
-                            <tr>
-                                <td>Applications in-progress (Admin)</td>
-                                <td>10</td>
-                                <td>23</td>
-                                <td>45</td>
+                            <tr id="reg_completed_row">
                             </tr>
-                            <tr>
-                                <td>Reg Completed</td>
-                                <td>10</td>
-                                <td>23</td>
-                                <td>45</td>
-                            </tr>
-                            <tr>
-                                <td>Docs uploaded</td>
-                                <td>10</td>
-                                <td>23</td>
-                                <td>45</td>
+                            <tr id="docs_uploaded_row">
                             </tr>
                         </tbody>
                     </table>
@@ -166,13 +134,49 @@
         window.onload = function () {
             getList()
         }
+        let header_row = document.getElementById('header_row')
+        let user_register_row = document.getElementById('user_register_row')
+        let user_converted_row = document.getElementById('user_converted_row')
+        let application_in_progress_user_row = document.getElementById('application_in_progress_user_row')
+        let application_in_progress_admin_row = document.getElementById('application_in_progress_admin_row')
+        let reg_completed_row = document.getElementById('reg_completed_row')
+        let docs_uploaded_row = document.getElementById('docs_uploaded_row')
         function getList() {
             startLoader()
             axiosInstance.get('fetch_dashboard').then((response) => {
                 endLoader()
                 console.log(response)
+                header_row.innerHTML = ''
+                user_register_row.innerHTML = ''
+                user_converted_row.innerHTML = ''
+                application_in_progress_user_row.innerHTML = ''
+                application_in_progress_admin_row.innerHTML = ''
+                reg_completed_row.innerHTML = ''
+                docs_uploaded_row.innerHTML = ''
                 if (response.status === 200) {
-
+                    let headerRowString = '<th style="width: 300px;min-width: 200px;"></th>';
+                    let userRegisterString = '<td>Users Registered</td>'
+                    let userConvertedString = '<td>Users Converted</td>'
+                    let applicationInProgressUserString = '<td>Applications in-progress (User)</td>'
+                    let applicationInProgressAdminString = '<td>Applications in-progress (Admin)</td>'
+                    let regCompletedString = '<td>Reg Completed</td>'
+                    let docsUploadedString = '<td>Docs uploaded</td>'
+                    response?.data?.dashboard?.forEach(d => {
+                        headerRowString = headerRowString + `<th>${d?.form_name}</th>`
+                        userRegisterString = userRegisterString + `<td>${d?.users_registered}</td>`
+                        userConvertedString = userConvertedString + `<td>${d?.users_converted}</td>`
+                        applicationInProgressUserString = applicationInProgressUserString + `<td>${d?.application_in_progress_user}</td>`
+                        applicationInProgressAdminString = applicationInProgressAdminString + `<td>${d?.application_in_progress_admin}</td>`
+                        regCompletedString = regCompletedString + `<td>${d?.reg_completed}</td>`
+                        docsUploadedString = docsUploadedString + `<td>${d?.docs_uploaded}</td>`
+                    })
+                    header_row.innerHTML = headerRowString
+                    user_register_row.innerHTML = userRegisterString
+                    user_converted_row.innerHTML = userConvertedString
+                    application_in_progress_user_row.innerHTML = applicationInProgressUserString
+                    application_in_progress_admin_row.innerHTML = applicationInProgressAdminString
+                    reg_completed_row.innerHTML = regCompletedString
+                    docs_uploaded_row.innerHTML = docsUploadedString
                 } else {
                     if (response?.data?.is_logged_out) {
                         localStorage.setItem("isAdminLoggedIn", "false");
